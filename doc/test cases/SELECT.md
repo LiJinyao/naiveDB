@@ -48,8 +48,14 @@ SELECT Name,Age From StudentsInfo
 ```
 Except:
 ```
-从StudentsInfo表中将获取Name列的数据
+从StudentsInfo表中将获取Name,Age列的数据
 ```
+| Name  | Age |
+|-------|-----|
+| 李华  | 17  |
+| 张三  | 18  |
+| 李四  | 17  |
+| 王五  | 19  |
 
 
 ####Case 3:
@@ -80,7 +86,22 @@ Except:
 语法错误，参数不完整（缺少表名）
 ```
 
-####Case 5：
+####Case 5:
 Input:
 ```
-S
+SELECT FROM StudnetsInfo
+```
+Except:
+```
+语法错误，参数不完整
+```
+
+####Case 6：
+Input:
+```
+SELECT * FROM UserInfo
+```
+Except:
+```
+语法错误，UserInfo表不存在
+```
