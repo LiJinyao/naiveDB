@@ -11,13 +11,17 @@ UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 
 其中ID为主键，Name存在空值约束。
 ##### case 1:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id = 12138 WHERE Name = 'Wilson' 
 ```
 expect:
 ```
-成功为Name为'Wilson'的人更新值为'12138'的id。
+成功为Name为'Wilson'的人更新值为12138的id。
 ```
 
 | ID    | Name   | Address |
@@ -26,6 +30,10 @@ expect:
 | 12120 | Gates  | BeiJing |
 
 ##### case 2:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id = 12580, Address = 'NanJing'
@@ -33,7 +41,7 @@ WHERE Name = 'Wilson'
 ```
 expect:
 ```
-成功为Name为'Wilson'的人更新值为'NanJing'的Address和值为'12580'的id。
+成功为Name为'Wilson'的人更新值为'NanJing'的Address和值为12580的id。
 ```
 
 | ID    | Name   | Address |
@@ -42,60 +50,88 @@ expect:
 | 12120 | Gates  | BeiJing |
 
 ##### case 3:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
-UPDATE SET id = 12138 WHERE Name = 'Wilson' 
+UPDATE SET id = 12121 WHERE Name = 'Wilson' 
 ```
 expect:
 ```
-error:缺少表名参数。
+缺少表名参数。
 ```
 ##### case 4:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
-UPDATE test id = 12138 WHERE Name = 'Wilson' 
+UPDATE test id = 12121 WHERE Name = 'Wilson' 
 ```
 expect:
 ```
-error:语法错误。
+语法错误。
 ```
 ##### case 5:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id WHERE Name = 'Wilson' 
 ```
 expect:
 ```
-error:缺少id参数。
+缺少id参数。
 ```
 ##### case 6:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET Work = 'Police' WHERE Name = 'Wilson' 
 ```
 expect:
 ```
-error:test表中不存在'Work'列。
+test表中不存在'Work'列。
 ```
 ##### case 7:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
-UPDATE test SET id = 12138 WHERE Work = 'Police'
+UPDATE test SET id = 12121 WHERE Work = 'Police'
 ```
 expect:
 ```
-error:test表中不存在'Work'列。
+test表中不存在'Work'列。
 ```
 ##### case 8:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id = 12138 WHERE Name = 'Waston'
 ```
 expect:
 ```
-error:不存在Name为'Waston'的数据。
+不存在Name为'Waston'的数据。
 ```
 ##### case 9:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id = 9283751092385
@@ -103,23 +139,31 @@ WHERE Name = 'Wilson'
 ```
 expect:
 ```
-error:输入的id参数超出规定限制。
+输入的id参数超出规定限制。
 ```
 ##### case 10:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET Name = NULL WHERE id = 12120
 ```
 expect:
 ```
-error:Name不能为NULL。
+Name不能为NULL。
 ```
 ##### case 11:
+preset:
+```
+预置名为test的表。
+```
 input:
 ```
 UPDATE test SET id = 12120 WHERE Name = 'Wilson'
 ```
 expect:
 ```
-error:主键必须唯一。
+主键必须唯一。
 ```
