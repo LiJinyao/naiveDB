@@ -40,7 +40,7 @@ CREATE TABLE test
 ```
 expect:
 ```
-报错。参数不完整。
+语法错误。参数不完整。
 ```
 ##### Case 4
 input:
@@ -49,7 +49,7 @@ CREATE TABLE
 ```
 expect:
 ```
-报错。参数不完整。
+语法错误。参数不完整。
 ```
 ##### Case 5
 input:
