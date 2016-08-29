@@ -1,0 +1,111 @@
+###DELETE 
+####语法定义： 
+####删除一个表
+DELETE FROM 表名称（删除表里面所有信息但是保留表的结构，属性和索引）
+####删除表中值等于某个条件的所有行
+DELETE FROM 表名称 WHERE 列名称 = 值
+
+
+####preset:
+Person
+
+| Lastname | FirstName | Address      | City     | Age |
+|----------|-----------|--------------|----------|-----|
+| Gates    | Bill      | Xuanwumen 10 | Beijing  | 37  |
+| Wilson   | Fred      | Zhongshan 23 | Nanjing  | 48  |
+| Andy     | Brown     | Nanjing 51   | Shanghai | 25  |
+
+
+#####Case 1:
+
+input:
+
+```	
+DELETE FROM person
+```
+
+expect:
+```
+成功删除一个表名为person的表
+```
+
+#####Case 2:
+
+input:
+
+```	
+DELETE FROM person
+```
+
+expect:
+
+```
+报错，报错类型为无所要删除的表
+```
+
+
+#####Case 3:
+
+input:
+
+```
+DELETE FROM person WHERE LastName = "Wilson"
+```
+
+expect:
+```
+成功删除一个行，将（"Gates"，"Bill"，"Xuanwumen 10"，"Beijing"）这一行删除。
+```
+
+#####Case 4:
+
+input:
+
+```
+DELETE FROM person WHERE LastName = "Eric"
+```
+
+expect:
+
+```
+报错，报错类型为无所要删除的行。
+```
+
+#####Case 5:
+
+input:
+
+```
+DELETE FROM "person"
+```
+
+expect:
+```
+报错，报错类型为语句语法错误
+```
+
+#####Case 6:
+
+input:
+
+```
+DELETE FROM Lastname = hehe
+```
+
+expect:
+```
+报错，报错类型为语句语法错误
+```
+
+#####Case 7:
+
+input:
+
+```
+DELETE FROM person WHERE Sex = "Male"
+```
+expect:
+
+```
+报错，表格缺乏所要删除的参数
+```
