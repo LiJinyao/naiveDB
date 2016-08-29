@@ -18,6 +18,9 @@ Person
 
 #####Case 1:
 
+preset: 
+预置一个person的表
+
 input:
 
 ```	
@@ -30,6 +33,9 @@ expect:
 ```
 
 #####Case 2:
+
+preset:
+预置一个空表
 
 input:
 
@@ -46,6 +52,9 @@ expect:
 
 #####Case 3:
 
+preset: 
+预置一个person的表
+
 input:
 
 ```
@@ -58,6 +67,9 @@ expect:
 ```
 
 #####Case 4:
+
+preset: 
+预置一个person的表
 
 input:
 
@@ -73,6 +85,9 @@ expect:
 
 #####Case 5:
 
+preset: 
+预置一个person的表
+
 input:
 
 ```
@@ -85,6 +100,9 @@ expect:
 ```
 
 #####Case 6:
+
+preset: 
+预置一个person的表
 
 input:
 
@@ -99,6 +117,9 @@ expect:
 
 #####Case 7:
 
+preset: 
+预置一个person的表
+
 input:
 
 ```
@@ -108,4 +129,36 @@ expect:
 
 ```
 报错，表格缺乏所要删除的参数
+```
+
+#####Case 8:
+
+preset: 
+预置一个person的表
+
+input:
+
+```
+DELETE person
+```
+expect:
+
+```
+报错，缺少关键字FROM
+```
+
+#####Case 9:
+
+preset: 
+预置一个person的表
+
+input:
+
+```
+DELETE FROM person LastName = "Brown"
+```
+expect:
+
+```
+报错，缺少关键字where
 ```
