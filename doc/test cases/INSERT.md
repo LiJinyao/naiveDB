@@ -10,7 +10,9 @@ INSERT INTO 表名称 VALUES (值1, 值2,....)
 INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
 ```
 
+```
 //下列用例对CREATE.md中定义的表test进行操作，其中id为主键，name为非空键。
+```
 
 ##### Case 1
 input:
