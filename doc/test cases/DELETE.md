@@ -11,15 +11,15 @@ Person
 
 | Lastname | FirstName | Address      | City     | Age |
 |----------|-----------|--------------|----------|-----|
-| Gates    | Bill      | Xuanwumen 10 | Beijing  | 37  |
-| Wilson   | Fred      | Zhongshan 23 | Nanjing  | 48  |
-| Andy     | Brown     | Nanjing 51   | Shanghai | 25  |
+| Gates    | Bill      | xuanwumen 10 | Beijing  | 37  |
+| Wilson   | Fred      | zhongshan 23 | Nanjing  | 48  |
+| Andy     | Brown     | nanjing 51   | Shanghai | 25  |
 
 
 #####Case 1:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -33,9 +33,6 @@ expect:
 ```
 
 #####Case 2:
-
-preset:
-预置一个空表
 
 input:
 
@@ -53,7 +50,7 @@ expect:
 #####Case 3:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -62,14 +59,15 @@ DELETE FROM person WHERE LastName = "Wilson"
 ```
 
 expect:
-```
-成功删除一个行，将（"Gates"，"Bill"，"Xuanwumen 10"，"Beijing"）这一行删除。
-```
+| Lastname | Firstname | Address      | City     | Age |
+|----------|-----------|--------------|----------|-----|
+| Gates    | Bill      | xuanwumen 10 | Beijing  | 37  |
+| Andy     | Brown     | nanjing      | Shanghai | 25  |
 
 #####Case 4:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -86,7 +84,7 @@ expect:
 #####Case 5:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -102,7 +100,7 @@ expect:
 #####Case 6:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -118,7 +116,7 @@ expect:
 #####Case 7:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -134,7 +132,7 @@ expect:
 #####Case 8:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
@@ -150,7 +148,7 @@ expect:
 #####Case 9:
 
 preset: 
-预置一个person的表
+预置一个名为person的表
 
 input:
 
