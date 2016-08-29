@@ -59,6 +59,7 @@ DELETE FROM person WHERE LastName = "Wilson"
 ```
 
 expect:
+
 | Lastname | Firstname | Address      | City     | Age |
 |----------|-----------|--------------|----------|-----|
 | Gates    | Bill      | xuanwumen 10 | Beijing  | 37  |
