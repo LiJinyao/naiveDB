@@ -3,12 +3,13 @@
 ```
 UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 ```
-##### preset test:
+##### test:
 | ID    | Name   | Address |
 |-------|--------|---------|
 | 12121 | Wilson |         |
 | 12120 | Gates  | BeiJing |
 
+这张名为test的表会在以下每个测试前当作预置表格。
 其中ID为主键，Name存在空值约束。
 ##### case 1:
 preset:
@@ -166,4 +167,17 @@ UPDATE test SET id = 12120 WHERE Name = 'Wilson'
 expect:
 ```
 主键必须唯一。
+```
+##### case 12:
+preset:
+```
+预置名为test的表。
+```
+input:
+```
+UPDATE test SET id = '12120' WHERE Name = 'Wilson'
+```
+expect:
+```
+输入参数类型错误。
 ```
