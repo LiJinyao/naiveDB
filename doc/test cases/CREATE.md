@@ -1,6 +1,7 @@
 
 ### CREATE TABLE
 #### 语法定义：
+```
 CREATE TABLE 表名称
 (
 列名称1 数据类型,
@@ -8,7 +9,8 @@ CREATE TABLE 表名称
 列名称3 数据类型,
 ....
 )
-
+```
+##### Case 1
 input:
 ```
 CREATE TABLE test
