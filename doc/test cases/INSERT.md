@@ -61,7 +61,7 @@ INSERT INTO test VALUES ( , '李四', '北京市海淀区北京理工大学')
 ```
 expect:
 ```
-报错。主键不能为空。
+语法错误。
 ```
 
 ##### Case 5
@@ -147,7 +147,7 @@ INSERT INTO test (id, name, address) VALUES ( , '王五', '')
 ```
 expect:
 ```
-报错。主键不能为空。
+语法错误。
 ```
 
 ##### Case 13
@@ -205,4 +205,44 @@ INSERT INTO test (id, address) VALUES (5, '北京市海淀区北京理工大学'
 expect:
 ```
 报错。无法插入记录：'name'不能为空。
+```
+
+##### Case 18
+input:
+```
+INSERT INTO test (id, name) VALUES (5, '北京市海淀区北京理工大学')
+```
+expect:
+```
+报错。'name'格式不符合要求。
+```
+
+##### Case 19
+input:
+```
+INSERT INTO test (id, name) VALUES ('5', '陈老师')
+```
+expect:
+```
+报错。'id'格式不符合要求。
+```
+
+##### Case 20
+input:
+```
+INSERT INTO test (id, name, address) VALUES (5, '陈老师', '北京市海淀区北京理工大学', '男')
+```
+expect:
+```
+语法错误。参数数量不匹配。
+```
+
+##### Case 21
+input:
+```
+INSERT INTO test (id, name, address) VALUES (5, '陈老师')
+```
+expect:
+```
+语法错误。参数数量不匹配。
 ```
