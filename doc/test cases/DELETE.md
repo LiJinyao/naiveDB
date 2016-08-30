@@ -43,7 +43,7 @@ DELETE FROM person
 expect:
 
 ```
-报错，报错类型为无所要删除的表
+报warning，类型为无所要删除的表
 ```
 
 
@@ -79,7 +79,7 @@ DELETE FROM person WHERE LastName = "Eric"
 expect:
 
 ```
-报错，报错类型为无所要删除的行。
+报warning，类型为无所要删除的行。
 ```
 
 #####Case 5:
