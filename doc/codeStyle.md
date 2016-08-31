@@ -1,57 +1,71 @@
 # naiveDB编码规范规范
 
-------
+-------
 
-##命名空间
+## 命名空间
+
 顶级命名空间为`naiveDB`。各模块在顶级命名空间下定义自己的命名空间，如：`naiveDB::parser`。
-##变量名
+## 变量名
+
 采用驼峰命名法。
-###Good
+### Good
 ```
 int someInt = 1;
 ```
-###Bad
+### Bad
 ```
 int some_int = 1;
 ```
-##常量名
+### Good
+```
+class MyClass {
+
+}
+```
+### Bad
+```
+class my_class {
+
+}
+```
+## 常量名
 采用大写。
-###Good
+### Good
 ```
 const int SOME_INT = 1;
 ```
-###Bad
+### Bad
 ```
 const int some_int = 1;
 const int someInt = 1;
 ```
-##大括号
+## 大括号
 大括号都不换行。
-###Good
+### Good
 ```
-namespace naiveDB { 
+namespace naiveDB {
 // ...
 }
 ```
-###Bad
+### Bad
 ```
 namespace naiveDB
-{ 
+{
 // ...
 }
 ```
-##using
+## using
 不允许对标准库使用`using namespace`。
-###Good
+### Good
 ```
 using std::cout;
 cout << "hello world.\n";
 ```
-Also good
+
 ```
 std::cout << "hello world.\n";
 ```
-###Bad
+### Bad
 ```
 using namespace std;
 cout << "hello world.\n";
