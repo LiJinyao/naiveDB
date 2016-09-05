@@ -55,7 +55,7 @@ preset:
 input:
 
 ```
-DELETE FROM person WHERE LastName = "Wilson"
+DELETE FROM person WHERE LastName = 'Wilson'
 ```
 
 expect:
@@ -73,7 +73,7 @@ preset:
 input:
 
 ```
-DELETE FROM person WHERE LastName = "Eric"
+DELETE FROM person WHERE LastName = 'Eric'
 ```
 
 expect:
@@ -90,7 +90,7 @@ preset:
 input:
 
 ```
-DELETE FROM "person"
+DELETE FROM 'person'
 ```
 
 expect:
@@ -122,7 +122,7 @@ preset:
 input:
 
 ```
-DELETE FROM person WHERE Sex = "Male"
+DELETE FROM person WHERE Sex = 'Male'
 ```
 expect:
 
@@ -154,7 +154,7 @@ preset:
 input:
 
 ```
-DELETE FROM person LastName = "Brown"
+DELETE FROM person LastName = 'Brown'
 ```
 expect:
 
