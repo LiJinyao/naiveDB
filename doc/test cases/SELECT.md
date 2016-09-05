@@ -143,7 +143,7 @@ Except:
 |李四|北京理工大学|
 |王五|北京理工大学|
 
-###Case 9:
+####Case 9:
 Input:
 ```
 SELECT Name FROM StudentsInfo WHERE Age;
