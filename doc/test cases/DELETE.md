@@ -1,12 +1,12 @@
-###DELETE 
-####语法定义： 
-####删除一个表
+### DELETE
+#### 语法定义：
+#### 删除一个表
 DELETE FROM 表名称（删除表里面所有信息但是保留表的结构，属性和索引）
-####删除表中值等于某个条件的所有行
+#### 删除表中值等于某个条件的所有行
 DELETE FROM 表名称 WHERE 列名称 = 值
 
 
-####preset:
+#### preset:
 Person
 
 | Lastname | FirstName | Address      | City     | Age |
@@ -16,14 +16,14 @@ Person
 | Andy     | Brown     | nanjing 51   | Shanghai | 25  |
 
 
-#####Case 1:
+##### Case 1:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
 
-```	
+```
 DELETE FROM person
 ```
 
@@ -32,11 +32,11 @@ expect:
 成功删除一个表名为person的表
 ```
 
-#####Case 2:
+##### Case 2:
 
 input:
 
-```	
+```
 DELETE FROM person
 ```
 
@@ -47,9 +47,9 @@ expect:
 ```
 
 
-#####Case 3:
+##### Case 3:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -65,9 +65,9 @@ expect:
 | Gates    | Bill      | xuanwumen 10 | Beijing  | 37  |
 | Andy     | Brown     | nanjing      | Shanghai | 25  |
 
-#####Case 4:
+##### Case 4:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -82,9 +82,9 @@ expect:
 报warning，类型为无所要删除的行。
 ```
 
-#####Case 5:
+##### Case 5:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -98,9 +98,9 @@ expect:
 报错，报错类型为语句语法错误
 ```
 
-#####Case 6:
+##### Case 6:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -114,9 +114,9 @@ expect:
 报错，报错类型为语句语法错误
 ```
 
-#####Case 7:
+##### Case 7:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -130,9 +130,9 @@ expect:
 报错，表格缺乏所要删除的参数
 ```
 
-#####Case 8:
+##### Case 8:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:
@@ -146,9 +146,9 @@ expect:
 报错，缺少关键字FROM
 ```
 
-#####Case 9:
+##### Case 9:
 
-preset: 
+preset:
 预置一个名为person的表
 
 input:

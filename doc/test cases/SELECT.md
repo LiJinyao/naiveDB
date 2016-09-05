@@ -1,6 +1,6 @@
 
-###SELECT
-####语法语义
+### SELECT
+#### 语法语义
 
 ```
 SELECT 列名称 FROM 表名称;
@@ -20,7 +20,7 @@ SELECT 列名称 FROM 表名称 WHERE 列 运算符 值;
 "StudentsInfo"表
 
 |Id|Name|Age|Address|
-|------| ------| ------| ------| 
+|------| ------| ------| ------|
 |01|李华|17|北京理工大学|
 |02|张三|18|北京理工大学|
 |03|李四|17|北京理工大学|
@@ -30,7 +30,7 @@ SELECT 列名称 FROM 表名称 WHERE 列 运算符 值;
 
 
 
-####Case 1:
+#### Case 1:
 Input:
 ```
 SELECT Name FROM StudentsInfo;
@@ -47,7 +47,7 @@ Except:
 | 王五  |
 
 
-####Case 2:
+#### Case 2:
 Input :
 ```
 SELECT Name,Age From StudentsInfo;
@@ -64,7 +64,7 @@ Except:
 | 王五  | 19  |
 
 
-####Case 3:
+#### Case 3:
 Input:
 ```
 SELECT * FROM StudentsInfo;
@@ -74,7 +74,7 @@ Except:
 从StudentsInfo中获取表中的所有数据
 ```
 |Id|Name|Age|Address|
-|------| ------| ------| ------| 
+|------| ------| ------| ------|
 |01|李华|17|北京理工大学|
 |02|张三|18|北京理工大学|
 |03|李四|17|北京理工大学|
@@ -82,7 +82,7 @@ Except:
 
 
 
-####Case 4:
+#### Case 4:
 Input:
 ```
 SELECT * FROM;
@@ -92,7 +92,7 @@ Except:
 语法错误，参数不完整（缺少表名）
 ```
 
-####Case 5:
+#### Case 5:
 Input:
 ```
 SELECT FROM StudnetsInfo;
@@ -102,7 +102,7 @@ Except:
 语法错误，参数不完整
 ```
 
-####Case 6：
+#### Case 6：
 Input:
 ```
 SELECT * FROM UserInfo;
