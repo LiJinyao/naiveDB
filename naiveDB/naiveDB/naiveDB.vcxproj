@@ -151,7 +151,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="database.test.cpp" />
     <ClCompile Include="Form.cpp" />
+    <ClCompile Include="grammar.test.cpp" />
     <ClCompile Include="IntKey.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="naiveDB.cpp" />
