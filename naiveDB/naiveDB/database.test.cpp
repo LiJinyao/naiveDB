@@ -27,7 +27,7 @@ void databaseTest() {
 	char cmd[10];
 	std::wstring x;
 	std::wstring y;
-	std::wstring z = L"OR";
+	std::wstring z = L"AND";
 	while (std::cin >> cmd)
 	{
 		std::vector<std::wstring> dat;
@@ -43,50 +43,32 @@ void databaseTest() {
 		}
 		if (cmd[0] == 'd')
 		{
-			//f->Delete();
-			std::wstring x1, y1;
-			std::wcin >> x >> y;
+			f->Delete();
+			/*	std::wcin >> x >> y;
 			dat.push_back(x);
 			dat.push_back(y);
 			dat1.push_back(dat);
-			dat.clear();
-			std::wcin >> x1 >> y1;
-			dat.push_back(x1);
-			dat.push_back(y1);
-			dat1.push_back(dat);
-			std::cout<< f->Delete(dat1, z)<<std::endl;
+			std::cout<< f->Delete(dat1, z)<<std::endl;*/
 		}
 		if (cmd[0] == 'u')
 		{
-			std::wstring x1, x2,x3,x4, y1, y2,y3,y4;
-			std::wcin >> x1 >> x2 >>x3>>x4>> y1 >> y2>>y3>>y4;
+			std::wstring x1, x2, y1, y2;
+			std::wcin >> x1 >> x2 >> y1 >> y2;
 			dat.push_back(x1);
 			dat.push_back(x2);
 			dat1.push_back(dat);
 			dat.clear();
-			dat.push_back(x3);
-			dat.push_back(x4);
-			dat1.push_back(dat);
-			dat.clear();
 			dat.push_back(y1);
 			dat.push_back(y2);
-			dat2.push_back(dat);
-			dat.clear();
-			dat.push_back(y3);
-			dat.push_back(y4);
 			dat2.push_back(dat);
 			std::cout << f->Update(dat1, dat2) << std::endl;
 		}
 		if (cmd[0] == 's')
 		{
 			f->Select();
-			std::wstring s1 = L"name", s2 = L"id";
-			std::wcin >> x >> y;
-			dat.push_back(s1);
-			dat.push_back(s2);
-			std::wstring condition[2];
-			condition[0] = x; condition[1] = y;
-			f->Select(dat,condition);
+			std::wcin >> x;
+			dat.push_back(x);
+			f->Select(dat);
 		}
 
 	}
