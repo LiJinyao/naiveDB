@@ -8,6 +8,6 @@ void databaseTest();
 void grammarTest();
 int main(int argc, char** argv) {
 	// databaseTest();
-	// grammarTest();
+	grammarTest();
 	return 0;
 }
