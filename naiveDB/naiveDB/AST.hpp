@@ -7,6 +7,8 @@
 #define BOOST_SPIRIT_UNICODE
 #include <iostream>
 #include <vector>
+#include "DataBase.h"
+
 namespace naiveDB {
 	namespace parser {
 		/****************************************
@@ -73,7 +75,7 @@ namespace naiveDB {
 			std::wstring name;
 			std::wstring dataType;
 			int limit = 0; // length limit.
-			std::wstring attribute; // NUT NULL, PRIMARY KEY
+			std::wstring attribute; // NOT NULL, PRIMARY KEY
 			friend std::wostream& operator<<(std::wostream& os, ColumnStatement const& ss) {
 				os << ss.name << " " << ss.dataType;
 				if (0 != ss.limit) {
@@ -154,7 +156,7 @@ namespace naiveDB {
 		* SQL AST enter
 		*
 		****************************************/
-		typedef
+		typedef 
 			boost::variant<SelectStatement, CreateStatement, DeleteStatement, InsertStatement> sqlStatement;
 
 		struct TopSQLStatement {
@@ -182,7 +184,12 @@ void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateStatement & i) const {
-	std::wcout << i << std::endl;
+	//std::wcout << i << std::endl;
+	//这里存在一个问题，即没有区分建立数据库和建立表两种不同操作
+	//下面在每一次CREATE时创建一个名为naiveDB的数据库实体，并创建第一张表
+	//缺点是无法实现一个数据库多表操作
+	naiveDB::DataBase db = naiveDB::DataBase(L"naiveDB");
+	db.Create(i);
 }
 
 void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
