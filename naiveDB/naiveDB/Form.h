@@ -37,6 +37,37 @@ namespace naiveDB {
 
 			std::map<int, Record> getForm();
 
+			std::vector<AVL<std::wstring>*> getWstringHeader();
+
+			std::vector<AVL<int>*> getIntHeader();
+
+			int getIdTotal();
+
+			int getKeyTotal();
+
+			std::vector<std::vector<std::wstring>> getFormHeader();
+
+			bool getFull();
+
+			bool getNull();
+
+			void setFormName(std::wstring x);
+
+			void setForm(std::map<int,Record>x);
+
+			void setWstringHeader(std::vector<AVL<std::wstring>*> x);
+
+			void setIntHeader(std::vector<AVL<int>*>x);
+
+			void setIdTotal(int x);
+
+			void setKeyTotal(int x);
+
+			void setFormHeader(std::vector<std::vector<std::wstring>>x);
+
+			void setFull(bool x);
+
+			void setNull(bool x);
 		protected:
 
 		private:
@@ -46,7 +77,6 @@ namespace naiveDB {
 			int idTotal;
 			int keyTotal;
 			std::vector<std::vector<std::wstring>> formHeader;//表头
-
 			std::map<int, Record> records;//重载Record的'<'
 
 			bool ifNull;

@@ -286,7 +286,7 @@ int Form::Select(std::vector<std::wstring> keyNames, std::wstring condition[2])
 
 		for (int j = 0; j < keyNames.size(); j++)
 		{
-
+			it = records.find(tmp[i]);
 			std::vector<Key*> tmpp = it->second.getRecord();
 			for (int k = 0; k < tmpp.size(); k++)
 			{
@@ -299,7 +299,7 @@ int Form::Select(std::vector<std::wstring> keyNames, std::wstring condition[2])
 					}
 					else
 					{
-						IntKey* now = (IntKey*)tmp[j];
+						IntKey* now = (IntKey*)tmpp[j];
 						std::wcout << std::setw(8) << now->getData();
 
 					}
@@ -412,7 +412,85 @@ std::map<int, Record> Form::getForm() {
 	return records;
 }
 
+std::vector<AVL<std::wstring>*> Form:: getWstringHeader()
+{
+	return wstringHeader;
+}
+
+std::vector<AVL<int>*> Form::getIntHeader()
+{
+	return intHeader;
+}
+
+int Form::getIdTotal()
+{
+	return idTotal;
+}
+
+int Form::getKeyTotal()
+{
+	return keyTotal;
+}
+std::vector<std::vector<std::wstring>> Form::getFormHeader()
+{
+	return formHeader;
+}
+
 //获取表名
 std::wstring Form::getFormName() {
 	return formName;
+}
+
+bool Form::getFull()
+{
+	return ifFull;
+}
+bool Form::getNull()
+{
+	return ifNull;
+}
+
+void Form::setFormName(std::wstring x)
+{
+	formName = x;
+}
+
+void Form::setForm(std::map<int, Record>x)
+{
+	records = x;
+}
+
+void Form::setWstringHeader(std::vector<AVL<std::wstring>*> x)
+{
+	wstringHeader = x;
+}
+
+void Form::setIntHeader(std::vector<AVL<int>*>x)
+{
+	intHeader = x;
+}
+
+void Form::setIdTotal(int x)
+{
+	idTotal = x;
+}
+
+void Form::setKeyTotal(int x)
+{
+	keyTotal = x;
+}
+
+void Form::setFormHeader(std::vector<std::vector<std::wstring>>x)
+{
+	formHeader = x;
+}
+
+void Form::setFull(bool x)
+{
+	ifFull = x;
+}
+
+void Form::setNull(bool x)
+{
+	ifNull = x;
 }
