@@ -15,7 +15,7 @@ SELECT * FROM 表名称;
 ```
 SELECT 列名称 FROM 表名称 WHERE 列 运算符 值;
 ```
-其中值可以加单引号'',或者不加。
+其中值可以加双引号"",或者不加。
 
 "StudentsInfo"表
 
@@ -130,11 +130,11 @@ Except:
 ####Case 8:
 Input:
 ```
-SELECT Name FROM StudentsInfo WHERE Adress = '北京理工大学';
+SELECT Name FROM StudentsInfo WHERE Adress = ""北京理工大学"";
 ```
 Except:
 ```
-输出符合Adress = '北京理工大学'的所有Name的值
+输出符合Adress = ""北京理工大学""的所有Name的值
 ```
 |Name|Address|
 |------| ------| 

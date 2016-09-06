@@ -18,11 +18,11 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = 12138 WHERE Name = 'Wilson' 
+UPDATE test SET id = 12138 WHERE Name = "Wilson" 
 ```
 expect:
 ```
-成功为Name为'Wilson'的人更新值为12138的id。
+成功为Name为"Wilson"的人更新值为12138的id。
 ```
 
 | ID    | Name   | Address |
@@ -37,12 +37,12 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = 12580, Address = 'NanJing'
-WHERE Name = 'Wilson'
+UPDATE test SET id = 12580, Address = "NanJing"
+WHERE Name = "Wilson"
 ```
 expect:
 ```
-成功为Name为'Wilson'的人更新值为'NanJing'的Address和值为12580的id。
+成功为Name为"Wilson"的人更新值为"NanJing"的Address和值为12580的id。
 ```
 
 | ID    | Name   | Address |
@@ -57,7 +57,7 @@ preset:
 ```
 input:
 ```
-UPDATE SET id = 12121 WHERE Name = 'Wilson' 
+UPDATE SET id = 12121 WHERE Name = "Wilson" 
 ```
 expect:
 ```
@@ -70,7 +70,7 @@ preset:
 ```
 input:
 ```
-UPDATE test id = 12121 WHERE Name = 'Wilson' 
+UPDATE test id = 12121 WHERE Name = "Wilson" 
 ```
 expect:
 ```
@@ -83,7 +83,7 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id WHERE Name = 'Wilson' 
+UPDATE test SET id WHERE Name = "Wilson" 
 ```
 expect:
 ```
@@ -96,11 +96,11 @@ preset:
 ```
 input:
 ```
-UPDATE test SET Work = 'Police' WHERE Name = 'Wilson' 
+UPDATE test SET Work = "Police" WHERE Name = "Wilson" 
 ```
 expect:
 ```
-test表中不存在'Work'列。
+test表中不存在"Work"列。
 ```
 ##### case 7:
 preset:
@@ -109,11 +109,11 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = 12121 WHERE Work = 'Police'
+UPDATE test SET id = 12121 WHERE Work = "Police"
 ```
 expect:
 ```
-test表中不存在'Work'列。
+test表中不存在"Work"列。
 ```
 ##### case 8:
 preset:
@@ -122,11 +122,11 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = 12138 WHERE Name = 'Waston'
+UPDATE test SET id = 12138 WHERE Name = "Waston"
 ```
 expect:
 ```
-不存在Name为'Waston'的数据。
+不存在Name为"Waston"的数据。
 ```
 ##### case 9:
 preset:
@@ -136,7 +136,7 @@ preset:
 input:
 ```
 UPDATE test SET id = 9283751092385
-WHERE Name = 'Wilson'
+WHERE Name = "Wilson"
 ```
 expect:
 ```
@@ -162,7 +162,7 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = 12120 WHERE Name = 'Wilson'
+UPDATE test SET id = 12120 WHERE Name = "Wilson"
 ```
 expect:
 ```
@@ -175,7 +175,7 @@ preset:
 ```
 input:
 ```
-UPDATE test SET id = '12120' WHERE Name = 'Wilson'
+UPDATE test SET id = "12120" WHERE Name = "Wilson"
 ```
 expect:
 ```
