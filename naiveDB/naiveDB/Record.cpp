@@ -1,7 +1,4 @@
-#include "Record.h"
 #include "stdafx.h"
-#include <sstream>
-#include <iostream>
 
 using namespace naiveDB::dataprocessor;
 

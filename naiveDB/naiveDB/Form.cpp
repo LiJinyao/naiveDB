@@ -1,11 +1,5 @@
-#include "Form.h"
-#include "stdafx.h" 
+#include "stdafx.h"
 
-#include <sstream>
-#include <iostream>
-#include <iterator>
-#include <iomanip>
-#include <set>
 using namespace naiveDB::dataprocessor;
 
 //½¨±í
@@ -15,7 +9,7 @@ Form::Form(std::vector<std::vector<std::wstring> > formDefine, std::wstring _for
 	formName = _formName;
 	formHeader = formDefine;
 
-	for (int i = 0; i < formDefine.size(); i++) {
+	for (unsigned int i = 0; i < formDefine.size(); i++) {
 		if (formDefine[i][1] == L"int") {
 			AVL<int> *tmp = new AVL<int>(formDefine[i][0], i);
 			intHeader.push_back(tmp);

@@ -1,5 +1,5 @@
-#include "IntKey.h"
 #include "stdafx.h"
+
 using namespace naiveDB::dataprocessor;
 
 IntKey::IntKey(

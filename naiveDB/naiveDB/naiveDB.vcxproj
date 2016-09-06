@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F031CE34-BA5A-4BA7-AE09-BCF556D2315C}</ProjectGuid>
+    <ProjectGuid>{C9967EA0-5EF9-4C82-9E10-A386ECF35824}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>naiveDB</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
@@ -87,12 +87,10 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\boost_1_61_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\boost_1_61_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -143,11 +141,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AST.hpp" />
     <ClInclude Include="AVL.hpp" />
-    <ClInclude Include="DataBase.h" />
     <ClInclude Include="Form.h" />
-    <ClInclude Include="Grammar.hpp" />
     <ClInclude Include="IntKey.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Record.h" />
@@ -156,7 +151,6 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DataBase.cpp" />
     <ClCompile Include="Form.cpp" />
     <ClCompile Include="IntKey.cpp" />
     <ClCompile Include="Key.cpp" />

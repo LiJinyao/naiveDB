@@ -1,16 +1,11 @@
-ï»¿#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <cstdlib>
-#include <algorithm>
-#include <string>
-#include <queue>
+#pragma once
+
 #define oo 0x7FFFFFFF
 
 namespace naiveDB {
 	namespace dataprocessor {
-		// AVL. finddata(T dat)è¿”å›çš„æ˜¯ä¸€ä¸ªnodeæŒ‡é’ˆpï¼Œp->dat = datï¼›
-		//å…¶ä½™çš„AVLçš„æ–¹æ³•å‡è¿”å›ä¸ºç©ºï¼Œæ‰§è¡Œæ‰€è¦æ±‚æ“ä½œ 
+		// AVL. finddata(T dat)·µ»ØµÄÊÇÒ»¸önodeÖ¸Õëp£¬p->dat = dat£»
+		//ÆäÓàµÄAVLµÄ·½·¨¾ù·µ»ØÎª¿Õ£¬Ö´ĞĞËùÒªÇó²Ù×÷ 
 		template <typename T>
 		class AVL {
 		private:

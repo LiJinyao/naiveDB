@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-#include "StringKey.h"
 #include "stdafx.h"
 
 using namespace naiveDB::dataprocessor;

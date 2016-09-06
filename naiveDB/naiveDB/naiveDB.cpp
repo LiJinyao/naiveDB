@@ -1,52 +1,85 @@
-// naiveDB.cpp : Defines the entry point for the console application.
+// ConsoleApplication5.cpp : Defines the entry point for the console application.
 //
-#pragma once
+
 #include "stdafx.h"
-#include "Grammar.hpp"
 
-int main() {
-	using boost::spirit::standard_wide::space;
-	typedef std::wstring::const_iterator iterator_type;
-	typedef naiveDB::parser::SQLRule<iterator_type> SQLRule;
-	SQLRule g; // Our grammar
-	std::wstring str;
-	std::wstring logo = L"\
-##########################################\n\
-#              _           _____  ____   #\n\
-#             (_)         |  __ \\|  _ \\  #\n\
-#  _ __   __ _ ___   _____| |  | | |_) | #\n\
-# | '_ \\ / _` | \\ \\ / / _ \\ |  | |  _ <  #\n\
-# | | | | (_| | |\\ V /  __/ |__| | |_) | #\n\
-# |_| |_|\\__,_|_| \\_/ \\___|_____/|____/  #\n\
-#                                        #\n\
-##########################################\n\
-Welcome to naiveDB!";
-	std::wcout << logo << std::endl;
-	while (getline(std::wcin, str)) {
-		if (str.empty() || str[0] == 'q' || str[0] == 'Q') {
-			break;
+using namespace naiveDB::dataprocessor;
+
+int main(int argc, char** argv) {
+
+	std::vector<std::vector<std::wstring>> fd;
+	std::vector<std::wstring> s;
+
+	s.push_back(L"name");
+	s.push_back(L"wstring");
+	s.push_back(L"false");
+	s.push_back(L"true");
+	s.push_back(L"5");
+
+	fd.push_back(s);
+	s.clear();
+
+	s.push_back(L"id");
+	s.push_back(L"int");
+	s.push_back(L"true");
+	s.push_back(L"true");
+	s.push_back(L"0");
+
+	fd.push_back(s);
+
+	Form *f = new Form(fd, L"students");
+
+
+	char cmd[10];
+	std::wstring x;
+	std::wstring y;
+	std::wstring z = L"AND";
+	while (std::cin >> cmd)
+	{
+		std::vector<std::wstring> dat;
+		std::vector<std::vector<std::wstring>> dat1;
+		std::vector<std::vector<std::wstring>> dat2;
+
+		if (cmd[0] == 'i')
+		{
+			std::wcin >> x >> y;
+			dat.push_back(x);
+			dat.push_back(y);
+			f->Insert(dat);
 		}
-		naiveDB::parser::TopSQLStatement ste;
-		std::wstring::const_iterator iter = str.begin();
-		std::wstring::const_iterator end = str.end();
-		bool r = phrase_parse(iter, end, g, space, ste);
-
-		if (r && iter == end) {
-
-			//std::cout << boost::fusion::tuple_open('[');
-			//std::cout << boost::fusion::tuple_close(']');
-			//std::cout << boost::fusion::tuple_delimiter(", ");
-
-			std::wcout << "Parsing succeeded\n";
-			boost::apply_visitor(naiveDB::parser::SQLparser(), ste.sql);
+		if (cmd[0] == 'd')
+		{
+			f->Delete();
+			/*	std::wcin >> x >> y;
+			dat.push_back(x);
+			dat.push_back(y);
+			dat1.push_back(dat);
+			std::cout<< f->Delete(dat1, z)<<std::endl;*/
 		}
-		else {
-			std::wcout << "Parsing failed\n";
-			std::wstring rest(iter, end);
-			std::wcout << "stopped at: " << rest << std::endl;
+		if (cmd[0] == 'u')
+		{
+			std::wstring x1, x2, y1, y2;
+			std::wcin >> x1 >> x2 >> y1 >> y2;
+			dat.push_back(x1);
+			dat.push_back(x2);
+			dat1.push_back(dat);
+			dat.clear();
+			dat.push_back(y1);
+			dat.push_back(y2);
+			dat2.push_back(dat);
+			std::cout << f->Update(dat1, dat2) << std::endl;
+		}
+		if (cmd[0] == 's')
+		{
+			f->Select();
+			std::wcin >> x;
+			dat.push_back(x);
+			f->Select(dat);
 		}
 
 	}
+
+
+
 	return 0;
 }
-

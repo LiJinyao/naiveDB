@@ -24,31 +24,22 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Grammar.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AST.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Key.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IntKey.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StringKey.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Record.h">
+    <ClInclude Include="AVL.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Form.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DataBase.h">
+    <ClInclude Include="IntKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AVL.hpp">
+    <ClInclude Include="Key.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Record.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringKey.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,22 +50,19 @@
     <ClCompile Include="naiveDB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Key.cpp">
+    <ClCompile Include="Form.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="IntKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StringKey.cpp">
+    <ClCompile Include="Key.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Record.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Form.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DataBase.cpp">
+    <ClCompile Include="StringKey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
