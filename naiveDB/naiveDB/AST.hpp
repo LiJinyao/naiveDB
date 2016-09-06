@@ -165,12 +165,14 @@ namespace naiveDB {
 		* USE statement
 		*
 		****************************************/
+		
 		struct UseDatabaseStatement{
 			std::wstring dbName;
 			friend std::wostream& operator<<(std::wostream& os, UseDatabaseStatement const& ss) {
 				return os << "USE DATABASE " << ss.dbName;
 			}
 		};
+
 		/****************************************
 		*
 		* SQL AST enter
@@ -228,6 +230,7 @@ void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
 * Use BOOST_FUSION to adapt AST to grammar structs
 *
 ****************************************/
+
 BOOST_FUSION_ADAPT_STRUCT(
 	naiveDB::parser::SelectStatement,
 	(std::vector<std::wstring>, columns)

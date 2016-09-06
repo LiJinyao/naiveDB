@@ -15,6 +15,7 @@ namespace naiveDB {
 		using std::wstring;
 		using qi::alpha;
 		using qi::alnum;
+		using qi::space;
 		using qi::no_case;
 		using qi::optional;
 		using qi::attr;
@@ -92,7 +93,7 @@ struct naiveDB::parser::WhereConditionClause : qi::grammar<Iterator, WhereCondit
 		columnsident %= lexeme[alpha >> *alnum];
 		// columnsident %= selectedColumns;
 		// optional quotate string
-		condition %= quotedString | +(char_ - (lit('"') | ';' | ','));
+		condition %= quotedString | lexeme[+(char_ - (encoding::space | lit('"') | ';' | ',' ))];
 		// start %= columnsident > whereOperator> condition;
 		start %= columnsident >> whereOperator >> condition;
 	}
@@ -106,7 +107,7 @@ template <typename Iterator>
 struct naiveDB::parser::WhereClause : qi::grammar<Iterator, WhereStatement(), encoding::space_type> {
 	WhereClause() : WhereClause::base_type(start) {
 
-		start %= no_case["where"] >> whereCondition >> -lit(';');
+		start %= no_case["where"] >> whereCondition % (no_case["and"] | no_case["or"])>> -lit(';');
 
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> columnsident, whereOperator, condition;
