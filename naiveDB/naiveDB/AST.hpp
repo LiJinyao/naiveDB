@@ -42,7 +42,7 @@ namespace naiveDB {
 		*
 		****************************************/
 		struct SelectStatement {
-			std::vector<std::wstring> columns, fromtables;
+			std::vector<std::wstring> columns, fromtables; //columns中只有一个元素且这个元素为L""时代表SELECT *
 			WhereStatement whereClause;
 
 			// test
