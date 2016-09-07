@@ -1,7 +1,5 @@
 #pragma once
 
-#define oo 0x7FFFFFFF
-
 namespace naiveDB {
 	namespace dataprocessor {
 		// AVL. finddata(T dat)返回的是一个node指针p，p->dat = dat；
