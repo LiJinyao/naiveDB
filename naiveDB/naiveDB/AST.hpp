@@ -154,10 +154,16 @@ namespace naiveDB {
 		* UPDATE AST
 		* UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 		****************************************/
-
+		// SET 列名称 = 新值 
+		struct SetStatement {
+			// col： 列名
+			// val： 要设置的值
+			std::wstring col, val;
+		};
 		struct UpdateStatement {
-			std::wstring tableName;
-			std::vector<std::wstring> columns, values;
+			std::wstring tableName; // 要修改的表名
+			std::vector<SetStatement> sets; //要修改的内容，见struct SetStatement
+			WhereStatement whereClause; //where限制条件
 		};
 
 		/****************************************
@@ -179,7 +185,7 @@ namespace naiveDB {
 		*
 		****************************************/
 		typedef
-			boost::variant<UseDatabaseStatement, SelectStatement, CreateTableStatement, CreateDatabaseStatement, DeleteStatement, InsertStatement> sqlStatement;
+			boost::variant<UpdateStatement, UseDatabaseStatement, SelectStatement, CreateTableStatement, CreateDatabaseStatement, DeleteStatement, InsertStatement> sqlStatement;
 
 		struct TopSQLStatement {
 			sqlStatement sql;
@@ -193,6 +199,7 @@ namespace naiveDB {
 			void operator()(DeleteStatement & i) const;
 			void operator()(InsertStatement & i) const;
 			void operator()(UseDatabaseStatement & i) const;
+			void operator()(UpdateStatement & i) const;
 		};
 	}
 }
@@ -224,6 +231,11 @@ void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
 }
 void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
 	std::wcout << i << std::endl;
+}
+
+void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
+	std::wcout << L"a";
+	i;
 }
 /****************************************
 *
@@ -291,4 +303,17 @@ BOOST_FUSION_ADAPT_STRUCT(
 BOOST_FUSION_ADAPT_STRUCT(
 	naiveDB::parser::UseDatabaseStatement,
 	(std::wstring, dbName)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	naiveDB::parser::UpdateStatement,
+	(std::wstring, tableName)
+	(std::vector<naiveDB::parser::SetStatement>, sets)
+	(naiveDB::parser::WhereStatement, whereClause)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	naiveDB::parser::SetStatement,
+	(std::wstring, col)
+	(std::wstring, val)
 )
