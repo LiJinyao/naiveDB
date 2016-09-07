@@ -129,7 +129,7 @@ struct naiveDB::parser::SelectRule : qi::grammar<Iterator, SelectStatement(), en
 	SelectRule() : SelectRule::base_type(start) {
 
 		tablesident %= lexeme[alpha >> *alnum]; // table name
-		columnsident %= lexeme[(alpha | '*') >> *alnum]; // columns name could be *
+		columnsident %= lexeme[(alpha | char_('*')) >> *alnum]; // columns name could be *
 		columns %= no_case["select"] >> (columnsident[&addColSym] % ',');
 		tables %= no_case["from"] >> (tablesident % ',');
 
