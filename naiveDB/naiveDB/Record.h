@@ -22,6 +22,10 @@ namespace naiveDB {
 
 			std::vector<Key *> getRecord();
 
+			void setId(int x);
+
+			void setRecord(std::vector<Key *> x);
+
 		protected:
 
 		private:

@@ -7,7 +7,7 @@
 void databaseTest();
 void grammarTest();
 int main(int argc, char** argv) {
-	// databaseTest();
+	 databaseTest();
 	// grammarTest();
 	return 0;
 }

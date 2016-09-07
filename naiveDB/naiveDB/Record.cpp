@@ -80,3 +80,13 @@ std::vector<Key *> Record::getRecord()
 {
 	return  record;
 }
+
+void Record::setId(int x)
+{
+	id = x;
+}
+
+void Record::setRecord (std::vector<Key *> x)
+{
+	record = x;
+}

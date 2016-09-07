@@ -35,3 +35,20 @@ bool Key::getPrimaryStatus() {
 bool Key::getNotNullStatus() {
 	return ifNotNull;
 }
+
+void Key::setPrimaryStatus(bool x)
+{
+	ifPrimaryKey = x;
+}
+void Key::setNotNullStatus(bool x)
+{
+	ifNotNull = x;
+}
+void Key::setKeyName(std::wstring x)
+{
+	keyName = x;
+}
+void Key::setTypeName(std::wstring x)
+{
+	typeName = x;
+}

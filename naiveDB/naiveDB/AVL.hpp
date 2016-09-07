@@ -148,9 +148,17 @@ namespace naiveDB {
 			{
 				return id;
 			}
+			int setId(int x)
+			{
+				id = x;
+			}
 			std::wstring GetName()
 			{
 				return name;
+			}
+			std::wstring setName(std::wstring)
+			{
+				name = x;
 			}
 			std::vector<int> finddata(T dat)
 			{
