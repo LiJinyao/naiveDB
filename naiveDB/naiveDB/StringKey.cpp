@@ -31,3 +31,8 @@ int StringKey::getLengthLimit() {
 void StringKey::setData(std::wstring _data) {
 	data = _data;
 }
+
+void StringKey::setLengthLimit(int x)
+{
+	lengthLimit = x;
+}

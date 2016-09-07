@@ -21,6 +21,9 @@ namespace naiveDB {
 
 			int getLengthLimit();
 
+
+			void setLengthLimit(int x);
+
 		protected:
 
 		private:

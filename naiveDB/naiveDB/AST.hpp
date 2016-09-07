@@ -59,7 +59,7 @@ namespace naiveDB {
 			}
 		};
 
-		/****************************************
+		/**************************************** 
 		*
 		* CREATE AST
 		*
@@ -85,10 +85,10 @@ namespace naiveDB {
 			}
 		};
 
-		struct CreateStatement {
+		struct CreateTableStatement {
 			std::wstring tableName;
 			std::vector<ColumnStatement> columns;
-			friend std::wostream& operator<<(std::wostream& os, CreateStatement const& ss) {
+			friend std::wostream& operator<<(std::wostream& os, CreateTableStatement const& ss) {
 				os << "CREATE TABLE " << ss.tableName << "(";
 				for (auto val : ss.columns) {
 					os << val;
@@ -97,12 +97,20 @@ namespace naiveDB {
 				return os << ')';
 			}
 		};
+		
+		struct CreateDatabaseStatement {
+			std::wstring dbName;
+			friend std::wostream& operator<<(std::wostream& os, CreateDatabaseStatement const& ss) {
+				return os << "CREATE DATABASE " << ss.dbName;
+			}
+		};
 
 		/****************************************
 		*
 		* DELETE AST
 		*
 		****************************************/
+
 		struct DeleteStatement {
 			std::wstring tableName;
 			WhereStatement whereClause;
@@ -114,11 +122,13 @@ namespace naiveDB {
 			}
 
 		};
+
 		/****************************************
 		*
 		* INSERT AST
 		* INSERT INTO 表名称 VALUES (值1, 值2,....)
 		****************************************/
+
 		struct InsertStatement {
 			std::wstring tableName;
 			std::vector<std::wstring> columns, values;
@@ -138,22 +148,38 @@ namespace naiveDB {
 			}
 
 		};
+
 		/****************************************
 		*
 		* UPDATE AST
 		* UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值
 		****************************************/
+
 		struct UpdateStatement {
 			std::wstring tableName;
 			std::vector<std::wstring> columns, values;
 		};
+
+		/****************************************
+		*
+		* USE statement
+		*
+		****************************************/
+		
+		struct UseDatabaseStatement{
+			std::wstring dbName;
+			friend std::wostream& operator<<(std::wostream& os, UseDatabaseStatement const& ss) {
+				return os << "USE DATABASE " << ss.dbName;
+			}
+		};
+
 		/****************************************
 		*
 		* SQL AST enter
 		*
 		****************************************/
 		typedef
-			boost::variant<SelectStatement, CreateStatement, DeleteStatement, InsertStatement> sqlStatement;
+			boost::variant<UseDatabaseStatement, SelectStatement, CreateTableStatement, CreateDatabaseStatement, DeleteStatement, InsertStatement> sqlStatement;
 
 		struct TopSQLStatement {
 			sqlStatement sql;
@@ -162,9 +188,11 @@ namespace naiveDB {
 		class SQLparser : public boost::static_visitor<> {
 		public:
 			void operator()(SelectStatement & i) const;
-			void operator()(CreateStatement & i) const;
+			void operator()(CreateTableStatement & i) const;
+			void operator()(CreateDatabaseStatement & i) const;
 			void operator()(DeleteStatement & i) const;
 			void operator()(InsertStatement & i) const;
+			void operator()(UseDatabaseStatement & i) const;
 		};
 	}
 }
@@ -179,7 +207,7 @@ void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 	std::wcout << i << std::endl;
 }
 
-void naiveDB::parser::SQLparser::operator()(CreateStatement & i) const {
+void naiveDB::parser::SQLparser::operator()(CreateTableStatement & i) const {
 	std::wcout << i << std::endl;
 }
 
@@ -190,11 +218,19 @@ void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
 void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
 	std::wcout << i << std::endl;
 }
+
+void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
+	std::wcout << i << std::endl;
+}
+void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
+	std::wcout << i << std::endl;
+}
 /****************************************
 *
 * Use BOOST_FUSION to adapt AST to grammar structs
 *
 ****************************************/
+
 BOOST_FUSION_ADAPT_STRUCT(
 	naiveDB::parser::SelectStatement,
 	(std::vector<std::wstring>, columns)
@@ -220,7 +256,7 @@ BOOST_FUSION_ADAPT_STRUCT(
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
-	naiveDB::parser::CreateStatement,
+	naiveDB::parser::CreateTableStatement,
 	(std::wstring, tableName)
 	(std::vector<naiveDB::parser::ColumnStatement>, columns)
 )
@@ -245,4 +281,14 @@ BOOST_FUSION_ADAPT_STRUCT(
 	naiveDB::parser::DeleteStatement,
 	(std::wstring, tableName)
 	(naiveDB::parser::WhereStatement, whereClause)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	naiveDB::parser::CreateDatabaseStatement,
+	(std::wstring, dbName)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	naiveDB::parser::UseDatabaseStatement,
+	(std::wstring, dbName)
 )

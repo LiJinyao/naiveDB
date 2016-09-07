@@ -15,6 +15,7 @@ namespace naiveDB {
 		using std::wstring;
 		using qi::alpha;
 		using qi::alnum;
+		using qi::space;
 		using qi::no_case;
 		using qi::optional;
 		using qi::attr;
@@ -32,9 +33,11 @@ namespace naiveDB {
 		*
 		****************************************/
 		template <typename Iterator> struct SelectRule;
-		template <typename Iterator> struct CreateRule;
+		template <typename Iterator> struct CreateTableRule;
+		template <typename Iterator> struct CreateDatabaseRule;
 		template <typename Iterator> struct DeletetRule;
 		template <typename Iterator> struct InsertRule;
+		template <typename Iterator> struct UseDatabasetRule;
 		// TODO
 		template <typename Iterator> struct UpdateRule;
 
@@ -68,13 +71,15 @@ struct naiveDB::parser::SQLRule : qi::grammar<Iterator, TopSQLStatement(), encod
 		using qi::lit;
 		using qi::optional;
 
-		start %= selectRule | createRule | deleteRule | insertRule;
+		start %= selectRule | createRule | deleteRule | insertRule | createDatabaseRule | useDatabasetRule;
 	}
 	qi::rule<Iterator, TopSQLStatement(), encoding::space_type> start;
 	SelectRule<Iterator> selectRule;
-	CreateRule<Iterator> createRule;
+	CreateTableRule<Iterator> createRule;
 	DeletetRule<Iterator> deleteRule;
 	InsertRule<Iterator> insertRule;
+	CreateDatabaseRule<Iterator> createDatabaseRule;
+	UseDatabasetRule<Iterator> useDatabasetRule;
 };
 
 // Where condition rule
@@ -88,7 +93,7 @@ struct naiveDB::parser::WhereConditionClause : qi::grammar<Iterator, WhereCondit
 		columnsident %= lexeme[alpha >> *alnum];
 		// columnsident %= selectedColumns;
 		// optional quotate string
-		condition %= quotedString | +(char_ - (lit('"') | ';' | ','));
+		condition %= quotedString | lexeme[+(char_ - (encoding::space | lit('"') | ';' | ',' ))];
 		// start %= columnsident > whereOperator> condition;
 		start %= columnsident >> whereOperator >> condition;
 	}
@@ -102,7 +107,7 @@ template <typename Iterator>
 struct naiveDB::parser::WhereClause : qi::grammar<Iterator, WhereStatement(), encoding::space_type> {
 	WhereClause() : WhereClause::base_type(start) {
 
-		start %= no_case["where"] >> whereCondition >> -lit(';');
+		start %= no_case["where"] >> whereCondition % (no_case["and"] | no_case["or"])>> -lit(';');
 
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> columnsident, whereOperator, condition;
@@ -115,6 +120,7 @@ void addColSym(std::wstring str) {
 }
 
 // Select statement rule
+// SELECT 列名称 FROM 表名称;
 template <typename Iterator>
 struct naiveDB::parser::SelectRule : qi::grammar<Iterator, SelectStatement(), encoding::space_type> {
 	SelectRule() : SelectRule::base_type(start) {
@@ -155,9 +161,10 @@ struct naiveDB::parser::ColumnsClause : qi::grammar<Iterator, ColumnStatement(),
 };
 
 // Create statement rule 
+// CREATE TABLE 表名称(列名称1 数据类型(limit),列名称2 数据类型,列名称3 数据类型)
 template <typename Iterator>
-struct naiveDB::parser::CreateRule : qi::grammar<Iterator, CreateStatement(), encoding::space_type> {
-	CreateRule() : CreateRule::base_type(start, "CREATE TABLE") {
+struct naiveDB::parser::CreateTableRule : qi::grammar<Iterator, CreateTableStatement(), encoding::space_type> {
+	CreateTableRule() : CreateTableRule::base_type(start, "CREATE TABLE") {
 
 		using namespace qi::labels;
 		using phoenix::construct;
@@ -178,11 +185,23 @@ struct naiveDB::parser::CreateRule : qi::grammar<Iterator, CreateStatement(), en
 			);
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> tablename;
-	qi::rule<Iterator, CreateStatement(), encoding::space_type> start;
+	qi::rule<Iterator, CreateTableStatement(), encoding::space_type> start;
 	ColumnsClause<Iterator> colum;
 };
 
+template <typename Iterator>
+struct naiveDB::parser::CreateDatabaseRule : qi::grammar<Iterator, CreateDatabaseStatement(), encoding::space_type> {
+	CreateDatabaseRule() : CreateDatabaseRule::base_type(start) {
+		start %= no_case["create database"] >> lexeme[alpha >> *alnum] >> -lit(';');
+	}
+	qi::rule<Iterator, CreateDatabaseStatement(), encoding::space_type> start;
+};
+
+
+
 // Insert statement rule
+// INSERT INTO table_name (列1, 列2,...) VALUES (值1, 值2,....)
+// INSERT INTO 表名称 VALUES (值1, 值2,....)
 template <typename Iterator>
 struct naiveDB::parser::InsertRule : qi::grammar<Iterator, InsertStatement(), encoding::space_type> {
 	InsertRule() : InsertRule::base_type(start) {
@@ -203,6 +222,7 @@ struct naiveDB::parser::InsertRule : qi::grammar<Iterator, InsertStatement(), en
 };
 
 // Delete statement rule
+// DELETE FROM 表名称 WHERE 列名称 = 值
 template <typename Iterator>
 struct naiveDB::parser::DeletetRule : qi::grammar<Iterator, DeleteStatement(), encoding::space_type> {
 	DeletetRule() : DeletetRule::base_type(start) {
@@ -214,4 +234,12 @@ struct naiveDB::parser::DeletetRule : qi::grammar<Iterator, DeleteStatement(), e
 	qi::rule<Iterator, std::wstring(), encoding::space_type> tablename;
 	qi::rule<Iterator, DeleteStatement(), encoding::space_type> start;
 	WhereClause<Iterator> whereStatement;
+};
+
+template <typename Iterator>
+struct naiveDB::parser::UseDatabasetRule : qi::grammar<Iterator, UseDatabaseStatement(), encoding::space_type> {
+	UseDatabasetRule() : UseDatabasetRule::base_type(start) {
+		start %= no_case["use"] >> lexeme[alpha >> *alnum] >> -lit(';');
+	}
+	qi::rule<Iterator, UseDatabaseStatement(), encoding::space_type> start;
 };
