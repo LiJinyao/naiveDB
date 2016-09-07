@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Form.hpp"
 using namespace naiveDB::dataprocessor;
 void databaseTest() {
 	std::vector<std::vector<std::wstring>> fd;
