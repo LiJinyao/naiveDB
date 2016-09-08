@@ -7,6 +7,10 @@ namespace naiveDB {
 	namespace dataprocessor {
 		class Form {
 		public:
+			Form() {
+
+			}
+
 			Form(std::vector<std::vector<std::wstring>> formDefine, std::wstring _formName) {
 				idTotal = 0;
 				keyTotal = formDefine.size();

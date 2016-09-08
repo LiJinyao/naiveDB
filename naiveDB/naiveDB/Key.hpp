@@ -6,6 +6,10 @@ namespace naiveDB {
 		class Key {
 
 		public:
+			Key() {
+
+			}
+
 			Key(std::wstring _keyName,
 				std::wstring _typeName,
 				bool _ifPrimaryKey,

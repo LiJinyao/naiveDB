@@ -8,6 +8,9 @@ namespace naiveDB {
 	namespace dataprocessor {
 		class Record {
 		public:
+			Record() {
+
+			}
 
 			//创建一般记录
 			Record(int _id, std::vector<std::vector<std::wstring>> formDefine) {

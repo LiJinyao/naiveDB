@@ -5,6 +5,10 @@ namespace naiveDB {
 	namespace dataprocessor {
 		class IntKey : public Key {
 		public:
+			IntKey() {
+
+			}
+
 			IntKey(std::wstring _keyName,
 				std::wstring _typeName,
 				bool _ifPrimaryKey,

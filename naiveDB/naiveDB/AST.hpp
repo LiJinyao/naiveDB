@@ -1,3 +1,4 @@
+#pragma once
 /****************************************
 *
 * SQL AST
@@ -5,6 +6,8 @@
 ****************************************/
 #define BOOST_SPIRIT_UNICODE
 #include "stdafx.h"
+
+
 namespace naiveDB {
 	namespace parser {
 		/****************************************
@@ -12,6 +15,7 @@ namespace naiveDB {
 		* WHERE satatement AST
 		*
 		****************************************/
+		
 
 		struct WhereConditionStatement {
 			std::wstring lh, op, rh;
@@ -211,7 +215,8 @@ namespace naiveDB {
 ****************************************/
 
 void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
-	std::wcout << i << std::endl;
+	//std::wcout << i << std::endl;
+
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateTableStatement & i) const {
@@ -227,10 +232,13 @@ void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
-	std::wcout << i << std::endl;
+	//std::wcout << i << std::endl;
+	//std::wstring dbName = i.
+
 }
 void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
-	std::wcout << i << std::endl;
+	//std::wcout << i << std::endl;
+	//std::wcout << L"当前正在操作数据库" << 
 }
 
 void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
