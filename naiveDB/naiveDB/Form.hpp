@@ -210,6 +210,9 @@ namespace naiveDB {
 							if (!now->isEmpty) {
 								std::wcout << std::setw(8) << now->getData();
 							}
+							else {
+								std::wcout << std::setw(8) << "";
+							}
 							
 						}
 						else
@@ -218,6 +221,9 @@ namespace naiveDB {
 							//std::wcout << std::setw(8) << now->getData();
 							if (!now->isEmpty) {
 								std::wcout << std::setw(8) << now->getData();
+							}
+							else {
+								std::wcout << std::setw(8) << "";
 							}
 						}
 					}
@@ -254,7 +260,7 @@ namespace naiveDB {
 										std::wcout << std::setw(8) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8);
+										std::wcout << std::setw(8) << "";
 									}
 								}
 								else
@@ -265,7 +271,7 @@ namespace naiveDB {
 										std::wcout << std::setw(8) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8);
+										std::wcout << std::setw(8) << "";
 									}
 
 								}
@@ -325,7 +331,7 @@ namespace naiveDB {
 										std::wcout << std::setw(8) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8);
+										std::wcout << std::setw(8)<< "";
 									}
 									//std::wcout << std::setw(8) << now->getData();
 								}
@@ -336,7 +342,7 @@ namespace naiveDB {
 										std::wcout << std::setw(8) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8);
+										std::wcout << std::setw(8) << "";
 									}
 									//std::wcout << std::setw(8) << now->getData();
 

@@ -274,7 +274,7 @@ namespace naiveDB {
 
 				naiveDB::dataprocessor::Form f = naiveDB::dataprocessor::Form(formDefine, formName);
 				formSet.push_back(f);
-				std::wcout << "成功创建一张名为" << formName << "的表。" << std::endl;
+				std::wcout << L"成功创建一张名为" << formName << L"的表。" << std::endl;
 				return;
 			}
 
@@ -296,7 +296,7 @@ namespace naiveDB {
 					}
 				}
 				if (!if_found) {
-					std::wcout << "表" << formName << "不存在，请在建表后进行插入操作。" << std::endl;
+					std::wcout << L"表" << formName << L"不存在，请在建表后进行插入操作。" << std::endl;
 					return;
 				}
 
@@ -305,7 +305,7 @@ namespace naiveDB {
 				//必须插入完整记录
 				if (definition.size() == 0) {
 					if (data.size() != fh.size()) {
-						std::wcout << "错误！参数数量不匹配。" << std::endl;
+						std::wcout << L"错误！参数数量不匹配。" << std::endl;
 						return;
 					}
 					//进行数据类型检查
@@ -320,11 +320,11 @@ namespace naiveDB {
 							}
 						}
 						if (if_int == true && fh[i][1] == L"char") {
-							std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是char型。" << std::endl;
+							std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
 							if_TypeError = true;
 						}
 						else if (if_int == false && fh[i][1] == L"int") {
-							std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是int型。" << std::endl;
+							std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
 							if_TypeError = true;
 						}
 					}
@@ -341,7 +341,7 @@ namespace naiveDB {
 							ss << fh[i][4];
 							ss >> limit;
 							if (data[i].length() > limit) {
-								std::wcout << "错误！字段" << fh[i][0] << "超出长度限制。" << std::endl;
+								std::wcout << L"错误！字段" << fh[i][0] << L"超出长度限制。" << std::endl;
 								if_LengthError = true;
 							}
 						}
@@ -393,11 +393,11 @@ namespace naiveDB {
 						for (unsigned int j = 0; j < fh.size(); j++) {
 							if (fh[j][0] == definition[i]) {
 								if (fh[j][1] == L"int" && if_int == false) {
-									std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是int型。" << std::endl;
+									std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
 									if_TypeError = true;
 								}
 								else if (fh[j][1] == L"char" && if_int == true) {
-									std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是char型。" << std::endl;
+									std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
 									if_TypeError = true;
 								}
 							}
@@ -418,7 +418,7 @@ namespace naiveDB {
 									ss << fh[i][4];
 									ss >> limit;
 									if (data[i].length() > limit) {
-										std::wcout << "错误！字段" << fh[i][0] << "超出长度限制。" << std::endl;
+										std::wcout << L"错误！字段" << fh[i][0] << L"超出长度限制。" << std::endl;
 										if_LengthError = true;
 									}
 							}
@@ -461,7 +461,7 @@ namespace naiveDB {
 					}
 				}
 				if (foundForm == -1) {
-					std::cout << "错误！没有所要查询的表。" << std::endl;
+					std::cout << L"错误！没有所要查询的表。" << std::endl;
 				}
 
 				//select全表
@@ -567,7 +567,7 @@ namespace naiveDB {
 				}
 
 				if (foundForm == -1) {
-					std::wcout << "错误！所要操作的表不存在。" << std::endl;
+					std::wcout << L"错误！所要操作的表不存在。" << std::endl;
 					return;
 				}
 

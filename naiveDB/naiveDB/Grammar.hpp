@@ -211,7 +211,7 @@ template <typename Iterator>
 struct naiveDB::parser::InsertRule : qi::grammar<Iterator, InsertStatement(), encoding::space_type> {
 	InsertRule() : InsertRule::base_type(start) {
 		tablename %= lexeme[alpha >> *alnum];
-		quotedString %= lexeme[lit('"') >> +(char_ - (lit('"') | ';' | ',')) >> lit('"')];
+		quotedString %= lexeme[lit('"') >> +(encoding::char_ - (lit('"') | ';' | ',')) >> lit('"')];
 		values %= quotedString | lexeme[digit >> *digit];
 		start %= no_case["insert into"]
 			>> tablename

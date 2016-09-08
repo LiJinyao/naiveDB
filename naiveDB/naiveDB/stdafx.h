@@ -24,7 +24,7 @@
 #include <boost/spirit/include/qi_attr.hpp>
 #include <boost/spirit/include/qi_uint.hpp>
 
-
+#include <locale>
 #include <sstream>
 #include <iterator>
 #include <iomanip>

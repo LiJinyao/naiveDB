@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "Grammar.hpp"
 #include "Executor.hpp"
+
 void grammarTest() {
 	using boost::spirit::standard_wide::space;
 	typedef std::wstring::const_iterator iterator_type;
@@ -16,6 +17,9 @@ void grammarTest() {
  | | | | (_| | |\\ V /  __/ |__| | |_) |\n\
  |_| |_|\\__,_|_| \\_/ \\___|_____/|____/ \n\
 Welcome to naiveDB!";
+	std::locale loc("chs");
+	std::wcin.imbue(loc);
+	std::wcout.imbue(loc);
 	std::wcout << logo << std::endl;
 	while (getline(std::wcin, str)) {
 		if (str.empty() || str[0] == 'q' || str[0] == 'Q') {
@@ -28,7 +32,7 @@ Welcome to naiveDB!";
 
 		if (r && iter == end) {
 
-			std::wcout << "Parsing succeeded\n";
+			//std::wcout << "Parsing succeeded\n";
 			boost::apply_visitor(naiveDB::parser::SQLparser(), ste.sql);
 		}
 		else {
