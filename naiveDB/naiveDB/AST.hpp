@@ -461,7 +461,8 @@ namespace naiveDB {
 					}
 				}
 				if (foundForm == -1) {
-					std::cout << L"错误！没有所要查询的表。" << std::endl;
+					std::wcout << L"错误！没有所要查询的表。" << std::endl;
+					return;
 				}
 
 				//select全表
@@ -499,7 +500,7 @@ namespace naiveDB {
 					}
 				}
 				if (!if_found) {
-					std::wcout << "所要删除的表不存在。" << std::endl;
+					std::wcout << L"所要删除的表不存在。" << std::endl;
 					return;
 				}
 
@@ -522,9 +523,9 @@ namespace naiveDB {
 						}
 					}
 					if (!keyflag) {
-						std::wcout << "错误！" << ds.whereClause.statements[0].lh
-							<< "不是表" << formSet[foundForm].getFormName()
-							<< "的成员。" << std::endl;
+						std::wcout << L"错误！" << ds.whereClause.statements[0].lh
+							<< L"不是表" << formSet[foundForm].getFormName()
+							<< L"的成员。" << std::endl;
 						return;
 					}
 					//检查键值是否存在
@@ -551,7 +552,7 @@ namespace naiveDB {
 					int affected = formSet[foundForm].Delete(condition, relation);
 
 					if (affected == 0) {
-						std::wcout << "删除失败，没有符合条件的记录" << std::endl;
+						std::wcout << L"删除失败，没有符合条件的记录" << std::endl;
 					}
 				}
 			}
