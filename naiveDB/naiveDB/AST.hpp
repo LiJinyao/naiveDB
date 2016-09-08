@@ -226,7 +226,7 @@ namespace naiveDB {
 				naiveDB::parser::CreateTableStatement cs = _cs;
 				std::wstring formName = cs.tableName; //参数2
 				std::vector<std::vector<std::wstring>> formDefine;
-				if (formDefine.size() == 0) {
+				if (cs.columns.size() == 0) {
 					std::wcout << L"错误！不能创建空表，请给出表的定义。" << std::endl;
 					return;
 				}
@@ -256,6 +256,10 @@ namespace naiveDB {
 					else if (columnDefine[i].attribute == L"PRIMARY KEY") {
 						s.push_back(L"true");
 						s.push_back(L"false");
+					}
+					else {
+						s.push_back(L"NULL");
+						s.push_back(L"NULL");
 					}
 
 					//第五项是长度限制，需要把int转成wstring
