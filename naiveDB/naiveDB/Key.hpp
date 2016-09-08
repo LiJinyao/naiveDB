@@ -20,8 +20,7 @@ namespace naiveDB {
 				ifNotNull = _ifNotNull;
 			}
 			~Key() {
-				delete &keyName;
-				delete &typeName;
+		
 			}
 
 			std::wstring getKeyName() {
@@ -56,6 +55,7 @@ namespace naiveDB {
 				typeName = x;
 			}
 
+			bool isEmpty = false;
 		protected:
 			bool ifPrimaryKey;
 			bool ifNotNull;

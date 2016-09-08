@@ -19,9 +19,7 @@ namespace naiveDB {
 			}
 
 			~IntKey() {
-				delete &keyName;
-				delete &typeName;
-				delete &data;
+			
 			}
 
 			int getData() {

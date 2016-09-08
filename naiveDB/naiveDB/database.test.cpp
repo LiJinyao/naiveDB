@@ -6,7 +6,7 @@ void databaseTest() {
 	std::vector<std::wstring> s;
 
 	s.push_back(L"name");
-	s.push_back(L"wstring");
+	s.push_back(L"char");
 	s.push_back(L"false");
 	s.push_back(L"true");
 	s.push_back(L"5");

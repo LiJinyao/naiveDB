@@ -12,36 +12,47 @@ namespace naiveDB {
 
 			}
 
-			//创建一般记录
+			
 			Record(int _id, std::vector<std::vector<std::wstring>> formDefine) {
 				id = _id;
 				for (unsigned int i = 0; i < formDefine.size(); i++) {
-					if (formDefine[i][1] == L"wstring") {
+
+					if (formDefine[i][1] == L"char") {
 						std::wstringstream ss;
 						int num;
 						ss << formDefine[i][4];
 						ss >> num;
-						record.push_back(new StringKey(
+						StringKey *sk = new StringKey(
 							formDefine[i][0],
 							formDefine[i][1],
-							formDefine[i][2] == L"0" ? true : false,
-							formDefine[i][3] == L"0" ? true : false,
+							formDefine[i][2] == L"true" ? true : false,
+							formDefine[i][3] == L"true" ? true : false,
 							num,
 							formDefine[i][5]
-						));
+						);
+						if (formDefine[i][5] == L"") {
+							sk->isEmpty = true;
+						}
+						
+						record.push_back(sk);
 					}
 					else if (formDefine[i][1] == L"int") {
+						
 						std::wstringstream ss;
 						int num;
 						ss << formDefine[i][5];
 						ss >> num;
-						record.push_back(new IntKey(
+						IntKey *ik = new IntKey(
 							formDefine[i][0],
 							formDefine[i][1],
-							formDefine[i][2] == L"0" ? true : false,
-							formDefine[i][3] == L"0" ? true : false,
+							formDefine[i][2] == L"true" ? true : false,
+							formDefine[i][3] == L"true" ? true : false,
 							num
-						));
+						);
+						if (formDefine[i][5] == L"") {
+							ik->isEmpty = true;
+						}
+						record.push_back(ik);
 					}
 				}
 			}
@@ -61,7 +72,7 @@ namespace naiveDB {
 						IntKey *k = (IntKey*)record[i];
 						std::cout << k->getData() << std::endl;
 					}
-					else if (record[i]->getTypeName() == L"wstring") {
+					else if (record[i]->getTypeName() == L"char") {
 						StringKey *k = (StringKey*)record[i];
 						std::wcout << k->getData() << std::endl;
 					}

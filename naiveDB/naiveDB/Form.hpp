@@ -17,24 +17,23 @@ namespace naiveDB {
 				formName = _formName;
 				formHeader = formDefine;
 
-				for (unsigned int i = 0; i < formDefine.size(); i++) {
-					if (formDefine[i][1] == L"int") {
-						AVL<int> *tmp = new AVL<int>(formDefine[i][0], i);
+				
+
+				for (unsigned int i = 0; i < formHeader.size(); i++) {
+					bool if_primary = formHeader[i][2] == L"true" ? true : false;
+					if (formHeader[i][1] == L"int") {
+						AVL<int> *tmp = new AVL<int>(formHeader[i][0], i, if_primary);
 						intHeader.push_back(tmp);
 					}
-					if (formDefine[i][1] == L"wstring") {
-						AVL<std::wstring> *tmp = new AVL<std::wstring>(formDefine[i][0], i);
+					if (formHeader[i][1] == L"char") {
+						AVL<std::wstring> *tmp = new AVL<std::wstring>(formHeader[i][0], i, if_primary);
 						wstringHeader.push_back(tmp);
 					}
 				}
 			}
 
 			~Form() {
-				delete &formName;
-				delete &intHeader;
-				delete &wstringHeader;
-				delete &records;
-				delete &formHeader;
+			
 			}
 
 
@@ -44,7 +43,8 @@ namespace naiveDB {
 				//建立可以传给Record的参数formDefine
 				std::vector<std::vector<std::wstring>> formDefine;
 
-				for (unsigned int i = 0; i < formHeader.size(); i++) {
+				for (unsigned int i = 0; i < dataSet.size(); i++) {
+	
 					std::vector<std::wstring> s;
 					s.push_back(formHeader[i][0]);
 					s.push_back(formHeader[i][1]);
@@ -67,6 +67,7 @@ namespace naiveDB {
 							int num;
 							ss << formDefine[i][5];
 							ss >> num;
+							
 							intHeader[j]->insert(num, idTotal);
 						}
 					}
@@ -196,7 +197,7 @@ namespace naiveDB {
 					std::wcout << std::setw(8) << formHeader[i][0];
 				}
 				std::cout << std::endl;
-				std::wstring sa = L"wstring";
+				std::wstring sa = L"char";
 				std::wstring sb = L"int";
 				for (it = records.begin(); it != records.end(); it++)
 				{
@@ -206,13 +207,18 @@ namespace naiveDB {
 						if (tmpp[j]->getTypeName() == sa)
 						{
 							StringKey* now = (StringKey*)tmpp[j];
-							std::wcout << std::setw(8) << now->getData();
+							if (!now->isEmpty) {
+								std::wcout << std::setw(8) << now->getData();
+							}
+							
 						}
 						else
 						{
 							IntKey* now = (IntKey*)tmpp[j];
-							std::wcout << std::setw(8) << now->getData();
-
+							//std::wcout << std::setw(8) << now->getData();
+							if (!now->isEmpty) {
+								std::wcout << std::setw(8) << now->getData();
+							}
 						}
 					}
 
@@ -229,7 +235,7 @@ namespace naiveDB {
 					std::wcout << std::setw(8) << keyNames[i];
 				}
 				std::cout << std::endl;
-				std::wstring sa = L"wstring";
+				std::wstring sa = L"char";
 				std::wstring sb = L"int";
 				for (it = records.begin(); it != records.end(); it++)
 				{
@@ -243,12 +249,24 @@ namespace naiveDB {
 								if (tmpp[k]->getTypeName() == sa)
 								{
 									StringKey* now = (StringKey*)tmpp[k];
-									std::wcout << std::setw(8) << now->getData();
+									//std::wcout << std::setw(8) << now->getData();
+									if (!now->isEmpty) {
+										std::wcout << std::setw(8) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(8);
+									}
 								}
 								else
 								{
 									IntKey* now = (IntKey*)tmpp[k];
-									std::wcout << std::setw(8) << now->getData();
+									//std::wcout << std::setw(8) << now->getData();
+									if (!now->isEmpty) {
+										std::wcout << std::setw(8) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(8);
+									}
 
 								}
 							}
@@ -263,7 +281,7 @@ namespace naiveDB {
 				std::map<int, Record>::iterator it;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				std::vector<int>tmp;
-				std::wstring sa = L"wstring";
+				std::wstring sa = L"char";
 				std::wstring sb = L"int";
 				for (int j = 0; j < wstringHeader.size(); j++)
 				{
@@ -300,15 +318,27 @@ namespace naiveDB {
 						{
 							if (tmpp[k]->getKeyName() == keyNames[j])
 							{
-								if (tmpp[j]->getTypeName() == sa)
+								if (tmpp[k]->getTypeName() == sa)
 								{
-									StringKey* now = (StringKey*)tmpp[j];
-									std::wcout << std::setw(8) << now->getData();
+									StringKey* now = (StringKey*)tmpp[k];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(8) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(8);
+									}
+									//std::wcout << std::setw(8) << now->getData();
 								}
 								else
 								{
-									IntKey* now = (IntKey*)tmpp[j];
-									std::wcout << std::setw(8) << now->getData();
+									IntKey* now = (IntKey*)tmpp[k];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(8) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(8);
+									}
+									//std::wcout << std::setw(8) << now->getData();
 
 								}
 							}

@@ -7,6 +7,8 @@ namespace naiveDB {
 		template <typename T>
 		class AVL {
 		private:
+			std::set<T> s;
+			bool ifKey;
 			std::wstring name;
 			int id;
 			class node {
@@ -141,7 +143,7 @@ namespace naiveDB {
 			}
 		public:
 
-			AVL(std::wstring _name, int _id) : root(0), id(_id), name(_name) {};
+			AVL(std::wstring _name, int _id,bool _ifkey) : root(0), id(_id), name(_name),ifKey(_ifkey) {};
 			int GetId()
 			{
 				return id;
@@ -163,6 +165,16 @@ namespace naiveDB {
 				return finddata(root, dat)->idset;
 			}
 			void insert(T dat, int id) {
+				if (ifKey)
+				{
+					std::set<T>::iterator it;
+					it = s.find(dat);
+					if (it != s.end())
+					{
+						std::wcout << "´íÎó£¡Ö÷¼üÖØ¸´¡£" << std::endl;
+						return;
+					}
+				}
 				insert(root, dat, id);
 			}
 			void erase(T dat) {

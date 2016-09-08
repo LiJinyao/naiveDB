@@ -274,7 +274,8 @@ namespace naiveDB {
 
 				naiveDB::dataprocessor::Form f = naiveDB::dataprocessor::Form(formDefine, formName);
 				formSet.push_back(f);
-				std::wcout << L"成功创建一张名为" << formName << L"的表。" << std::endl;
+				std::wcout << "成功创建一张名为" << formName << "的表。" << std::endl;
+				return;
 			}
 
 			//注意这里只实现了 INSERT INTO 表名称 VALUES (值1, 值2,....) 一种句式
@@ -295,16 +296,16 @@ namespace naiveDB {
 					}
 				}
 				if (!if_found) {
-					std::wcout << L"表" << formName << L"不存在，请在建表后进行插入操作。" << std::endl;
+					std::wcout << "表" << formName << "不存在，请在建表后进行插入操作。" << std::endl;
 					return;
 				}
 
 				std::vector<std::vector<std::wstring>> fh = formSet[foundform].getFormHeader();
-
+				std::vector<std::wstring> dataset;
 				//必须插入完整记录
 				if (definition.size() == 0) {
 					if (data.size() != fh.size()) {
-						std::wcout << L"错误！参数数量不匹配。" << std::endl;
+						std::wcout << "错误！参数数量不匹配。" << std::endl;
 						return;
 					}
 					//进行数据类型检查
@@ -313,17 +314,17 @@ namespace naiveDB {
 						bool if_int = true;
 						std::wstring tmp = data[i];
 						for (unsigned int j = 0; j < tmp.length(); j++) {
-							if (tmp[j] >= L'9' || tmp[j] <= L'0') {
+							if (tmp[j] > L'9' || tmp[j] < L'0') {
 								if_int = false;
 								break;
 							}
 						}
-						if (if_int == true && fh[i][1] == L"wstring") {
-							std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+						if (if_int == true && fh[i][1] == L"char") {
+							std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是char型。" << std::endl;
 							if_TypeError = true;
 						}
-						if (if_int == false && fh[i][1] == L"int") {
-							std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
+						else if (if_int == false && fh[i][1] == L"int") {
+							std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是int型。" << std::endl;
 							if_TypeError = true;
 						}
 					}
@@ -334,13 +335,13 @@ namespace naiveDB {
 					//进行长度限制检查
 					bool if_LengthError = false;
 					for (unsigned int i = 0; i < data.size(); i++) {
-						if (fh[i][1] == L"wstring") {
+						if (fh[i][1] == L"char") {
 							std::wstringstream ss;
 							int limit;
 							ss << fh[i][4];
 							ss >> limit;
 							if (data[i].length() > limit) {
-								std::wcout << L"错误！字段" << fh[i][0] << L"超出长度限制。" << std::endl;
+								std::wcout << "错误！字段" << fh[i][0] << "超出长度限制。" << std::endl;
 								if_LengthError = true;
 							}
 						}
@@ -350,18 +351,103 @@ namespace naiveDB {
 					}
 
 					//进行属性限制检查
-					bool if_PropertyError = false;
+					/*bool if_PropertyError = false;
+					for (unsigned int i = 0; i < data.size(); i++) {
+						if(fh[i][2] == L"true")
+					}*/
 
+					dataset = data;
 				}
 				//可插入部分字段
 				else {
 					if (data.size() != definition.size()) {
-						std::wcout << L"错误！参数数量不匹配。" << std::endl;
+						std::wcout << "错误！参数数量不匹配。" << std::endl;
 						return;
 					}
 
+					//只找出第一个不存在的字段
+					for (unsigned int i = 0; i < definition.size(); i++) {
+						bool if_exist = false;
+						for (unsigned int j = 0; j < fh.size(); j++) {
+							if (fh[j][0] == definition[i]) {
+								if_exist = true;
+								break;
+							}
+						}
+						if (!if_exist) {
+							std::wcout << "错误！字段" << definition[i] << "不存在。" << std::endl;
+							return;
+						}
+					}
+
+					bool if_TypeError = false;
+					for (unsigned int i = 0; i < data.size(); i++) {
+						bool if_int = true;
+						std::wstring tmp = data[i];
+						for (unsigned int j = 0; j < tmp.length(); j++) {
+							if (tmp[j] > L'9' || tmp[j] < L'0') {
+								if_int = false;
+								break;
+							}
+						}
+						for (unsigned int j = 0; j < fh.size(); j++) {
+							if (fh[j][0] == definition[i]) {
+								if (fh[j][1] == L"int" && if_int == false) {
+									std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是int型。" << std::endl;
+									if_TypeError = true;
+								}
+								else if (fh[j][1] == L"char" && if_int == true) {
+									std::wcout << "插入了错误的数据类型，" << fh[i][0] << "是char型。" << std::endl;
+									if_TypeError = true;
+								}
+							}
+						}
+					}
+					if (if_TypeError) {
+						return;
+					}
+
+					//进行长度限制检查
+					bool if_LengthError = false;
+					for (unsigned int i = 0; i < data.size(); i++) {
+						for (unsigned int j = 0; j < fh.size(); j++) {
+							if (fh[j][0] == definition[i]) {
+								if (fh[i][1] == L"char") {
+									std::wstringstream ss;
+									int limit;
+									ss << fh[i][4];
+									ss >> limit;
+									if (data[i].length() > limit) {
+										std::wcout << "错误！字段" << fh[i][0] << "超出长度限制。" << std::endl;
+										if_LengthError = true;
+									}
+							}
+						}
+						
+					  }
+					}
+					if (if_LengthError) {
+						return;
+					}
+					for (unsigned int i = 0; i < fh.size(); i++) {
+						bool if_occupied = false;
+						for (unsigned j = 0; j < definition.size(); j++) {
+							if (definition[j] == fh[i][0]) {
+								if_occupied = true;
+								dataset.push_back(data[j]);
+								break;
+							}
+						}
+						if (!if_occupied) {
+							dataset.push_back(L"");
+						}
+
+					}
+
 				}
-				formSet[foundform].Insert(data);
+				
+				
+				formSet[foundform].Insert(dataset);
 			}
 
 			//这里只实现选择一张表中的内容
@@ -374,8 +460,12 @@ namespace naiveDB {
 						break;
 					}
 				}
+				if (foundForm == -1) {
+					std::cout << "错误！没有所要查询的表。" << std::endl;
+				}
+
 				//select全表
-				if (ss.columns.size() == 1 && ss.columns[0] == L"") {
+				if (ss.columns.size() == 1 && ss.columns[0] == L"*") {
 					formSet[foundForm].Select();
 					return;
 				}
@@ -409,7 +499,7 @@ namespace naiveDB {
 					}
 				}
 				if (!if_found) {
-					std::wcout << L"所要删除的表不存在。" << std::endl;
+					std::wcout << "所要删除的表不存在。" << std::endl;
 					return;
 				}
 
@@ -432,9 +522,9 @@ namespace naiveDB {
 						}
 					}
 					if (!keyflag) {
-						std::wcout << L"错误！" << ds.whereClause.statements[0].lh
-							<< L"不是表" << formSet[foundForm].getFormName()
-							<< L"的成员。" << std::endl;
+						std::wcout << "错误！" << ds.whereClause.statements[0].lh
+							<< "不是表" << formSet[foundForm].getFormName()
+							<< "的成员。" << std::endl;
 						return;
 					}
 					//检查键值是否存在
@@ -461,7 +551,7 @@ namespace naiveDB {
 					int affected = formSet[foundForm].Delete(condition, relation);
 
 					if (affected == 0) {
-						std::wcout << L"删除失败，没有符合条件的记录" << std::endl;
+						std::wcout << "删除失败，没有符合条件的记录" << std::endl;
 					}
 				}
 			}
@@ -477,7 +567,7 @@ namespace naiveDB {
 				}
 
 				if (foundForm == -1) {
-					std::wcout << L"错误！所要操作的表不存在。" << std::endl;
+					std::wcout << "错误！所要操作的表不存在。" << std::endl;
 					return;
 				}
 
@@ -555,8 +645,8 @@ void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
 }
 
 void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
-	std::wcout << L"a";
-	i;
+	//std::wcout << L"a";
+	db->Update(i);
 }
 
 /****************************************

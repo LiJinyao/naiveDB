@@ -22,9 +22,7 @@ namespace naiveDB {
 			}
 
 			~StringKey() {
-				delete &keyName;
-				delete &typeName;
-				delete &data;
+	
 			}
 
 			std::wstring getData() {
