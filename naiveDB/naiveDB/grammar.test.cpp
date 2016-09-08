@@ -1,5 +1,7 @@
+#pragma once
 #include "stdafx.h"
 #include "Grammar.hpp"
+#include "Executor.hpp"
 void grammarTest() {
 	using boost::spirit::standard_wide::space;
 	typedef std::wstring::const_iterator iterator_type;
@@ -27,7 +29,7 @@ Welcome to naiveDB!";
 		if (r && iter == end) {
 
 			std::wcout << "Parsing succeeded\n";
-			boost::apply_visitor(naiveDB::parser::SQLparser(), ste.sql);
+			boost::apply_visitor(naiveDB::executor::SQLparser(), ste.sql);
 		}
 		else {
 			std::wcout << "Parsing failed\n";

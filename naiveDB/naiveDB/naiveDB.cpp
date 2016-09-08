@@ -1,6 +1,6 @@
 // ConsoleApplication5.cpp : Defines the entry point for the console application.
 //
-
+#pragma once
 #include "stdafx.h"
 
 

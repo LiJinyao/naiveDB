@@ -16,7 +16,6 @@ namespace naiveDB {
 		*
 		****************************************/
 		
-
 		struct WhereConditionStatement {
 			std::wstring lh, op, rh;
 			// test
@@ -195,56 +194,10 @@ namespace naiveDB {
 			sqlStatement sql;
 		};
 
-		class SQLparser : public boost::static_visitor<> {
-		public:
-			void operator()(SelectStatement & i) const;
-			void operator()(CreateTableStatement & i) const;
-			void operator()(CreateDatabaseStatement & i) const;
-			void operator()(DeleteStatement & i) const;
-			void operator()(InsertStatement & i) const;
-			void operator()(UseDatabaseStatement & i) const;
-			void operator()(UpdateStatement & i) const;
-		};
 	}
 }
 
-/****************************************
-*
-* AST visition functions
-*
-****************************************/
 
-void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
-	//std::wcout << i << std::endl;
-
-}
-
-void naiveDB::parser::SQLparser::operator()(CreateTableStatement & i) const {
-	std::wcout << i << std::endl;
-}
-
-void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
-	std::wcout << i << std::endl;
-}
-
-void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
-	std::wcout << i << std::endl;
-}
-
-void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
-	//std::wcout << i << std::endl;
-	//std::wstring dbName = i.
-
-}
-void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
-	//std::wcout << i << std::endl;
-	//std::wcout << L"当前正在操作数据库" << 
-}
-
-void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
-	std::wcout << L"a";
-	i;
-}
 /****************************************
 *
 * Use BOOST_FUSION to adapt AST to grammar structs

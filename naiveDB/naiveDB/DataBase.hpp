@@ -1,3 +1,4 @@
+#pragma once
 #include "stdafx.h"
 #include "Form.hpp"
 #include "AST.hpp"
@@ -172,7 +173,7 @@ namespace naiveDB {
 				return;
 			}
 			//select部分列（无条件）
-			else if (ss.whereClause.statements.size == 0) {
+			else if (ss.whereClause.statements.size() == 0) {
 				formSet[foundForm].Select(ss.columns);
 				return;
 			}

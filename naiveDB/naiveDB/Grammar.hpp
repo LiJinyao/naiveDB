@@ -1,3 +1,4 @@
+#pragma once
 #define BOOST_SPIRIT_UNICODE
 #include "stdafx.h"
 #include "AST.hpp"
