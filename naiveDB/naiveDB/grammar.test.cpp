@@ -29,7 +29,7 @@ Welcome to naiveDB!";
 		if (r && iter == end) {
 
 			std::wcout << "Parsing succeeded\n";
-			boost::apply_visitor(naiveDB::executor::SQLparser(), ste.sql);
+			boost::apply_visitor(naiveDB::parser::SQLparser(), ste.sql);
 		}
 		else {
 			std::wcout << "Parsing failed\n";

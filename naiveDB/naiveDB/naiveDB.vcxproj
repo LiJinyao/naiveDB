@@ -147,7 +147,6 @@
   <ItemGroup>
     <ClInclude Include="AST.hpp" />
     <ClInclude Include="AVL.hpp" />
-    <ClInclude Include="DataBase.hpp" />
     <ClInclude Include="Executor.hpp" />
     <ClInclude Include="Form.hpp" />
     <ClInclude Include="Grammar.hpp" />
