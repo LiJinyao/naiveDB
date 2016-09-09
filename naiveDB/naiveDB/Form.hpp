@@ -190,11 +190,11 @@ namespace naiveDB {
 			void Select() {
 				std::map<int, Record>::iterator it;
 
-				std::cout.setf(std::ios::left, std::ios::adjustfield);
+			//	std::cout.setf(std::ios::right, std::ios::adjustfield);
 
 				for (int i = 0; i < formHeader.size(); i++)
 				{
-					std::wcout << std::setw(8) << formHeader[i][0];
+					std::wcout << std::setw(24) << formHeader[i][0];
 				}
 				std::cout << std::endl;
 				std::wstring sa = L"char";
@@ -208,10 +208,10 @@ namespace naiveDB {
 						{
 							StringKey* now = (StringKey*)tmpp[j];
 							if (!now->isEmpty) {
-								std::wcout << std::setw(8) << now->getData();
+								std::wcout << std::setw(24) << now->getData();
 							}
 							else {
-								std::wcout << std::setw(8) << "";
+								std::wcout << std::setw(24) << " ";
 							}
 							
 						}
@@ -220,10 +220,10 @@ namespace naiveDB {
 							IntKey* now = (IntKey*)tmpp[j];
 							//std::wcout << std::setw(8) << now->getData();
 							if (!now->isEmpty) {
-								std::wcout << std::setw(8) << now->getData();
+								std::wcout << std::setw(24) << now->getData();
 							}
 							else {
-								std::wcout << std::setw(8) << "";
+								std::wcout << std::setw(24) << " ";
 							}
 						}
 					}
@@ -238,7 +238,7 @@ namespace naiveDB {
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				for (int i = 0; i < keyNames.size(); i++)
 				{
-					std::wcout << std::setw(8) << keyNames[i];
+					std::wcout << std::setw(24) << keyNames[i];
 				}
 				std::cout << std::endl;
 				std::wstring sa = L"char";
@@ -257,10 +257,10 @@ namespace naiveDB {
 									StringKey* now = (StringKey*)tmpp[k];
 									//std::wcout << std::setw(8) << now->getData();
 									if (!now->isEmpty) {
-										std::wcout << std::setw(8) << now->getData();
+										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8) << "";
+										std::wcout << std::setw(24) << " ";
 									}
 								}
 								else
@@ -268,10 +268,10 @@ namespace naiveDB {
 									IntKey* now = (IntKey*)tmpp[k];
 									//std::wcout << std::setw(8) << now->getData();
 									if (!now->isEmpty) {
-										std::wcout << std::setw(8) << now->getData();
+										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8) << "";
+										std::wcout << std::setw(24) << " ";
 									}
 
 								}
@@ -308,9 +308,10 @@ namespace naiveDB {
 
 					}
 				}
+
 				for (int i = 0; i < keyNames.size(); i++)
 				{
-					std::wcout << std::setw(8) << keyNames[i];
+					std::wcout << std::setw(24) << keyNames[i];
 				}
 				std::cout << std::endl;
 				for (int i = 0; i < tmp.size(); i++)
@@ -328,10 +329,10 @@ namespace naiveDB {
 								{
 									StringKey* now = (StringKey*)tmpp[k];
 									if (!now->isEmpty) {
-										std::wcout << std::setw(8) << now->getData();
+										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8)<< "";
+										std::wcout << std::setw(24)<< " ";
 									}
 									//std::wcout << std::setw(8) << now->getData();
 								}
@@ -339,10 +340,10 @@ namespace naiveDB {
 								{
 									IntKey* now = (IntKey*)tmpp[k];
 									if (!now->isEmpty) {
-										std::wcout << std::setw(8) << now->getData();
+										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(8) << "";
+										std::wcout << std::setw(24) << " ";
 									}
 									//std::wcout << std::setw(8) << now->getData();
 

@@ -51,7 +51,7 @@
     <ClInclude Include="StringKey.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Executor.hpp">
+    <ClInclude Include="DataBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

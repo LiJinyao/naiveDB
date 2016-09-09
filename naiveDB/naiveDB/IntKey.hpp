@@ -23,6 +23,7 @@ namespace naiveDB {
 			}
 
 			int getData() {
+				
 				return data;
 			}
 

@@ -162,7 +162,13 @@ namespace naiveDB {
 			}
 			std::vector<int> finddata(T dat)
 			{
-				return finddata(root, dat)->idset;
+				node *p = finddata(root, dat);
+				if (p == NULL)
+				{
+					std::vector<int> empt;
+					return empt;
+				}
+				return p->idset;
 			}
 			void insert(T dat, int id) {
 				if (ifKey)
