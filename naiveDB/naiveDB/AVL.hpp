@@ -144,13 +144,13 @@ namespace naiveDB {
 			void dfs(node *&p, std::wstring op, T dat, std::vector<int>v1)
 			{
 				if (p == NULL) return;
-				if (op == '!=')
+				if (op == L"!=")
 				{
 					if (p->dat != dat) v1.insert(v1.end(), p->idset.begin(), p->idset.end());
 					dfs(p->l, op, dat, v1);
 					dfs(p->r, op, dat, v1);
 				}
-				if (op == '<')
+				if (op == L"<")
 				{
 					if (p->dat < dat)
 					{
@@ -163,7 +163,7 @@ namespace naiveDB {
 						dfs(p->l, op, dat, v1);
 					}
 				}
-				if (op == '<=')
+				if (op == L"<=")
 				{
 					if (p->dat <= dat)
 					{
@@ -176,7 +176,7 @@ namespace naiveDB {
 						dfs(p->l, op, dat, v1);
 					}
 				}
-				if (op == '>')
+				if (op == L">")
 				{
 					if (p->dat > dat)
 					{
@@ -189,7 +189,7 @@ namespace naiveDB {
 						dfs(p->r, op, dat, v1);
 					}
 				}
-				if (op == '>=')
+				if (op == L">=")
 				{
 					if (p->dat >= dat)
 					{
