@@ -7,7 +7,7 @@ namespace naiveDB {
 		template <typename T>
 		class AVL {
 		private:
-			std::set<T> s;
+			std::set<T> ss;
 			bool ifKey;
 			std::wstring name;
 			int id;
@@ -141,9 +141,71 @@ namespace naiveDB {
 				else if (p->dat > dat) return finddata(p->l, dat);
 				else return finddata(p->r, dat);
 			}
+			void dfs(node *&p, std::wstring op, T dat, std::vector<int>v1)
+			{
+				if (p == NULL) return;
+				if (op == '!=')
+				{
+					if (p->dat != dat) v1.insert(v1.end(), p->idset.begin(), p->idset.end());
+					dfs(p->l, op, dat, v1);
+					dfs(p->r, op, dat, v1);
+				}
+				if (op == '<')
+				{
+					if (p->dat < dat)
+					{
+						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat, v1);
+						dfs(p->r, op, dat, v1);
+					}
+					else
+					{
+						dfs(p->l, op, dat, v1);
+					}
+				}
+				if (op == '<=')
+				{
+					if (p->dat <= dat)
+					{
+						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat, v1);
+						dfs(p->r, op, dat, v1);
+					}
+					else
+					{
+						dfs(p->l, op, dat, v1);
+					}
+				}
+				if (op == '>')
+				{
+					if (p->dat > dat)
+					{
+						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat, v1);
+						dfs(p->r, op, dat, v1);
+					}
+					else
+					{
+						dfs(p->r, op, dat, v1);
+					}
+				}
+				if (op == '>=')
+				{
+					if (p->dat >= dat)
+					{
+						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat, v1);
+						dfs(p->r, op, dat, v1);
+					}
+					else
+					{
+						dfs(p->r, op, dat, v1);
+					}
+				}
+			}
 		public:
 
-			AVL(std::wstring _name, int _id,bool _ifkey) : root(0), id(_id), name(_name),ifKey(_ifkey) {};
+			AVL(std::wstring _name, int _id, bool _ifkey) : root(0), id(_id), name(_name), ifKey(_ifkey) {};
 			int GetId()
 			{
 				return id;
@@ -160,22 +222,47 @@ namespace naiveDB {
 			{
 				name = x;
 			}
-			std::vector<int> finddata(T dat)
+			std::vector<int> finddata(T dat, std::wstring op)
 			{
-				node *p = finddata(root, dat);
-				if (p == NULL)
+				if (op == L"=")
 				{
-					std::vector<int> empt;
-					return empt;
+					node *p = finddata(root, dat);
+					if (p == NULL)
+					{
+						std::vector<int> empt;
+						return empt;
+					}
+					return p->idset;
 				}
-				return p->idset;
+				std::vector<int>ans;
+				if (op == L"!=")
+				{
+					dfs(root, L"!=", dat, ans);
+				}
+				if (op == L"<")
+				{
+					dfs(root, L"<", dat, ans);
+				}
+				if (op == L"<=")
+				{
+					dfs(root, L"<=", dat, ans);
+				}
+				if (op == L">")
+				{
+					dfs(root, L">", dat, ans);
+				}
+				if (op == L">=")
+				{
+					dfs(root, L">=", dat, ans);
+				}
+				return ans;
 			}
 			void insert(T dat, int id) {
 				if (ifKey)
 				{
 					std::set<T>::iterator it;
-					it = s.find(dat);
-					if (it != s.end())
+					it = ss.find(dat);
+					if (it != ss.end())
 					{
 						std::wcout << "´íÎó£¡Ö÷¼üÖØ¸´¡£" << std::endl;
 						return;

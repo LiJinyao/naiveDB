@@ -17,7 +17,7 @@ namespace naiveDB {
 				formName = _formName;
 				formHeader = formDefine;
 
-				
+
 
 				for (unsigned int i = 0; i < formHeader.size(); i++) {
 					bool if_primary = formHeader[i][2] == L"true" ? true : false;
@@ -33,10 +33,17 @@ namespace naiveDB {
 			}
 
 			~Form() {
-			
+
 			}
 
-
+			/*bool cmp1(const std::pair<int, std::wstring> &m_one, const std::pair<int, std::wstring>&m_two)
+			{
+				return (m_one.second> m_two.second);//定义了大于，就是按从小到大排序 //可以定义任何你想要的比较操作  
+			}
+			bool cmp2(std::pair<int, int> m_one, std::pair<int,int>m_two)
+			{
+				return (m_one.second > m_two.second);//定义了大于，就是按从小到大排序 //可以定义任何你想要的比较操作  
+			}*/
 			void Insert(std::vector<std::wstring> dataSet) {
 
 				idTotal++;
@@ -44,7 +51,7 @@ namespace naiveDB {
 				std::vector<std::vector<std::wstring>> formDefine;
 
 				for (unsigned int i = 0; i < dataSet.size(); i++) {
-	
+
 					std::vector<std::wstring> s;
 					s.push_back(formHeader[i][0]);
 					s.push_back(formHeader[i][1]);
@@ -67,7 +74,7 @@ namespace naiveDB {
 							int num;
 							ss << formDefine[i][5];
 							ss >> num;
-							
+
 							intHeader[j]->insert(num, idTotal);
 						}
 					}
@@ -96,7 +103,7 @@ namespace naiveDB {
 			}
 
 			//删除符合多种条件的记录(A&&B,A||B)
-			int Delete(std::vector<std::vector<std::wstring>> condition, std::wstring relation){
+			int Delete(std::vector<std::vector<std::wstring>> condition, std::wstring relation) {
 				std::vector<std::vector<int> > ans;
 				for (int i = 0; i < condition.size(); i++)
 				{
@@ -105,7 +112,7 @@ namespace naiveDB {
 
 						if (wstringHeader[j]->GetName() == condition[i][0])
 						{
-							ans.push_back(wstringHeader[j]->finddata(condition[i][1]));
+							ans.push_back(wstringHeader[j]->finddata(condition[i][1], condition[i][2]));
 							//wstringHeader[j]->erase(condition[i][1]);
 						}
 					}
@@ -117,7 +124,7 @@ namespace naiveDB {
 						ss >> x;
 						if (intHeader[j]->GetName() == condition[i][0])
 						{
-							ans.push_back(intHeader[j]->finddata(x));
+							ans.push_back(intHeader[j]->finddata(x, condition[i][2]));
 							//intHeader[j]->erase(x);
 						}
 					}
@@ -190,7 +197,7 @@ namespace naiveDB {
 			void Select() {
 				std::map<int, Record>::iterator it;
 
-			//	std::cout.setf(std::ios::right, std::ios::adjustfield);
+				//	std::cout.setf(std::ios::right, std::ios::adjustfield);
 
 				for (int i = 0; i < formHeader.size(); i++)
 				{
@@ -213,7 +220,7 @@ namespace naiveDB {
 							else {
 								std::wcout << std::setw(24) << " ";
 							}
-							
+
 						}
 						else
 						{
@@ -283,31 +290,108 @@ namespace naiveDB {
 			}
 
 			//打印符合条件的记录
-			int Select(std::vector<std::wstring> keyNames, std::wstring condition[2]) {
+			int Select(std::vector<std::wstring> keyNames, std::vector<std::vector<std::wstring> >condition, int orderx, std::wstring name) {
 				std::map<int, Record>::iterator it;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				std::vector<int>tmp;
 				std::wstring sa = L"char";
 				std::wstring sb = L"int";
-				for (int j = 0; j < wstringHeader.size(); j++)
+				std::set<int>stmp;
+				std::map<std::wstring,int> mp1;
+				std::map<int, int> mp2;
+				for (int i = 0; i < condition.size(); i++)
 				{
-					if (wstringHeader[j]->GetName() == condition[0])
+					tmp.clear();
+					for (int j = 0; j < wstringHeader.size(); j++)
 					{
-						tmp = wstringHeader[j]->finddata(condition[1]);
+						if (wstringHeader[j]->GetName() == condition[i][0])
+						{
+							tmp = wstringHeader[j]->finddata(condition[i][1], condition[i][2]);
+						}
 					}
-				}
-				for (int j = 0; j < intHeader.size(); j++)
-				{
-					if (intHeader[j]->GetName() == condition[0])
+					for (int j = 0; j < intHeader.size(); j++)
 					{
-						std::wstringstream ss;
-						ss << condition[1];
-						int x;
-						ss >> x;
-						tmp = intHeader[j]->finddata(x);
+						if (intHeader[j]->GetName() == condition[i][0])
+						{
+							std::wstringstream ss;
+							ss << condition[i][1];
+							int x;
+							ss >> x;
+							tmp = intHeader[j]->finddata(x, condition[i][2]);
+						}
+					}
+					for (int j = 0; j < tmp.size(); j++) stmp.insert(tmp[j]);
+				}
+				tmp.clear();
+				if (orderx > 0)
+				{
+					for (int i = 0; i < wstringHeader.size(); i++)
+					{
+						if (wstringHeader[i]->GetName() == name)
+						{
+							std::set<int>::iterator it;
+							for (it = stmp.begin(); it != stmp.end(); it++)
+							{
+								int x = (*it);
+								std::vector<Key*> h = records[x].getRecord();
+								StringKey * p = (StringKey*)h[i];
+								std::wstring y = p->getData();
+								mp1.insert(std::map<std::wstring,int>::value_type(y, x));
+								
+									
+							}
+							//std::sort(v1.begin(), v1.end());
+							if (orderx == 1)
+							{
+								for (std::map<std::wstring,int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+								{
+									tmp.push_back(rit->second);
+								}
+							}
+							if (orderx == 2)
+							{
+								for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+								{
+									tmp.push_back(rit->second);
+								}
+							}
+						}
+
+					}
+					for (int i = 0; i < intHeader.size(); i++)
+					{
+						if (intHeader[i]->GetName() == name)
+						{
+							std::set<int>::iterator it;
+							for (it = stmp.begin(); it != stmp.end(); it++)
+							{
+								int x = (*it);
+								std::vector<Key*> h = records[x].getRecord();
+								IntKey * p = (IntKey*)h[i];
+								int y = p->getData();
+								mp2.insert(std::map<int, int>::value_type(y, x));
+							}
+							//std::sort(v2.begin(), v2.end());
+							if (orderx == 1)
+							{
+								for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+								{
+									tmp.push_back(rit->second);
+								}
+							}
+							if (orderx == 2)
+							{
+								for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+								{
+									tmp.push_back(rit->second);
+								}
+							}
+						}
+
 
 					}
 				}
+
 
 				for (int i = 0; i < keyNames.size(); i++)
 				{
@@ -332,7 +416,7 @@ namespace naiveDB {
 										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
-										std::wcout << std::setw(24)<< " ";
+										std::wcout << std::setw(24) << " ";
 									}
 									//std::wcout << std::setw(8) << now->getData();
 								}
@@ -368,7 +452,7 @@ namespace naiveDB {
 					{
 						if (wstringHeader[j]->GetName() == condition[i][0])
 						{
-							tmp = wstringHeader[j]->finddata(condition[i][1]);
+							tmp = wstringHeader[j]->finddata(condition[i][1], condition[i][2]);
 						}
 					}
 					for (int j = 0; j < intHeader.size(); j++)
@@ -379,7 +463,7 @@ namespace naiveDB {
 							ss << condition[i][1];
 							int x;
 							ss >> x;
-							tmp = intHeader[j]->finddata(x);
+							tmp = intHeader[j]->finddata(x, condition[i][2]);
 
 						}
 					}
