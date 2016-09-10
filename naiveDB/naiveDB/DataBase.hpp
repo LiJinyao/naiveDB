@@ -213,6 +213,8 @@ namespace naiveDB {
 			}
 
 			formSet[foundform].Insert(dataset);
+			saveFormName();
+			saveForm(formSet[foundform]);
 		}
 
 
@@ -222,7 +224,9 @@ namespace naiveDB {
 		void Select(
 			std::vector<std::wstring> _columns, 
 			std::vector<std::wstring> _fromtables, 
-			std::vector<std::vector<std::wstring>> _whereClause) {
+			std::vector<std::vector<std::wstring>> _whereClause,
+		    std::wstring _orderBy,
+			std::wstring _order) {
 			
 
 			std::vector<std::wstring> columns = _columns;
@@ -267,7 +271,13 @@ namespace naiveDB {
 				}
 
 				int orderx = 0;
-				std::wstring name = L"";
+				if (_order == L"ASC") {
+					orderx = 1;
+				}
+				else if (_order == L"DESC") {
+					orderx = 2;
+				}
+				std::wstring name = _orderBy;
 
 				formSet[foundForm].Select(columns, condition, orderx, name);
 				return;
@@ -401,6 +411,188 @@ namespace naiveDB {
 
 		}
 
+		bool saveForm(dataprocessor::Form form) {
+			std::wstring fileName = L".\\";
+			fileName = fileName + DBName + L"\\" + form.getFormName();
+
+			std::ofstream fout(wcscat((wchar_t*)fileName.data(), L".dat"), std::ios::binary);
+			boost::archive::binary_oarchive oa(fout);
+
+			oa << form.getFormName();
+			oa << form.getIdTotal();
+			oa << form.getKeyTotal();
+			oa << form.getNull();
+			oa << form.getFull();
+			oa << form.getFormHeader().size();
+			for (int i = 0; i < form.getFormHeader().size(); i++) {
+				oa << form.getFormHeader().at(i);
+			}
+
+			std::map<int, dataprocessor::Record> records = form.getForm();
+			oa << records.size();
+			std::map<int, dataprocessor::Record>::iterator map_it;
+			for (map_it = records.begin(); map_it != records.end(); map_it++) {//start of map
+				int temp = map_it->first;
+				oa << temp;
+				dataprocessor::Record	record = map_it->second;
+				oa << record.getId();
+
+				std::vector<dataprocessor::Key*> singleRecord = record.getRecord();
+				oa << singleRecord.size();
+				std::vector<dataprocessor::Key*>::iterator vector_it;
+				for (vector_it = singleRecord.begin(); vector_it != singleRecord.end(); vector_it++) {//start of vector
+					dataprocessor::Key* temp_key = *vector_it;
+					oa << temp_key->getPrimaryStatus();
+					oa << temp_key->getNotNullStatus();
+					oa << temp_key->getKeyName();
+					std::wstring typeName = temp_key->getTypeName();
+					oa << typeName;
+					oa << temp_key->isEmpty;// save Key isEmpty;
+					if (typeName == L"int") {// IntKey
+						dataprocessor::IntKey* temp_intkey = (dataprocessor::IntKey*)temp_key;
+						oa << temp_intkey->getData();
+					}
+					else if (typeName == L"string") {// StringKey
+						dataprocessor::StringKey* temp_stringkey = (dataprocessor::StringKey*)temp_key;
+						oa << temp_stringkey->getData();
+						oa << temp_stringkey->getLengthLimit();
+					}
+				}//end of vector
+				fout.flush();
+			}// end of map
+			fout.close();
+			return true;
+		}
+
+		dataprocessor::Form loadForm(std::wstring formName) {
+
+			std::wstring fileName = L".\\";
+			fileName = fileName + DBName + L"\\" + formName;
+
+			dataprocessor::Form form;
+			std::ifstream fin;
+			fin.open(wcscat((wchar_t*)fileName.data(), L".dat"), std::ios::binary);
+			boost::archive::binary_iarchive ia(fin);
+			int temp_int;
+			std::wstring temp_wstring;
+			bool temp_bool;
+			ia >> temp_wstring;
+			form.setFormName(temp_wstring); //set Form formName
+			ia >> temp_int;
+			form.setIdTotal(temp_int);//set Form idTotal
+			ia >> temp_int;
+			form.setKeyTotal(temp_int);//set Form keyTotal
+			ia >> temp_bool;
+			form.setNull(temp_bool);//set Form ifNull
+			ia >> temp_bool;
+			form.setFull(temp_bool);//set Form ifFull
+
+			int formHeaderSize;
+			ia >> formHeaderSize;
+			std::vector<std::vector<std::wstring>> formHeader;
+			for (int i = 0; i < formHeaderSize; i++) {
+				std::vector<std::wstring> singleFormHeader;
+				ia >> singleFormHeader;
+				formHeader.push_back(singleFormHeader);
+			}
+			form.setFormHeader(formHeader);//set Form formHeader
+
+			int recordsSize;
+			std::map<int, dataprocessor::Record> records;
+			ia >> recordsSize;
+			for (int i = 0; i < recordsSize; i++) {
+				int map_id = 0;
+				ia >> map_id;
+				dataprocessor::Record record;
+				int record_id;
+				ia >> record_id;
+				record.setId(record_id);// set Record id
+				int singleRecordSize;
+				std::vector<dataprocessor::Key*> singleRecord;
+				ia >> singleRecordSize;
+				for (int i = 0; i < singleRecordSize; i++) {
+					bool key_iPK;
+					bool key_iNN;
+					bool key_iE;
+					std::wstring key_keyName;
+					std::wstring key_typeName;
+					ia >> key_iPK; // set Key ifPrimaryKey
+					ia >> key_iNN; // set Key ifNotNull
+					ia >> key_keyName; // set Key keyName
+					ia >> key_typeName;// set Key typeName
+					ia >> key_iE; // set Key isEmpty
+					if (key_typeName == L"int") {
+						int intkey_data;
+						ia >> intkey_data;// set IntKey data
+						dataprocessor::IntKey* intkey = new dataprocessor::IntKey(
+							key_keyName,
+							key_typeName,
+							key_iPK, key_iNN,
+							intkey_data);
+						intkey->isEmpty = key_iE;
+						singleRecord.push_back(intkey);// push_back IntKey* to Record vector<Key*>
+					}
+					else if (key_typeName == L"string") {
+						std::wstring stringkey_data;
+						int stringkey_LengthLimit;
+
+						ia >> stringkey_data;// set StringKey data
+						ia >> stringkey_LengthLimit;// set StringKey LengthLimit
+						dataprocessor::StringKey* stringkey = new dataprocessor::StringKey(
+							key_keyName,
+							key_typeName,
+							key_iPK, key_iNN,
+							stringkey_LengthLimit,
+							stringkey_data);
+						stringkey->isEmpty = key_iE;
+						singleRecord.push_back(stringkey);// push_back StringKey* to Record vector<Key*>
+					}
+				}
+				record.setRecord(singleRecord);// set Record vector<Key*>
+				records.insert(std::pair<int, dataprocessor::Record>(map_id, record));// insert Record to Form map<int, Record>
+			}
+			form.setForm(records);//set Form form
+
+			return form;
+		}
+
+		bool saveFormName() {
+			std::wstring commandName = L"md .\\";
+			commandName = commandName + DBName;
+			_wsystem(commandName.data());
+
+			std::wstring formNameList = L".\\";
+			formNameList = formNameList + DBName + L"\\formNameList.dat";
+
+			std::ofstream fout;
+			fout.open(formNameList, std::ios::binary);
+			boost::archive::binary_oarchive oa(fout);
+			oa << formSet.size();
+			std::vector<dataprocessor::Form>::iterator it;
+			for (it = formSet.begin(); it != formSet.end(); it++) {
+				oa << it->getFormName();
+			}
+			fout.close();
+			return true;
+		}
+
+		std::vector<std::wstring> loadFormName() {
+			std::wstring formNameList = L".\\";
+			formNameList = formNameList + DBName + L"\\formNameList.dat";
+
+			std::ifstream fin;
+			fin.open(formNameList, std::ios::binary);
+			boost::archive::binary_iarchive ia(fin);
+			int formSetSize;
+			ia >> formSetSize;
+			std::wstring wstr;
+			std::vector<std::wstring> v;
+			for (int i = 0; i < formSetSize; i++) {
+				ia >> wstr;
+				v.push_back(wstr);
+			}
+			return v;
+		}
 
 	protected:
 

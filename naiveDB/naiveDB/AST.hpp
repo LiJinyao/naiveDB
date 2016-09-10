@@ -235,7 +235,10 @@ void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 		s.clear();
 	}
 
-	db->Select(columns, fromtables, whereClause);
+	std::wstring orderBy = i.orderBy;
+	
+
+	db->Select(columns, fromtables, whereClause, orderBy, order);
 
 }
 

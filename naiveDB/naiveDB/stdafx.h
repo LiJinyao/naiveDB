@@ -23,6 +23,9 @@
 #include <boost/spirit/include/qi_optional.hpp>
 #include <boost/spirit/include/qi_attr.hpp>
 #include <boost/spirit/include/qi_uint.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
 
 #include <locale>
 #include <sstream>
@@ -34,4 +37,5 @@
 #include <algorithm>
 #include <queue>
 #include <map>
+#include <fstream>
 
