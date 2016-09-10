@@ -133,12 +133,16 @@ struct naiveDB::parser::SelectRule : qi::grammar<Iterator, SelectStatement(), en
 		columnsident %= lexeme[(alpha | char_('*')) >> *alnum]; // columns name could be *
 		columns %= no_case["select"] >> (columnsident[&addColSym] % ',');
 		tables %= no_case["from"] >> (tablesident % ',');
-
-		start %= columns >> tables
-			>> -whereStatement;
+		orderByDef %= (no_case["order by"] >> tablesident) | attr(L"");
+		orderDef %= (no_case[encoding::string(L"desc")] | no_case[encoding::string(L"asc")]) | attr(L"");
+		start %= columns
+			>> tables
+			>> -whereStatement
+			>> -orderByDef >> -orderDef;
+		//((no_case["desc"] >> attr(L"DESC")) | (no_case["asc"] >> attr(L"ASC")))
 	}
 
-	qi::rule<Iterator, std::wstring(), encoding::space_type> tablesident, columnsident;
+	qi::rule<Iterator, std::wstring(), encoding::space_type> tablesident, columnsident, orderByDef, orderDef;
 	qi::rule<Iterator, std::vector<std::wstring>(), encoding::space_type> columns, tables;
 	qi::rule<Iterator, SelectStatement(), encoding::space_type> start;
 	WhereClause<Iterator> whereStatement;

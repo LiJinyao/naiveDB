@@ -7,7 +7,7 @@
 #define BOOST_SPIRIT_UNICODE
 #include "stdafx.h"
 #include "DataBase.hpp"
-
+#include <boost/algorithm/string.hpp> 
 namespace naiveDB {
 	namespace parser {
 
@@ -48,6 +48,8 @@ namespace naiveDB {
 		struct SelectStatement {
 			std::vector<std::wstring> columns, fromtables; //columns中只有一个元素且这个元素为L"*"时代表SELECT *
 			WhereStatement whereClause;
+			std::wstring orderBy; // 排序的字段
+			std::wstring order; //排序顺序，可能为: ""（未指定）, "DESC"（降序）, "ASC"（升序）；
 
 			// test
 			friend std::wostream& operator<<(std::wostream& os, SelectStatement const& ss) {
@@ -221,7 +223,8 @@ namespace naiveDB {
 void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 	std::vector<std::wstring> columns = i.columns;
 	std::vector<std::wstring> fromtables = i.fromtables;
-
+	std::wstring order = i.order; //排序顺序，可能为: ""（未指定）, "DESC"（降序）, "ASC"（升序）；
+	boost::algorithm::to_upper(order);
 	std::vector<std::vector<std::wstring>> whereClause;
 	for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
 		std::vector<std::wstring> s;
@@ -341,6 +344,8 @@ BOOST_FUSION_ADAPT_STRUCT(
 	(std::vector<std::wstring>, columns)
 	(std::vector<std::wstring>, fromtables)
 	(naiveDB::parser::WhereStatement, whereClause)
+	(std::wstring, orderBy)
+	(std::wstring, order)
 )
 
 BOOST_FUSION_ADAPT_STRUCT(
