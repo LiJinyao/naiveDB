@@ -225,7 +225,7 @@ void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 	std::vector<std::wstring> fromtables = i.fromtables;
 	std::wstring order = i.order; //排序顺序，可能为: ""（未指定）, "DESC"（降序）, "ASC"（升序）；
 	boost::algorithm::to_upper(order);
-	std::vector<std::vector<std::wstring>> whereClause;
+ 	std::vector<std::vector<std::wstring>> whereClause;
 	for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
 		std::vector<std::wstring> s;
 		s.push_back(i.whereClause.statements[j].lh);
