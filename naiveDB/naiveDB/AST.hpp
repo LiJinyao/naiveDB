@@ -327,7 +327,7 @@ void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
-    std:wstring dbname = i.dbName;
+    std::wstring dbname = i.dbName;
 	DataBase *db = new DataBase(dbname);
 	dataBaseSet.push_back(db);
 }
