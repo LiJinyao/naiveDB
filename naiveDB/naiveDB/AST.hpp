@@ -225,6 +225,19 @@ namespace naiveDB {
 			}
 			return;
 		}
+//=======
+//		DataBase *db = new DataBase(L"naiveDB");
+//		/*std::vector<DataBase*> dataBaseSet;
+//		DataBase *pointer;
+//		if(_waccess(L".\\naiveDB", 0) == -1){
+//			_wsystem(L"md .\\naiveDB");
+//		}
+//		else{
+//			std::wcout << L"该数据库已存在" << std::endl;
+//		}*/
+//		
+//
+//>>>>>>> origin/master
 	}
 }
 /****************************************
