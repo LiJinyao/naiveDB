@@ -39,8 +39,9 @@ namespace naiveDB {
 		template <typename Iterator> struct DeletetRule;
 		template <typename Iterator> struct InsertRule;
 		template <typename Iterator> struct UseDatabasetRule;
-		// TODO
 		template <typename Iterator> struct UpdateRule;
+		// TODO
+		
 
 
 		/****************************************

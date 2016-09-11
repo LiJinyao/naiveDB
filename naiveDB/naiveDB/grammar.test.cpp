@@ -8,18 +8,21 @@ void grammarTest() {
 	typedef naiveDB::parser::SQLRule<iterator_type> SQLRule;
 	SQLRule g; // Our grammar
 	std::wstring str;
-	std::wstring logo = L"\
+	std::wstring logo = L"\n\
               _           _____  ____  \n\
              (_)         |  __ \\|  _ \\ \n\
   _ __   __ _ ___   _____| |  | | |_) |\n\
  | '_ \\ / _` | \\ \\ / / _ \\ |  | |  _ < \n\
  | | | | (_| | |\\ V /  __/ |__| | |_) |\n\
- |_| |_|\\__,_|_| \\_/ \\___|_____/|____/ \n\
+ |_| |_|\\__,_|_| \\_/ \\___|_____/|____/ \n\n\
 Welcome to naiveDB!";
 	std::locale loc("chs");
+	std::wstring help = L"\
+		";
 	std::wcin.imbue(loc);
 	std::wcout.imbue(loc);
 	std::wcout << logo << std::endl;
+	std::wcout << help << std::endl;
 	while (getline(std::wcin, str)) {
 		if (str.empty() || str[0] == 'q' || str[0] == 'Q') {
 			break;
