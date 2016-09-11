@@ -414,10 +414,10 @@ namespace naiveDB {
 		}
 
 		bool saveForm(dataprocessor::Form form) {
-			std::wstring fileName = L".\\";
+			std::wstring fileName = L".\\naiveDB\\";
 			fileName = fileName + DBName + L"\\" + form.getFormName();
 
-			std::ofstream fout(wcscat((wchar_t*)fileName.data(), L".dat"), std::ios::binary);
+			std::ofstream fout(fileName + L".dat", std::ios::binary);
 			boost::archive::binary_oarchive oa(fout);
 
 			oa << form.getFormName();
@@ -468,12 +468,12 @@ namespace naiveDB {
 
 		dataprocessor::Form loadForm(std::wstring formName) {
 
-			std::wstring fileName = L".\\";
+			std::wstring fileName = L".\\naiveDB\\";
 			fileName = fileName + DBName + L"\\" + formName;
 
 			dataprocessor::Form form;
 			std::ifstream fin;
-			fin.open(wcscat((wchar_t*)fileName.data(), L".dat"), std::ios::binary);
+			fin.open(fileName + L".dat", std::ios::binary);
 			boost::archive::binary_iarchive ia(fin);
 			int temp_int;
 			std::wstring temp_wstring;
@@ -559,11 +559,19 @@ namespace naiveDB {
 		}
 
 		bool saveFormName() {
-			std::wstring commandName = L"md .\\";
+			std::wstring commandName = L"md .\\naiveDB\\";
 			commandName = commandName + DBName;
-			_wsystem(commandName.data());
 
-			std::wstring formNameList = L".\\";
+			std::wstring acccess_dbname = L".\\naiveDB\\";
+			acccess_dbname = acccess_dbname + DBName;
+			if (_waccess(acccess_dbname.data(), 0) == -1) {
+				_wsystem(commandName.data());
+			}
+			else {
+				std::wcout << L"该数据库存在" << std::endl;
+			}
+
+			std::wstring formNameList = L".\\naiveDB\\";
 			formNameList = formNameList + DBName + L"\\formNameList.dat";
 
 			std::ofstream fout;
@@ -579,7 +587,7 @@ namespace naiveDB {
 		}
 
 		std::vector<std::wstring> loadFormName() {
-			std::wstring formNameList = L".\\";
+			std::wstring formNameList = L".\\naiveDB\\";
 			formNameList = formNameList + DBName + L"\\formNameList.dat";
 
 			std::ifstream fin;
