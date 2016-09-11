@@ -210,8 +210,21 @@ namespace naiveDB {
 
 
 
-		DataBase *db = new DataBase(L"naiveDB");
-
+		//DataBase *db = new DataBase(L"naiveDB");
+		std::vector<DataBase*> dataBaseSet;
+		DataBase *pointer;
+		void folderBuild() {
+			std::wstring folderName = L".\\naiveDB";
+			std::wstring command = L"md ";
+			command = command + folderName;
+			if (_waccess(folderName.data(), 0) == -1) {
+				_wsystem(command.data());
+			}
+			else {
+				std::wcout << L"该数据库已存在" << std::endl;
+			}
+			return;
+		}
 	}
 }
 /****************************************
@@ -238,7 +251,7 @@ void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
 	std::wstring orderBy = i.orderBy;
 	
 
-	db->Select(columns, fromtables, whereClause, orderBy, order);
+	pointer->Select(columns, fromtables, whereClause, orderBy, order);
 
 }
 
@@ -274,7 +287,7 @@ void naiveDB::parser::SQLparser::operator()(CreateTableStatement & i) const {
 		s.clear();
 	}
 
-	db->Create(formDefine, formName);
+	pointer->Create(formDefine, formName);
 }
 
 void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
@@ -288,7 +301,7 @@ void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
 		whereClause.push_back(s);
 		s.clear();
 	}
-	db->Delete(tableName, whereClause);
+	pointer->Delete(tableName, whereClause);
 }
 
 void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
@@ -296,19 +309,24 @@ void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
 	std::vector<std::wstring> data = i.values;
 	std::vector<std::wstring> definition = i.columns;
 
-	db->Insert(formName, data, definition);
+	pointer->Insert(formName, data, definition);
 
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
-	
-
-
+    std:wstring dbname = i.dbName;
+	DataBase *db = new DataBase(dbname);
+	dataBaseSet.push_back(db);
 }
 
 void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
 	std::wstring  dbName = i.dbName;
-	db->Use(dbName);
+	for (unsigned i = 0; i < dataBaseSet.size(); i++) {
+		if (dataBaseSet[i]->getDBName() == dbName) {
+			pointer = dataBaseSet[i];
+		}
+	}
+
 }
 
 void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
@@ -333,7 +351,7 @@ void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
 		whereClause.push_back(s);
 		s.clear();
 	}
-	db->Update(tableName, sets, whereClause);
+	pointer->Update(tableName, sets, whereClause);
 }
 
 /****************************************
