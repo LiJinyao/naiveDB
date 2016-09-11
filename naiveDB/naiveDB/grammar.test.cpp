@@ -18,6 +18,17 @@ void grammarTest() {
 Welcome to naiveDB!";
 	std::locale loc("chs");
 	std::wstring help = L"\
+------------------naiveDB帮助信息------------------\n\
+- 格式规定：\n\
+数字不需要加引号， 字符串用双引号 \"\"\n\
+- 创建表语法：\n\
+CREATE TABLE 表名称(字段1 数据类型,字段2 数据类型,....)\n\
+- 查询语法：\n\
+SELECT 列名称 FROM 表名称 WHERE 条件 = 指定值\n\
+- 更新语法：\n\
+UPDATE 表名称 SET 列名称 = 新值 WHERE 列名称 = 某值\n\
+- 删除语法：\n\
+DELETE FROM 表名称 WHERE 列名称 = 值\n\
 		";
 	std::wcin.imbue(loc);
 	std::wcout.imbue(loc);
