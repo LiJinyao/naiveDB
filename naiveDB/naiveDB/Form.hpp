@@ -334,7 +334,13 @@ namespace naiveDB {
 							{
 								int x = (*it);
 								std::vector<Key*> h = records[x].getRecord();
-								StringKey * p = (StringKey*)h[i];
+								int j;
+								for (j = 0; j < h.size(); j++)
+								{
+									if (h[j]->getKeyName() == name)
+									break;
+								}
+								StringKey * p = (StringKey*)h[j];
 								std::wstring y = p->getData();
 								mp1.insert(std::map<std::wstring,int>::value_type(y, x));
 								
@@ -367,7 +373,13 @@ namespace naiveDB {
 							{
 								int x = (*it);
 								std::vector<Key*> h = records[x].getRecord();
-								IntKey * p = (IntKey*)h[i];
+								int j;
+								for (j = 0; j < h.size(); j++)
+								{
+									if (h[j]->getKeyName() == name)
+										break;
+								}
+								IntKey * p = (IntKey*)h[j];
 								int y = p->getData();
 								mp2.insert(std::map<int, int>::value_type(y, x));
 							}
@@ -391,7 +403,14 @@ namespace naiveDB {
 
 					}
 				}
-
+				else
+				{
+					std::set<int>::iterator it;
+					for (it = stmp.begin(); it != stmp.end(); it++)
+					{
+						tmp.push_back(*it);
+					}
+				}
 
 				for (int i = 0; i < keyNames.size(); i++)
 				{

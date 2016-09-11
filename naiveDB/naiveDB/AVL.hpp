@@ -10,6 +10,7 @@ namespace naiveDB {
 			std::set<T> ss;
 			bool ifKey;
 			std::wstring name;
+			std::vector<int>hehe;
 			int id;
 			class node {
 			public:
@@ -141,65 +142,65 @@ namespace naiveDB {
 				else if (p->dat > dat) return finddata(p->l, dat);
 				else return finddata(p->r, dat);
 			}
-			void dfs(node *&p, std::wstring op, T dat, std::vector<int>v1)
+			void dfs(node *&p, std::wstring op, T dat)
 			{
 				if (p == NULL) return;
 				if (op == L"!=")
 				{
-					if (p->dat != dat) v1.insert(v1.end(), p->idset.begin(), p->idset.end());
-					dfs(p->l, op, dat, v1);
-					dfs(p->r, op, dat, v1);
+					if (p->dat != dat) hehe.insert(hehe.end(), p->idset.begin(), p->idset.end());
+					dfs(p->l, op, dat);
+					dfs(p->r, op, dat);
 				}
 				if (op == L"<")
 				{
 					if (p->dat < dat)
 					{
-						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
-						dfs(p->l, op, dat, v1);
-						dfs(p->r, op, dat, v1);
+						hehe.insert(hehe.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat);
+						dfs(p->r, op, dat);
 					}
 					else
 					{
-						dfs(p->l, op, dat, v1);
+						dfs(p->l, op, dat);
 					}
 				}
 				if (op == L"<=")
 				{
 					if (p->dat <= dat)
 					{
-						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
-						dfs(p->l, op, dat, v1);
-						dfs(p->r, op, dat, v1);
+						hehe.insert(hehe.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat);
+						dfs(p->r, op, dat);
 					}
 					else
 					{
-						dfs(p->l, op, dat, v1);
+						dfs(p->l, op, dat);
 					}
 				}
 				if (op == L">")
 				{
 					if (p->dat > dat)
 					{
-						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
-						dfs(p->l, op, dat, v1);
-						dfs(p->r, op, dat, v1);
+						hehe.insert(hehe.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat);
+						dfs(p->r, op, dat);
 					}
 					else
 					{
-						dfs(p->r, op, dat, v1);
+						dfs(p->r, op, dat);
 					}
 				}
 				if (op == L">=")
 				{
 					if (p->dat >= dat)
 					{
-						v1.insert(v1.end(), p->idset.begin(), p->idset.end());
-						dfs(p->l, op, dat, v1);
-						dfs(p->r, op, dat, v1);
+						hehe.insert(hehe.end(), p->idset.begin(), p->idset.end());
+						dfs(p->l, op, dat);
+						dfs(p->r, op, dat);
 					}
 					else
 					{
-						dfs(p->r, op, dat, v1);
+						dfs(p->r, op, dat);
 					}
 				}
 			}
@@ -234,28 +235,28 @@ namespace naiveDB {
 					}
 					return p->idset;
 				}
-				std::vector<int>ans;
+				hehe.clear();
 				if (op == L"!=")
 				{
-					dfs(root, L"!=", dat, ans);
+					dfs(root, L"!=", dat);
 				}
 				if (op == L"<")
 				{
-					dfs(root, L"<", dat, ans);
+					dfs(root, L"<", dat);
 				}
 				if (op == L"<=")
 				{
-					dfs(root, L"<=", dat, ans);
+					dfs(root, L"<=", dat);
 				}
 				if (op == L">")
 				{
-					dfs(root, L">", dat, ans);
+					dfs(root, L">", dat);
 				}
 				if (op == L">=")
 				{
-					dfs(root, L">=", dat, ans);
+					dfs(root, L">=", dat);
 				}
-				return ans;
+				return hehe;
 			}
 			void insert(T dat, int id) {
 				if (ifKey)
