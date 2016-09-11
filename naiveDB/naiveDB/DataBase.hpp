@@ -596,6 +596,10 @@ namespace naiveDB {
 			return v;
 		}
 
+		std::wstring getDBName() {
+			return DBName;
+		}
+
 	protected:
 
 	private:
