@@ -210,10 +210,10 @@ namespace naiveDB {
 
 
 
-		//DataBase *db = new DataBase(L"naiveDB");
+	
 		std::vector<DataBase*> dataBaseSet;
 		DataBase *pointer;
-		void folderBuild() {
+		void buildFolder() {
 			std::wstring folderName = L".\\naiveDB";
 			std::wstring command = L"md ";
 			command = command + folderName;
@@ -221,23 +221,43 @@ namespace naiveDB {
 				_wsystem(command.data());
 			}
 			else {
-				std::wcout << L"该数据库已存在" << std::endl;
+				std::wcout << L"根目录已存在" << std::endl;
 			}
 			return;
 		}
-//=======
-//		DataBase *db = new DataBase(L"naiveDB");
-//		/*std::vector<DataBase*> dataBaseSet;
-//		DataBase *pointer;
-//		if(_waccess(L".\\naiveDB", 0) == -1){
-//			_wsystem(L"md .\\naiveDB");
-//		}
-//		else{
-//			std::wcout << L"该数据库已存在" << std::endl;
-//		}*/
-//		
-//
-//>>>>>>> origin/master
+
+		std::vector<std::wstring> loadDataBaseName() {
+			std::wstring fileName = L".\\naiveDB\\dataBaseNameList.dat";
+			std::vector<std::wstring> v;
+			if (_waccess(fileName.data(), 0) == -1) {
+				return v;
+			}
+			std::ifstream fin(fileName, std::ios::binary);
+			boost::archive::binary_iarchive ia(fin);
+			int size;
+			ia >> size;
+			std::wstring wstr;
+			for (int i = 0; i < size; i++) {
+				ia >> wstr;
+				v.push_back(wstr);
+			}
+			return v;
+		}
+	
+		 void Initialize() {
+			 std::vector<std::wstring> dbNames = loadDataBaseName();
+			for (unsigned int i = 0; i < dbNames.size(); i++) {
+				DataBase *db = new DataBase(dbNames[i], i);
+				std::vector<std::wstring> formNameList = db->loadFormName();
+				for (unsigned int j = 0; j < formNameList.size(); j++) {
+					db->loadForm(formNameList[j]);
+				}
+				dataBaseSet.push_back(db);
+			}
+		}
+		
+		
+
 	}
 }
 /****************************************
@@ -329,7 +349,18 @@ void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
 void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
     std::wstring dbname = i.dbName;
 	DataBase *db = new DataBase(dbname);
+	pointer = db;
 	dataBaseSet.push_back(db);
+	//saveDataBaseName
+	std::wstring fileName = L".\\naiveDB\\dataBaseNameList.dat";
+	std::ofstream fout(fileName, std::ios::binary);
+	boost::archive::binary_oarchive oa(fout);
+	std::vector<DataBase*>::iterator it;
+	oa << dataBaseSet.size();
+	for (it = dataBaseSet.begin(); it != dataBaseSet.end(); it++) {
+		oa << (*it)->getDBName();
+	}
+	fout.close();
 }
 
 void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {

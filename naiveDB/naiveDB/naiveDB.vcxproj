@@ -161,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="database.test.cpp" />
+    <ClCompile Include="datastorage.test.cpp" />
     <ClCompile Include="grammar.test.cpp" />
     <ClCompile Include="naiveDB.cpp" />
     <ClCompile Include="stdafx.cpp">

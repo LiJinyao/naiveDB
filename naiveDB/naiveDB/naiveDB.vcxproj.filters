@@ -68,5 +68,8 @@
     <ClCompile Include="database.test.cpp">
       <Filter>Source Files\Test Entry</Filter>
     </ClCompile>
+    <ClCompile Include="datastorage.test.cpp">
+      <Filter>Source Files\Test Entry</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

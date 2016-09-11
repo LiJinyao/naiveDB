@@ -16,9 +16,8 @@ namespace naiveDB {
 				keyTotal = formDefine.size();
 				formName = _formName;
 				formHeader = formDefine;
-
-
-
+				ifFull = false;
+				ifNull = true;
 				for (unsigned int i = 0; i < formHeader.size(); i++) {
 					bool if_primary = formHeader[i][2] == L"true" ? true : false;
 					if (formHeader[i][1] == L"int") {

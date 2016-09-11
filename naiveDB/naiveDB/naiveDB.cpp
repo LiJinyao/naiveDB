@@ -6,11 +6,14 @@
 
 void databaseTest();
 void grammarTest();
+void datastorageTest();
 int main(int argc, char** argv) {
+
 
 	
 	 // databaseTest();
 	  grammarTest();
+	//datastorageTest();
 
 	return 0;
 }

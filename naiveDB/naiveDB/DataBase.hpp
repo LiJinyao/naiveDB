@@ -8,6 +8,30 @@ namespace naiveDB {
 
 		DataBase(std::wstring _dbName) {
 			DBName = _dbName;
+			std::wstring command= L"md .\\naiveDB\\";
+			command = command + _dbName;
+			std::wstring destination = L".\\naiveDB\\";
+			destination = destination + _dbName;
+			if (_waccess(destination.data(), 0) == -1) {
+				_wsystem(command.data());
+			}
+			else {
+				std::wcout << L"该数据库已存在" << std::endl;
+			}
+		}
+
+		DataBase(std::wstring _dbName, int useless) {
+			DBName = _dbName;
+			//std::wstring command = L"md .\\naiveDB\\";
+			//command = command + _dbName;
+			//std::wstring destination = L".\\naiveDB\\";
+			//destination = destination + _dbName;
+			//if (_waccess(destination.data(), 0) == -1) {
+			//	_wsystem(command.data());
+			//}
+			//else {
+			//	//std::wcout << L"该数据库已存在" << std::endl;
+			//}
 		}
 
 
@@ -35,6 +59,8 @@ namespace naiveDB {
 			naiveDB::dataprocessor::Form f = naiveDB::dataprocessor::Form(formDefine, formName);
 			formSet.push_back(f);
 			std::wcout << L"成功创建一张名为" << formName << L"的表。" << std::endl;
+			saveFormName();
+			saveForm(f);
 			return;
 		}
 
@@ -106,7 +132,7 @@ namespace naiveDB {
 						int limit;
 						ss << fh[i][4];
 						ss >> limit;
-						if (data[i].length() > limit) {
+						if ((data[i].length()) > limit && (limit > 0)) {
 							std::wcout << L"错误！字段" << fh[i][0] << L"超出长度限制。" << std::endl;
 							if_LengthError = true;
 						}
@@ -213,8 +239,9 @@ namespace naiveDB {
 			}
 
 			formSet[foundform].Insert(dataset);
-			//saveFormName();
-			//saveForm(formSet[foundform]);
+
+			saveFormName();
+			saveForm(formSet[foundform]);
 		}
 
 
@@ -313,6 +340,9 @@ namespace naiveDB {
 			//删除全表
 			if (whereClause.size() == 0) {
 				formSet[foundForm].Delete();
+				saveFormName();
+				saveForm(formSet[foundForm]);
+				return;
 			}
 			//删除部分记录(支持多条件)
 			else {
@@ -358,6 +388,11 @@ namespace naiveDB {
 				if (affected == 0) {
 					std::wcout << L"删除失败，没有符合条件的记录" << std::endl;
 				}
+				else {
+					saveFormName();
+					saveForm(formSet[foundForm]);
+				}
+				return;
 			}
 		}
 
@@ -405,13 +440,11 @@ namespace naiveDB {
 			}
 
 			formSet[foundForm].Update(set, condition);
-
+			saveFormName();
+			saveForm(formSet[foundForm]);
+			return;
 		}
 
-
-		void Use(std::wstring dbName) {
-
-		}
 
 		bool saveForm(dataprocessor::Form form) {
 			std::wstring fileName = L".\\naiveDB\\";
@@ -454,7 +487,7 @@ namespace naiveDB {
 						dataprocessor::IntKey* temp_intkey = (dataprocessor::IntKey*)temp_key;
 						oa << temp_intkey->getData();
 					}
-					else if (typeName == L"string") {// StringKey
+					else if (typeName == L"char") {// StringKey
 						dataprocessor::StringKey* temp_stringkey = (dataprocessor::StringKey*)temp_key;
 						oa << temp_stringkey->getData();
 						oa << temp_stringkey->getLengthLimit();
@@ -466,7 +499,7 @@ namespace naiveDB {
 			return true;
 		}
 
-		dataprocessor::Form loadForm(std::wstring formName) {
+		void loadForm(std::wstring formName) {
 
 			std::wstring fileName = L".\\naiveDB\\";
 			fileName = fileName + DBName + L"\\" + formName;
@@ -534,7 +567,7 @@ namespace naiveDB {
 						intkey->isEmpty = key_iE;
 						singleRecord.push_back(intkey);// push_back IntKey* to Record vector<Key*>
 					}
-					else if (key_typeName == L"string") {
+					else if (key_typeName == L"char") {
 						std::wstring stringkey_data;
 						int stringkey_LengthLimit;
 
@@ -554,22 +587,22 @@ namespace naiveDB {
 				records.insert(std::pair<int, dataprocessor::Record>(map_id, record));// insert Record to Form map<int, Record>
 			}
 			form.setForm(records);//set Form form
-
-			return form;
+			formSet.push_back(form);
+			return;
 		}
 
 		bool saveFormName() {
-			std::wstring commandName = L"md .\\naiveDB\\";
-			commandName = commandName + DBName;
+			//std::wstring commandName = L"md .\\naiveDB\\";
+			//commandName = commandName + DBName;
 
-			std::wstring acccess_dbname = L".\\naiveDB\\";
-			acccess_dbname = acccess_dbname + DBName;
-			if (_waccess(acccess_dbname.data(), 0) == -1) {
-				_wsystem(commandName.data());
-			}
-			else {
-				std::wcout << L"该数据库存在" << std::endl;
-			}
+			//std::wstring acccess_dbname = L".\\naiveDB\\";
+			//acccess_dbname = acccess_dbname + DBName;
+			//if (_waccess(acccess_dbname.data(), 0) == -1) {
+			//	_wsystem(commandName.data());
+			//}
+			//else {
+			//	std::wcout << L"该表存在" << std::endl;
+			//}
 
 			std::wstring formNameList = L".\\naiveDB\\";
 			formNameList = formNameList + DBName + L"\\formNameList.dat";

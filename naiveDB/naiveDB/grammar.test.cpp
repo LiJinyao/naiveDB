@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "Grammar.hpp"
 
+void  naiveDB::parser::Initialize();
+
 void grammarTest() {
 	using boost::spirit::standard_wide::space;
 	typedef std::wstring::const_iterator iterator_type;
@@ -34,6 +36,10 @@ DELETE FROM 表名称 WHERE 列名称 = 值\n\
 	std::wcout.imbue(loc);
 	std::wcout << logo << std::endl;
 	std::wcout << help << std::endl;
+
+	naiveDB::parser::Initialize();
+
+
 	while (getline(std::wcin, str)) {
 		if (str.empty() || str[0] == 'q' || str[0] == 'Q') {
 			break;
