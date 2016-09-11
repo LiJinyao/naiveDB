@@ -213,8 +213,8 @@ namespace naiveDB {
 			}
 
 			formSet[foundform].Insert(dataset);
-			saveFormName();
-			saveForm(formSet[foundform]);
+			//saveFormName();
+			//saveForm(formSet[foundform]);
 		}
 
 
@@ -228,10 +228,12 @@ namespace naiveDB {
 		    std::wstring _orderBy,
 			std::wstring _order) {
 			
-
 			std::vector<std::wstring> columns = _columns;
 			std::vector<std::wstring> fromtables = _fromtables;
 			std::vector<std::vector<std::wstring>> whereClause = _whereClause;
+
+			int orderx = 0;
+			std::wstring name = _orderBy;
 
 			int foundForm = -1;
 			for (unsigned int i = 0; i < formSet.size(); i++) {
@@ -245,41 +247,41 @@ namespace naiveDB {
 				return;
 			}
 
-			//select全表
-			if (columns.size() == 1 && columns[0] == L"*") {
-				formSet[foundForm].Select();
-				return;
+			std::vector<std::wstring> allColumns;
+			std::vector<std::vector<std::wstring>> header = formSet[foundForm].getFormHeader();
+			for (unsigned int i = 0; i < header.size(); i++) {
+				allColumns.push_back(header[i][0]);
 			}
 
-			//select部分列（无条件）
-			else if (whereClause.size() == 0) {
+			//select全字段
+			if (columns.size() == 1 && columns[0] == L"*") {
+				//select全表
+				if (whereClause.size() == 0) {
+			        formSet[foundForm].Select();
+					return;
+				}
+				//select符合条件的全部字段
+				else {
+					formSet[foundForm].Select(allColumns, whereClause, orderx, name);
+					return;
+				}
+			}
+
+			//select部分列（无条件无顺序）
+			else if ((whereClause.size() == 0) && (_orderBy == L"")) {
 				formSet[foundForm].Select(columns);
 				return;
 			}
 
-			//select部分列（多条件）
+			//select部分列（多条件有顺序）
 			else {
-				
-				std::vector<std::vector<std::wstring>> condition;
-				for (unsigned int i = 0; i < whereClause.size(); i++) {
-					std::vector<std::wstring> s;
-					s.push_back(whereClause[i][0]);
-					s.push_back(whereClause[i][1]);
-					s.push_back(whereClause[i][2]);
-					condition.push_back(s);
-					s.clear();
-				}
-
-				int orderx = 0;
 				if (_order == L"ASC") {
 					orderx = 1;
 				}
 				else if (_order == L"DESC") {
 					orderx = 2;
 				}
-				std::wstring name = _orderBy;
-
-				formSet[foundForm].Select(columns, condition, orderx, name);
+				formSet[foundForm].Select(columns, whereClause, orderx, name);
 				return;
 			}
 
