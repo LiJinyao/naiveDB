@@ -193,9 +193,11 @@ namespace naiveDB {
 			}
 
 			//打印整个表
-			void Select() {
+			void Select(int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
-
+				std::map<std::wstring, int>mp1;
+				std::map<int, int>mp2;
+				int flag = 0;
 				//	std::cout.setf(std::ios::right, std::ios::adjustfield);
 
 				for (int i = 0; i < formHeader.size(); i++)
@@ -205,42 +207,117 @@ namespace naiveDB {
 				std::cout << std::endl;
 				std::wstring sa = L"char";
 				std::wstring sb = L"int";
-				for (it = records.begin(); it != records.end(); it++)
+				if (orderx > 0)
 				{
-					std::vector<Key*> tmpp = it->second.getRecord();
-					for (int j = 0; j < tmpp.size(); j++)
+					for (it = records.begin(); it != records.end(); it++)
 					{
-						if (tmpp[j]->getTypeName() == sa)
+						std::vector<Key*> tmp = it->second.getRecord();
+						for (int i = 0; i < tmp.size(); i++)
 						{
-							StringKey* now = (StringKey*)tmpp[j];
-							if (!now->isEmpty) {
-								std::wcout << std::setw(24) << now->getData();
-							}
-							else {
-								std::wcout << std::setw(24) << " ";
-							}
-
-						}
-						else
-						{
-							IntKey* now = (IntKey*)tmpp[j];
-							//std::wcout << std::setw(8) << now->getData();
-							if (!now->isEmpty) {
-								std::wcout << std::setw(24) << now->getData();
-							}
-							else {
-								std::wcout << std::setw(24) << " ";
+							if (tmp[i]->getKeyName() == name)
+							{
+								if (tmp[i]->getTypeName() == L"wstring")
+								{
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[i];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::map<std::wstring, int>::value_type(y, x));
+								}
+								else
+								{
+									IntKey * p = (IntKey*)tmp[i];
+									int x = it->first;
+									int y = p->getData();
+									mp2.insert(std::map<int, int>::value_type(y, x));
+								}
 							}
 						}
 					}
 
-					std::wcout << std::endl;
 				}
+				std::vector<int> pp;
+				if (orderx != 0)
+				{
+					if (flag == 1)
+					{
+						if (orderx == 1)
+						{
+							for (std::map<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+						}
+						else
+						{
+							for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+
+						}
+					}
+					else
+					{
+						if (orderx == 1)
+						{
+							for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+						}
+						else
+						{
+							for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+
+						}
+					}
+				}
+					for (int i = 0; i < pp.size(); i++)
+					{
+						it = records.find(pp[i]);
+						std::vector<Key*> tmpp = it->second.getRecord();
+
+						for (int j = 0; j < tmpp.size(); j++)
+						{
+							if (tmpp[j]->getTypeName() == sa)
+							{
+								StringKey* now = (StringKey*)tmpp[j];
+								if (!now->isEmpty) {
+									std::wcout << std::setw(24) << now->getData();
+								}
+								else {
+									std::wcout << std::setw(24) << " ";
+								}
+
+							}
+							else
+							{
+								IntKey* now = (IntKey*)tmpp[j];
+								//std::wcout << std::setw(8) << now->getData();
+								if (!now->isEmpty) {
+									std::wcout << std::setw(24) << now->getData();
+								}
+								else {
+									std::wcout << std::setw(24) << " ";
+								}
+							}
+						}
+
+						std::wcout << std::endl;
+					}
+			
 			}
 
 			//打印表的部分列
-			void Select(std::vector<std::wstring> keyNames) {
+			void Select(std::vector<std::wstring> keyNames,int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
+				std::map<std::wstring, int>mp1;
+				std::map<int, int>mp2;
+				int flag = 0;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				for (int i = 0; i < keyNames.size(); i++)
 				{
@@ -249,8 +326,78 @@ namespace naiveDB {
 				std::cout << std::endl;
 				std::wstring sa = L"char";
 				std::wstring sb = L"int";
-				for (it = records.begin(); it != records.end(); it++)
+				if (orderx > 0)
 				{
+					for (it = records.begin(); it != records.end(); it++)
+					{
+						std::vector<Key*> tmp = it->second.getRecord();
+						for (int i = 0; i < tmp.size(); i++)
+						{
+							if (tmp[i]->getKeyName() == name)
+							{
+								if (tmp[i]->getTypeName() == L"wstring")
+								{
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[i];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::map<std::wstring, int>::value_type(y, x));
+								}
+								else
+								{
+									IntKey * p = (IntKey*)tmp[i];
+									int x = it->first;
+									int y = p->getData();
+									mp2.insert(std::map<int, int>::value_type(y, x));
+								}
+							}
+						}
+					}
+
+				}
+				std::vector<int> pp;
+				if (orderx != 0)
+				{
+					if (flag == 1)
+					{
+						if (orderx == 1)
+						{
+							for (std::map<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+						}
+						else
+						{
+							for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+
+						}
+					}
+					else
+					{
+						if (orderx == 1)
+						{
+							for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+						}
+						else
+						{
+							for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+							{
+								pp.push_back(rit->second);
+							}
+
+						}
+					}
+				}
+				for (int i  = 0; i <= pp.size();i++)
+				{
+					it = records.find(pp[i]);
 					for (int j = 0; j < keyNames.size(); j++)
 					{
 						std::vector<Key*> tmpp = it->second.getRecord();
