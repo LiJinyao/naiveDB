@@ -316,6 +316,10 @@ namespace naiveDB {
 			node* getroot() {
 				return root;
 			}
+			bool ifk()
+			{
+				return ifKey;
+			}
 		};
 	}
 }

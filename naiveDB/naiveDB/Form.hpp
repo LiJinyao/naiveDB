@@ -125,7 +125,7 @@ namespace naiveDB {
 				{
 					intHeader[i]->clear();
 				}
-				std::cout << "make a empty form" << std::endl;					//打印空表 
+				std::wcout <<L"表已清空。" << std::endl;					//打印空表 
 			}
 
 			//删除符合多种条件的记录(A&&B,A||B)
@@ -693,7 +693,7 @@ namespace naiveDB {
 				{
 					for (int j = 0; j < condition.size(); j++)
 					{
-						if (wstringHeader[i]->GetName() == condition[j][0])
+						if (wstringHeader[i]->GetName() == condition[j][0]&& wstringHeader[i]->ifk() == 1)
 						{
 							flag = 1;
 						}
@@ -703,7 +703,7 @@ namespace naiveDB {
 				{
 					for (int j = 0; j < set.size(); j++)
 					{
-						if (intHeader[i]->GetName() == set[j][0])
+						if (intHeader[i]->GetName() == set[j][0]&& intHeader[i] ->ifk()==1)
 						{
 							flag = 1;
 						}
