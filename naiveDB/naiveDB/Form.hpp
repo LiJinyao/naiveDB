@@ -684,7 +684,7 @@ namespace naiveDB {
 							if (ans.count(tmp[j]) != 0)
 								temp.insert(tmp[j]);
 						}
-						ans.empty();
+						ans.clear();
 						for (it = temp.begin(); it != temp.end(); it++) ans.insert(*it);
 					}
 				}
@@ -701,9 +701,9 @@ namespace naiveDB {
 				}
 				for (int i = 0; i < intHeader.size(); i++)
 				{
-					for (int j = 0; j < condition.size(); j++)
+					for (int j = 0; j < set.size(); j++)
 					{
-						if (intHeader[i]->GetName() == condition[j][0])
+						if (intHeader[i]->GetName() == set[j][0])
 						{
 							flag = 1;
 						}
