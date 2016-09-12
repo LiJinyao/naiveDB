@@ -257,7 +257,7 @@ namespace naiveDB {
 					for (unsigned int k = 0; k < recordsCopy.size(); k++) {
 						std::vector<std::wstring> dataset;
 						std::vector<naiveDB::dataprocessor::Key*> r = recordsCopy[k].getRecord();
-						for (unsigned int l = 0; l < r.size; l++) {
+						for (unsigned int l = 0; l < r.size(); l++) {
 							if (r[l]->getTypeName() == L"char") {
 								naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
 								dataset.push_back(p->getData());
