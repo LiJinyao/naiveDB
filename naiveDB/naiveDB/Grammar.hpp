@@ -111,9 +111,7 @@ struct naiveDB::parser::WhereConditionClause : qi::grammar<Iterator, WhereCondit
 template <typename Iterator>
 struct naiveDB::parser::WhereClause : qi::grammar<Iterator, WhereStatement(), encoding::space_type> {
 	WhereClause() : WhereClause::base_type(start) {
-
 		start %= no_case["where"] >> whereCondition % (no_case["and"] | no_case["or"])>> -lit(';');
-
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> columnsident, whereOperator, condition;
 	qi::rule<Iterator, WhereStatement(), encoding::space_type> start;

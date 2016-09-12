@@ -166,6 +166,7 @@ namespace naiveDB {
 			// val： 要设置的值
 			std::wstring col, val;
 		};
+		
 		struct UpdateStatement {
 			std::wstring tableName; // 要修改的表名
 			std::vector<SetStatement> sets; //要修改的内容，见struct SetStatement
@@ -207,10 +208,6 @@ namespace naiveDB {
 			void operator()(UseDatabaseStatement & i) const;
 			void operator()(UpdateStatement & i) const;
 		};
-
-
-
-	
 		std::vector<DataBase*> dataBaseSet;
 		DataBase *pointer;
 		void buildFolder() {
