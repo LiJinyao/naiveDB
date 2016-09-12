@@ -436,7 +436,6 @@ namespace naiveDB {
 						pp.push_back(it->first);
 					}
 				}
-				//printf("%d\n", mp2.size());
 				for (int i  = 0; i < pp.size();i++)
 				{
 					it = records.find(pp[i]);
