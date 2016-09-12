@@ -271,7 +271,7 @@ namespace naiveDB {
 						return false;
 					}
 				}
-				retrun true;
+				return true;
 			}
 			void erase(T dat) {
 				erase(root, dat);

@@ -77,7 +77,7 @@ namespace naiveDB {
 						}
 					}
 					for (unsigned int j = 0; j < wstringHeader.size(); j++) {
-						if (wstringHeader[j]->GetId == i) {
+						if (wstringHeader[j]->GetId() == i) {
 							bool _judge = wstringHeader[j]->judge(dataSet[i]);
 							if (!_judge) {
 								std::wcout << L"´íÎó£¡Ö÷¼üÖØ¸´¡£" << std::endl;
