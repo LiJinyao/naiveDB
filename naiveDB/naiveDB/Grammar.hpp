@@ -40,6 +40,7 @@ namespace naiveDB {
 		template <typename Iterator> struct InsertRule;
 		template <typename Iterator> struct UseDatabasetRule;
 		template <typename Iterator> struct UpdateRule;
+		template <typename Iterator> struct DropRule;
 		// TODO
 		
 
@@ -75,7 +76,7 @@ struct naiveDB::parser::SQLRule : qi::grammar<Iterator, TopSQLStatement(), encod
 		using qi::lit;
 		using qi::optional;
 
-		start %= selectRule | createRule | deleteRule | insertRule | createDatabaseRule | useDatabasetRule | updateRule;
+		start %= selectRule | createRule | deleteRule | insertRule | createDatabaseRule | useDatabasetRule | updateRule | dropRule;
 	}
 	qi::rule<Iterator, TopSQLStatement(), encoding::space_type> start;
 	SelectRule<Iterator> selectRule;
@@ -85,6 +86,7 @@ struct naiveDB::parser::SQLRule : qi::grammar<Iterator, TopSQLStatement(), encod
 	CreateDatabaseRule<Iterator> createDatabaseRule;
 	UseDatabasetRule<Iterator> useDatabasetRule;
 	UpdateRule<Iterator> updateRule;
+	DropRule<Iterator> dropRule;
 };
 
 // Where condition rule
@@ -281,4 +283,14 @@ struct naiveDB::parser::SetClause : qi::grammar<Iterator, SetStatement(), encodi
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> col, quotedString, value;
 	qi::rule<Iterator, SetStatement(), encoding::space_type> start;
+};
+
+template <typename Iterator>
+struct naiveDB::parser::DropRule : qi::grammar<Iterator, DropStatement(), encoding::space_type> {
+	DropRule() : DropRule::base_type(start) {
+		col %= lexeme[alpha >> *alnum];
+		start %= no_case["drop"] >> col;
+	}
+	qi::rule<Iterator, std::wstring(), encoding::space_type> col;
+	qi::rule<Iterator, DropStatement(), encoding::space_type> start;
 };

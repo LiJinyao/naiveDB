@@ -188,11 +188,19 @@ namespace naiveDB {
 
 		/****************************************
 		*
+		* DROP statement
+		*
+		****************************************/
+		struct DropStatement {
+			std::wstring table;
+		};
+		/****************************************
+		*
 		* SQL AST enter
 		*
 		****************************************/
 		typedef
-			boost::variant<UpdateStatement, UseDatabaseStatement, SelectStatement, CreateTableStatement, CreateDatabaseStatement, DeleteStatement, InsertStatement> sqlStatement;
+			boost::variant<UpdateStatement, DropStatement, UseDatabaseStatement, SelectStatement, CreateTableStatement, CreateDatabaseStatement, DeleteStatement, InsertStatement> sqlStatement;
 
 		struct TopSQLStatement {
 			sqlStatement sql;
@@ -207,6 +215,7 @@ namespace naiveDB {
 			void operator()(InsertStatement & i) const;
 			void operator()(UseDatabaseStatement & i) const;
 			void operator()(UpdateStatement & i) const;
+			void operator()(DropStatement & i) const;
 		};
 		std::vector<DataBase*> dataBaseSet;
 		DataBase *pointer;
@@ -422,6 +431,10 @@ void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
 	pointer->Update(tableName, sets, whereClause);
 }
 
+void naiveDB::parser::SQLparser::operator()(DropStatement & i) const {
+	std::wcout << i.table;
+}
+
 /****************************************
 *
 * Use BOOST_FUSION to adapt AST to grammar structs
@@ -503,4 +516,9 @@ BOOST_FUSION_ADAPT_STRUCT(
 	naiveDB::parser::SetStatement,
 	(std::wstring, col)
 	(std::wstring, val)
+)
+
+BOOST_FUSION_ADAPT_STRUCT(
+	naiveDB::parser::DropStatement,
+	(std::wstring, table)
 )
