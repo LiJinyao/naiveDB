@@ -688,6 +688,32 @@ namespace naiveDB {
 						for (it = temp.begin(); it != temp.end(); it++) ans.insert(*it);
 					}
 				}
+				int flag = 0;
+				for (int i = 0; i < wstringHeader.size(); i++)
+				{
+					for (int j = 0; j < condition.size(); j++)
+					{
+						if (wstringHeader[i]->GetName() == condition[j][0])
+						{
+							flag = 1;
+						}
+					}
+				}
+				for (int i = 0; i < intHeader.size(); i++)
+				{
+					for (int j = 0; j < condition.size(); j++)
+					{
+						if (intHeader[i]->GetName() == condition[j][0])
+						{
+							flag = 1;
+						}
+					}
+				}
+				if (flag == 1 && ans.size() > 1)
+				{
+					std::wcout << L"不合法修改" << std::endl;
+					return 0;
+				}
 				for (int i = 0; i < set.size(); i++)
 				{
 					for (int j = 0; j < wstringHeader.size(); j++)
