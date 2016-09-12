@@ -222,8 +222,8 @@ namespace naiveDB {
 			//打印整个表
 			void Select(int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
-				std::map<std::wstring, int>mp1;
-				std::map<int, int>mp2;
+				std::multimap<std::wstring, int>mp1;
+				std::multimap<int, int>mp2;
 				int flag = 0;
 				//	std::cout.setf(std::ios::right, std::ios::adjustfield);
 
@@ -249,14 +249,14 @@ namespace naiveDB {
 									StringKey * p = (StringKey*)tmp[i];
 									int x = it->first;
 									std::wstring y = p->getData();
-									mp1.insert(std::map<std::wstring, int>::value_type(y, x));
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
 								}
 								else
 								{
 									IntKey * p = (IntKey*)tmp[i];
 									int x = it->first;
 									int y = p->getData();
-									mp2.insert(std::map<int, int>::value_type(y, x));
+									mp2.insert(std::multimap<int, int>::value_type(y, x));
 								}
 							}
 						}
@@ -270,14 +270,14 @@ namespace naiveDB {
 					{
 						if (orderx == 1)
 						{
-							for (std::map<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+							for (std::multimap<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
 						}
 						else
 						{
-							for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+							for (std::multimap<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
@@ -288,14 +288,14 @@ namespace naiveDB {
 					{
 						if (orderx == 1)
 						{
-							for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+							for (std::multimap<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
 						}
 						else
 						{
-							for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+							for (std::multimap<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
@@ -349,8 +349,8 @@ namespace naiveDB {
 			//打印表的部分列
 			void Select(std::vector<std::wstring> keyNames,int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
-				std::map<std::wstring, int>mp1;
-				std::map<int, int>mp2;
+				std::multimap<std::wstring, int>mp1;
+				std::multimap<int, int>mp2;
 				int flag = 0;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				for (int i = 0; i < keyNames.size(); i++)
@@ -365,24 +365,24 @@ namespace naiveDB {
 					for (it = records.begin(); it != records.end(); it++)
 					{
 						std::vector<Key*> tmp = it->second.getRecord();
-						for (int i = 0; i < tmp.size(); i++)
+						for (int ii = 0; ii < tmp.size(); ii++)
 						{
-							if (tmp[i]->getKeyName() == name)
+							if (tmp[ii]->getKeyName() == name)
 							{
-								if (tmp[i]->getTypeName() == L"wstring")
+								if (tmp[ii]->getTypeName() == L"wstring")
 								{
 									flag = 1;
-									StringKey * p = (StringKey*)tmp[i];
+									StringKey * p = (StringKey*)tmp[ii];
 									int x = it->first;
 									std::wstring y = p->getData();
-									mp1.insert(std::map<std::wstring, int>::value_type(y, x));
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
 								}
 								else
 								{
-									IntKey * p = (IntKey*)tmp[i];
+									IntKey * p = (IntKey*)tmp[ii];
+									int yy = p->getData();
 									int x = it->first;
-									int y = p->getData();
-									mp2.insert(std::map<int, int>::value_type(y, x));
+									mp2.insert(std::multimap<int, int>::value_type(yy, x));
 								}
 							}
 						}
@@ -396,14 +396,14 @@ namespace naiveDB {
 					{
 						if (orderx == 1)
 						{
-							for (std::map<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+							for (std::multimap<std::wstring, int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
 						}
 						else
 						{
-							for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+							for (std::multimap<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
@@ -414,14 +414,14 @@ namespace naiveDB {
 					{
 						if (orderx == 1)
 						{
-							for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+							for (std::multimap<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
 						}
 						else
 						{
-							for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+							for (std::multimap<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
 							{
 								pp.push_back(rit->second);
 							}
@@ -436,6 +436,7 @@ namespace naiveDB {
 						pp.push_back(it->first);
 					}
 				}
+				//printf("%d\n", mp2.size());
 				for (int i  = 0; i <= pp.size();i++)
 				{
 					it = records.find(pp[i]);
@@ -484,8 +485,8 @@ namespace naiveDB {
 				std::wstring sa = L"char";
 				std::wstring sb = L"int";
 				std::set<int>stmp;
-				std::map<std::wstring,int> mp1;
-				std::map<int, int> mp2;
+				std::multimap<std::wstring,int> mp1;
+				std::multimap<int, int> mp2;
 				for (int i = 0; i < condition.size(); i++)
 				{
 					tmp.clear();
@@ -529,21 +530,21 @@ namespace naiveDB {
 								}
 								StringKey * p = (StringKey*)h[j];
 								std::wstring y = p->getData();
-								mp1.insert(std::map<std::wstring,int>::value_type(y, x));
+								mp1.insert(std::multimap<std::wstring,int>::value_type(y, x));
 								
 									
 							}
 							//std::sort(v1.begin(), v1.end());
 							if (orderx == 1)
 							{
-								for (std::map<std::wstring,int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
+								for (std::multimap<std::wstring,int>::iterator rit = mp1.begin(); rit != mp1.end(); rit++)
 								{
 									tmp.push_back(rit->second);
 								}
 							}
 							if (orderx == 2)
 							{
-								for (std::map<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
+								for (std::multimap<std::wstring, int>::reverse_iterator rit = mp1.rbegin(); rit != mp1.rend(); rit++)
 								{
 									tmp.push_back(rit->second);
 								}
@@ -568,19 +569,19 @@ namespace naiveDB {
 								}
 								IntKey * p = (IntKey*)h[j];
 								int y = p->getData();
-								mp2.insert(std::map<int, int>::value_type(y, x));
+								mp2.insert(std::multimap<int, int>::value_type(y, x));
 							}
 							//std::sort(v2.begin(), v2.end());
 							if (orderx == 1)
 							{
-								for (std::map<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
+								for (std::multimap<int, int>::iterator rit = mp2.begin(); rit != mp2.end(); rit++)
 								{
 									tmp.push_back(rit->second);
 								}
 							}
 							if (orderx == 2)
 							{
-								for (std::map<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
+								for (std::multimap<int, int>::reverse_iterator rit = mp2.rbegin(); rit != mp2.rend(); rit++)
 								{
 									tmp.push_back(rit->second);
 								}
