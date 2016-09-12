@@ -303,6 +303,13 @@ namespace naiveDB {
 						}
 					}
 				}
+				else
+				{
+					for (it = records.begin(); it != records.end(); it++)
+					{
+						pp.push_back(it->first);
+					}
+				}
 					for (int i = 0; i < pp.size(); i++)
 					{
 						it = records.find(pp[i]);
@@ -420,6 +427,13 @@ namespace naiveDB {
 							}
 
 						}
+					}
+				}
+				else
+				{
+					for (it = records.begin(); it != records.end(); it++)
+					{
+						pp.push_back(it->first);
 					}
 				}
 				for (int i  = 0; i <= pp.size();i++)
