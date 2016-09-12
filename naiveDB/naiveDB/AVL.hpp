@@ -259,17 +259,19 @@ namespace naiveDB {
 				return hehe;
 			}
 			void insert(T dat, int id) {
+				ss.insert(dat);
+				insert(root, dat, id);
+			}
+			bool judge(T dat)
+			{
 				if (ifKey)
 				{
-					std::set<T>::iterator it;
-					it = ss.find(dat);
-					if (it != ss.end())
+					if (ss.find(dat) != ss.end())
 					{
-						std::wcout << "´íÎó£¡Ö÷¼üÖØ¸´¡£" << std::endl;
-						return;
+						return false;
 					}
 				}
-				insert(root, dat, id);
+				retrun true;
 			}
 			void erase(T dat) {
 				erase(root, dat);

@@ -152,6 +152,7 @@ namespace naiveDB {
 			}
 			//可插入部分字段
 			else {
+				//参数数量检查
 				if (data.size() != definition.size()) {
 					std::wcout << "错误！参数数量不匹配。" << std::endl;
 					return;
@@ -172,6 +173,7 @@ namespace naiveDB {
 					}
 				}
 
+				//数据类型检查
 				bool if_TypeError = false;
 				for (unsigned int i = 0; i < data.size(); i++) {
 					bool if_int = true;
@@ -221,6 +223,31 @@ namespace naiveDB {
 				if (if_LengthError) {
 					return;
 				}
+
+				//检查主键或非空键是否为空
+				bool if_NotNullError = false;
+
+
+				for (unsigned int i = 0; i < fh.size(); i++) {
+					if (fh[i][2] == L"true" || fh[i][3] == L"true") {
+						bool flag = false;
+						for (unsigned int j = 0; j < definition.size(); j++) {
+							if ((definition[j] == fh[i][0]) && (data[j] != L"")) {
+								flag = true;
+								break;
+							}
+						}
+						if (!flag) {
+							if_NotNullError = true;
+							std::wcout << L"错误！键值" << fh[i][0] << L"不能为空。" << std::endl;
+						}
+					}
+				}
+				if (if_NotNullError) {
+					return;
+				}
+
+				//创建参数
 				for (unsigned int i = 0; i < fh.size(); i++) {
 					bool if_occupied = false;
 					for (unsigned j = 0; j < definition.size(); j++) {
@@ -239,7 +266,6 @@ namespace naiveDB {
 			}
 
 			formSet[foundform].Insert(dataset);
-
 			saveFormName();
 			saveForm(formSet[foundform]);
 		}
@@ -261,6 +287,13 @@ namespace naiveDB {
 
 			int orderx = 0;
 			std::wstring name = _orderBy;
+			
+			if (_order == L"ASC") {
+				orderx = 1;
+			}
+			else if (_order == L"DESC") {
+				orderx = 2;
+			}
 
 			int foundForm = -1;
 			for (unsigned int i = 0; i < formSet.size(); i++) {
@@ -284,7 +317,7 @@ namespace naiveDB {
 			if (columns.size() == 1 && columns[0] == L"*") {
 				//select全表
 				if (whereClause.size() == 0) {
-			        formSet[foundForm].Select();
+			        formSet[foundForm].Select(orderx, name);
 					return;
 				}
 				//select符合条件的全部字段
@@ -294,20 +327,14 @@ namespace naiveDB {
 				}
 			}
 
-			//select部分列（无条件无顺序）
-			else if ((whereClause.size() == 0) && (_orderBy == L"")) {
-				formSet[foundForm].Select(columns);
+			//select部分列（无条件）
+			else if (whereClause.size() == 0) {
+				formSet[foundForm].Select(columns, orderx, name);
 				return;
 			}
 
-			//select部分列（多条件有顺序）
+			//select部分列（有条件）
 			else {
-				if (_order == L"ASC") {
-					orderx = 1;
-				}
-				else if (_order == L"DESC") {
-					orderx = 2;
-				}
 				formSet[foundForm].Select(columns, whereClause, orderx, name);
 				return;
 			}

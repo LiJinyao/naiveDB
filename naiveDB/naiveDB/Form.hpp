@@ -61,9 +61,32 @@ namespace naiveDB {
 					formDefine.push_back(s);
 				}
 
-				//把新纪录插入map
-				Record r = Record(idTotal, formDefine);
-				records.insert(std::pair<int, Record>(idTotal, r));
+				//检查主键是否重复
+				for (unsigned int i = 0; i < dataSet.size(); i++) {
+					for (unsigned int j = 0; j < intHeader.size(); j++) {
+						if (intHeader[j]->GetId() == i) {
+							int num;
+							std::wstringstream ss;
+							ss << dataSet[i];
+							ss >> num;
+							bool _judge = intHeader[j]->judge(num);
+							if (!_judge) {
+								std::wcout << L"错误！主键重复。" << std::endl;
+								return;
+							}
+						}
+					}
+					for (unsigned int j = 0; j < wstringHeader.size(); j++) {
+						if (wstringHeader[j]->GetId == i) {
+							bool _judge = wstringHeader[j]->judge(dataSet[i]);
+							if (!_judge) {
+								std::wcout << L"错误！主键重复。" << std::endl;
+								return;
+							}
+						}
+
+					}
+				}
 
 				//在AVL中插入新纪录
 				for (unsigned int i = 0; i < formDefine.size(); i++) {
@@ -83,6 +106,10 @@ namespace naiveDB {
 						}
 					}
 				}
+
+				//把新纪录插入map
+				Record r = Record(idTotal, formDefine);
+				records.insert(std::pair<int, Record>(idTotal, r));
 			}
 
 			//删除全部记录
