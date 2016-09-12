@@ -34,7 +34,16 @@ namespace naiveDB {
 			~Form() {
 
 			}
-
+			
+			int check(std::wstring name)
+			{
+				for (int i = 0; i < formHeader.size(); i++)
+				{
+					if (formHeader[i][0] == name)
+						return 1;
+				}
+				return 0;
+			}
 			/*bool cmp1(const std::pair<int, std::wstring> &m_one, const std::pair<int, std::wstring>&m_two)
 			{
 				return (m_one.second> m_two.second);//定义了大于，就是按从小到大排序 //可以定义任何你想要的比较操作  
@@ -133,6 +142,14 @@ namespace naiveDB {
 				std::vector<std::vector<int> > ans;
 				for (int i = 0; i < condition.size(); i++)
 				{
+					if (!check(condition[i][0]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
+				for (int i = 0; i < condition.size(); i++)
+				{
 					for (int j = 0; j < wstringHeader.size(); j++)
 					{
 
@@ -220,7 +237,7 @@ namespace naiveDB {
 			}
 
 			//打印整个表
-			void Select(int orderx,std::wstring name) {
+			int Select(int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
 				std::multimap<std::wstring, int>mp1;
 				std::multimap<int, int>mp2;
@@ -343,16 +360,24 @@ namespace naiveDB {
 
 						std::wcout << std::endl;
 					}
-			
+					return records.size();
 			}
 
 			//打印表的部分列
-			void Select(std::vector<std::wstring> keyNames,int orderx,std::wstring name) {
+			int Select(std::vector<std::wstring> keyNames,int orderx,std::wstring name) {
 				std::map<int, Record>::iterator it;
 				std::multimap<std::wstring, int>mp1;
 				std::multimap<int, int>mp2;
 				int flag = 0;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
+				for (int i = 0; i < keyNames.size(); i++)
+				{
+					if (!check(keyNames[i]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
 				for (int i = 0; i < keyNames.size(); i++)
 				{
 					std::wcout << std::setw(24) << keyNames[i];
@@ -474,6 +499,7 @@ namespace naiveDB {
 					}
 					std::cout << std::endl;
 				}
+				return records.size();
 			}
 
 			//打印符合条件的记录
@@ -486,6 +512,22 @@ namespace naiveDB {
 				std::set<int>stmp;
 				std::multimap<std::wstring,int> mp1;
 				std::multimap<int, int> mp2;
+				for (int i = 0; i < keyNames.size(); i++)
+				{
+					if (!check(keyNames[i]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
+				for (int i = 0; i < condition.size(); i++)
+				{
+					if (!check(condition[i][0]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
 				for (int i = 0; i < condition.size(); i++)
 				{
 					tmp.clear();
@@ -652,6 +694,22 @@ namespace naiveDB {
 				std::set<int>temp;
 				std::set<int>::iterator it;
 				std::map<int, Record>::iterator itMap;
+				for (int i = 0; i < set.size(); i++)
+				{
+					if (!check(set[i][0]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
+				for (int i = 0; i < condition.size(); i++)
+				{
+					if (!check(condition[i][0]))
+					{
+						std::wcout << L"字段不存在。" << std::endl;
+						return 0;
+					}
+				}
 				for (int i = 0; i < condition.size(); i++)
 				{
 					for (int j = 0; j < wstringHeader.size(); j++)
