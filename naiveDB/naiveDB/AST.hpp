@@ -246,8 +246,35 @@ namespace naiveDB {
 			for (unsigned int i = 0; i < dbNames.size(); i++) {
 				DataBase *db = new DataBase(dbNames[i], i);
 				std::vector<std::wstring> formNameList = db->loadFormName();
+				//对每一个表进行还原
 				for (unsigned int j = 0; j < formNameList.size(); j++) {
-					db->loadForm(formNameList[j]);
+					naiveDB::dataprocessor::Form f1 = db->loadForm(formNameList[j]);
+					std::vector<std::vector<std::wstring>> hd = f1.getFormHeader();
+					naiveDB::dataprocessor::Form f2 = naiveDB::dataprocessor::Form(hd, formNameList[j]);
+					std::map<int, naiveDB::dataprocessor::Record> recordsCopy = f1.getForm();
+					
+
+					for (unsigned int k = 0; k < recordsCopy.size(); k++) {
+						std::vector<std::wstring> dataset;
+						std::vector<naiveDB::dataprocessor::Key*> r = recordsCopy[k].getRecord();
+						for (unsigned int l = 0; l < r.size; l++) {
+							if (r[l]->getTypeName() == L"char") {
+								naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
+								dataset.push_back(p->getData());
+							}
+							else if (r[l]->getTypeName() == L"int") {
+								naiveDB::dataprocessor::IntKey *p = (naiveDB::dataprocessor::IntKey*)r[l];
+								std::wstringstream ss;
+								int num = p->getData();
+								std::wstring str;
+								ss << num;
+								ss >> str;
+								dataset.push_back(str);
+							}
+						}
+						f2.Insert(dataset);
+					}
+					db->addForm(f2);
 				}
 				dataBaseSet.push_back(db);
 			}

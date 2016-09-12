@@ -526,7 +526,7 @@ namespace naiveDB {
 			return true;
 		}
 
-		void loadForm(std::wstring formName) {
+		naiveDB::dataprocessor::Form loadForm(std::wstring formName) {
 
 			std::wstring fileName = L".\\naiveDB\\";
 			fileName = fileName + DBName + L"\\" + formName;
@@ -614,8 +614,8 @@ namespace naiveDB {
 				records.insert(std::pair<int, dataprocessor::Record>(map_id, record));// insert Record to Form map<int, Record>
 			}
 			form.setForm(records);//set Form form
-			formSet.push_back(form);
-			return;
+			//formSet.push_back(form);
+			return form;
 		}
 
 		bool saveFormName() {
@@ -666,6 +666,10 @@ namespace naiveDB {
 
 		std::wstring getDBName() {
 			return DBName;
+		}
+
+		void addForm(dataprocessor::Form f) {
+			formSet.push_back(f);
 		}
 
 	protected:
