@@ -24,6 +24,8 @@ namespace naiveDB {
 		using qi::fail;
 		using boost::spirit::qi::symbols;
 		using qi::digit;
+		using phoenix::construct;
+		using phoenix::val;
 		// top rule
 		template <typename Iterator> struct SQLRule;
 		// Columns attribute statement rule
@@ -164,7 +166,18 @@ struct naiveDB::parser::ColumnsClause : qi::grammar<Iterator, ColumnStatement(),
 		* * will not work in the BOOST_FUSION_ADAPT_STRUCT.
 		* use int_ | attr(0)
 		*/
+		using namespace qi::labels;
 		start %= name >> dataType >> ('(' >> int_ >> ')' | attr(0)) >> *dataAtrribute;
+		dataType.name("数据类型错误");
+		on_error<fail>(
+			start,
+			std::cout
+			<< val("Grammar Error: ")
+			<< _4
+			<< val("at ")
+			<< construct<std::string>(_3, _2)
+			<< std::endl
+			);
 	}
 	qi::rule<Iterator, std::wstring(), encoding::space_type> dataType, dataAtrribute, name;
 	qi::rule<Iterator, ColumnStatement(), encoding::space_type> start;
@@ -178,8 +191,7 @@ struct naiveDB::parser::CreateTableRule : qi::grammar<Iterator, CreateTableState
 	CreateTableRule() : CreateTableRule::base_type(start, "CREATE TABLE") {
 
 		using namespace qi::labels;
-		using phoenix::construct;
-		using phoenix::val;
+
 
 		tablename %= lexeme[alpha >> *alnum];
 		start %= no_case["create table"] > tablename >> lit('(') >> colum % ',' >> lit(')') >> -lit(';');
@@ -188,7 +200,7 @@ struct naiveDB::parser::CreateTableRule : qi::grammar<Iterator, CreateTableState
 		on_error<fail>(
 			start,
 			std::cout
-			<< val("Grammar Error: Expecting")
+			<< val("Grammar Error: ")
 			<< _4
 			<< val("at ")
 			<< construct<std::string>(_3, _2)
