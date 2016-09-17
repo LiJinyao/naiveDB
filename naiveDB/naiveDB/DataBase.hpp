@@ -100,21 +100,49 @@ namespace naiveDB {
 				bool if_TypeError = false;
 				for (unsigned int i = 0; i < data.size(); i++) {
 					bool if_int = true;
+					bool if_bool = false;
+					bool if_date = true;
+					bool if_char = true;
 					std::wstring tmp = data[i];
+
+					if ((tmp == L"true") || (tmp == L"false") || (tmp == L"是") || (tmp == L"否")) {
+						if_bool = true;
+					}
+
+					if ((tmp[4] != '-') || (tmp[7] != '-') || (tmp.length() != 10)) {
+						if_date = false;
+					}
+
+
 					for (unsigned int j = 0; j < tmp.length(); j++) {
 						if (tmp[j] > L'9' || tmp[j] < L'0') {
 							if_int = false;
 							break;
 						}
 					}
-					if (if_int == true && fh[i][1] == L"char") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
-						if_TypeError = true;
+
+					if ((if_bool == true) || (if_date == true) || (if_int == true)) {
+						if_char = false;
 					}
-					else if (if_int == false && fh[i][1] == L"int") {
+
+
+					if (if_int == false && fh[i][1] == L"int") {
 						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
 						if_TypeError = true;
 					}
+					else if (if_char == false && fh[i][1] == L"char") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_bool == false && fh[i][1] == L"bool") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是bool型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_date == false && fh[i][1] == L"date") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是date型。" << std::endl;
+						if_TypeError = true;
+					}
+
 				}
 				if (if_TypeError) {
 					return;
@@ -137,12 +165,6 @@ namespace naiveDB {
 				if (if_LengthError) {
 					return;
 				}
-
-				//进行属性限制检查
-				/*bool if_PropertyError = false;
-				for (unsigned int i = 0; i < data.size(); i++) {
-				if(fh[i][2] == L"true")
-				}*/
 
 				dataset = data;
 			}
@@ -173,24 +195,47 @@ namespace naiveDB {
 				bool if_TypeError = false;
 				for (unsigned int i = 0; i < data.size(); i++) {
 					bool if_int = true;
+					bool if_bool = false;
+					bool if_date = true;
+					bool if_char = true;
 					std::wstring tmp = data[i];
+
+
+					if ((tmp == L"true") || (tmp == L"false") || (tmp == L"是") || (tmp == L"否")) {
+						if_bool = true;
+					}
+
+					if ((tmp[4] != '-') || (tmp[7] != '-') || (tmp.length() != 10)) {
+						if_date = false;
+					}
+
 					for (unsigned int j = 0; j < tmp.length(); j++) {
 						if (tmp[j] > L'9' || tmp[j] < L'0') {
 							if_int = false;
 							break;
 						}
 					}
-					for (unsigned int j = 0; j < fh.size(); j++) {
-						if (fh[j][0] == definition[i]) {
-							if (fh[j][1] == L"int" && if_int == false) {
-								std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
-								if_TypeError = true;
-							}
-							else if (fh[j][1] == L"char" && if_int == true) {
-								std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
-								if_TypeError = true;
-							}
-						}
+
+					if ((if_bool == true) || (if_date == true) || (if_int == true)) {
+						if_char = false;
+					}
+
+
+					if (if_int == false && fh[i][1] == L"int") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_char == false && fh[i][1] == L"char") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_bool == false && fh[i][1] == L"bool") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是bool型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_date == false && fh[i][1] == L"date") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是date型。" << std::endl;
+						if_TypeError = true;
 					}
 				}
 				if (if_TypeError) {
@@ -263,6 +308,7 @@ namespace naiveDB {
 			formSet[foundform].Insert(dataset);
 			saveFormName();
 			saveForm(formSet[foundform]);
+			std::wcout << L"成功插入一条记录。" << std::endl;
 		}
 
 
@@ -311,25 +357,29 @@ namespace naiveDB {
 			if (columns.size() == 1 && columns[0] == L"*") {
 				//select全表
 				if (whereClause.size() == 0) {
-			        formSet[foundForm].Select(orderx, name);
+					int affected = formSet[foundForm].Select(orderx, name);
+					std::wcout << L"共查找出" << affected << L"条记录" << std::endl;
 					return;
 				}
 				//select符合条件的全部字段
 				else {
-					formSet[foundForm].Select(allColumns, whereClause, orderx, name);
+					int affected = formSet[foundForm].Select(allColumns, whereClause, orderx, name);
+					std::wcout << L"共查找出" << affected << L"条记录" << std::endl;
 					return;
 				}
 			}
 
 			//select部分列（无条件）
 			else if (whereClause.size() == 0) {
-				formSet[foundForm].Select(columns, orderx, name);
+				int affected = formSet[foundForm].Select(columns, orderx, name);
+				std::wcout << L"共查找出" << affected << L"条记录" << std::endl;
 				return;
 			}
 
 			//select部分列（有条件）
 			else {
-				formSet[foundForm].Select(columns, whereClause, orderx, name);
+				int affected = formSet[foundForm].Select(columns, whereClause, orderx, name);
+				std::wcout << L"共查找出" << affected << L"条记录" << std::endl;
 				return;
 			}
 
@@ -342,6 +392,7 @@ namespace naiveDB {
 			for (it = formSet.begin(); it != formSet.end();) {
 				if (it->getFormName() == name) {
 					it = formSet.erase(it);
+					std::wcout << L"表" << name << L"已被删除。" << std::endl;
 				}
 				else {
 					it++;
@@ -373,6 +424,7 @@ namespace naiveDB {
 			//删除全表
 			if (whereClause.size() == 0) {
 				formSet[foundForm].Delete();
+				std::wcout << L"表" << formName << L"已被清空。" << std::endl;
 				saveFormName();
 				saveForm(formSet[foundForm]);
 				return;
@@ -422,6 +474,7 @@ namespace naiveDB {
 					std::wcout << L"删除失败，没有符合条件的记录" << std::endl;
 				}
 				else {
+					std::wcout << L"已删除" << affected << L"条符合条件的记录。" << std::endl;
 					saveFormName();
 					saveForm(formSet[foundForm]);
 				}
@@ -472,7 +525,8 @@ namespace naiveDB {
 				s.clear();
 			}
 
-			formSet[foundForm].Update(set, condition);
+			int affected = formSet[foundForm].Update(set, condition);
+			std::wcout << affected << L"条记录被修改。" << std::endl;
 			saveFormName();
 			saveForm(formSet[foundForm]);
 			return;
@@ -525,6 +579,17 @@ namespace naiveDB {
 						oa << temp_stringkey->getData();
 						oa << temp_stringkey->getLengthLimit();
 					}
+					else if (typeName == L"bool") {// StringKey
+						dataprocessor::StringKey* temp_stringkey = (dataprocessor::StringKey*)temp_key;
+						oa << temp_stringkey->getData();
+						oa << temp_stringkey->getLengthLimit();
+					}
+					else if (typeName == L"date") {// StringKey
+						dataprocessor::StringKey* temp_stringkey = (dataprocessor::StringKey*)temp_key;
+						oa << temp_stringkey->getData();
+						oa << temp_stringkey->getLengthLimit();
+					}
+
 				}//end of vector
 				fout.flush();
 			}// end of map
@@ -615,6 +680,36 @@ namespace naiveDB {
 						stringkey->isEmpty = key_iE;
 						singleRecord.push_back(stringkey);// push_back StringKey* to Record vector<Key*>
 					}
+					else if (key_typeName == L"bool") {
+						std::wstring stringkey_data;
+						int stringkey_LengthLimit;
+
+						ia >> stringkey_data;// set StringKey data
+						ia >> stringkey_LengthLimit;// set StringKey LengthLimit
+						dataprocessor::StringKey* stringkey = new dataprocessor::StringKey(
+							key_keyName,
+							key_typeName,
+							key_iPK, key_iNN,
+							stringkey_LengthLimit,
+							stringkey_data);
+						stringkey->isEmpty = key_iE;
+						singleRecord.push_back(stringkey);// push_back StringKey* to Record vector<Key*>
+					}
+					else if (key_typeName == L"date") {
+						std::wstring stringkey_data;
+						int stringkey_LengthLimit;
+
+						ia >> stringkey_data;// set StringKey data
+						ia >> stringkey_LengthLimit;// set StringKey LengthLimit
+						dataprocessor::StringKey* stringkey = new dataprocessor::StringKey(
+							key_keyName,
+							key_typeName,
+							key_iPK, key_iNN,
+							stringkey_LengthLimit,
+							stringkey_data);
+						stringkey->isEmpty = key_iE;
+						singleRecord.push_back(stringkey);// push_back StringKey* to Record vector<Key*>
+					}
 				}
 				record.setRecord(singleRecord);// set Record vector<Key*>
 				records.insert(std::pair<int, dataprocessor::Record>(map_id, record));// insert Record to Form map<int, Record>
@@ -684,6 +779,7 @@ namespace naiveDB {
 				return;
 			}
 			else {
+				std::wcout << L"数据库" << DBName << L"中共有" << formSet.size() << L"张表" << std::endl;
 				for (unsigned int i = 0; i < formSet.size(); i++) {
 					std::wcout << formSet[i].getFormName() << std::endl;
 				}
