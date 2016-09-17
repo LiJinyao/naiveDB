@@ -155,7 +155,7 @@ struct naiveDB::parser::SelectRule : qi::grammar<Iterator, SelectStatement(), en
 template <typename Iterator>
 struct naiveDB::parser::ColumnsClause : qi::grammar<Iterator, ColumnStatement(), encoding::space_type> {
 	ColumnsClause() : ColumnsClause::base_type(start, "ColumsClause") {
-		dataType %= no_case[encoding::string("int")] | no_case[encoding::string("char")];
+		dataType %= no_case[encoding::string("int")] | no_case[encoding::string("char")] | no_case[encoding::string("bool")] | no_case[encoding::string("date")];
 		dataAtrribute %= no_case[encoding::string("not null")] | no_case[encoding::string("primary key")];
 		name %= lexeme[alpha >> *alnum];
 		/**

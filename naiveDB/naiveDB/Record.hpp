@@ -54,6 +54,39 @@ namespace naiveDB {
 						}
 						record.push_back(ik);
 					}
+					else if (formDefine[i][1] == L"bool") {
+						int num = 0;
+						StringKey *bk = new StringKey(
+							formDefine[i][0],
+							formDefine[i][1],
+							formDefine[i][2] == L"true" ? true : false,
+							formDefine[i][3] == L"true" ? true : false,
+							num,
+							formDefine[i][5]
+						);
+						if (formDefine[i][5] == L"") {
+							bk->isEmpty = true;
+						}
+
+						record.push_back(bk);
+					}
+					else if (formDefine[i][1] == L"date") {
+						int num = 10;
+						StringKey *dk = new StringKey(
+							formDefine[i][0],
+							formDefine[i][1],
+							formDefine[i][2] == L"true" ? true : false,
+							formDefine[i][3] == L"true" ? true : false,
+							num,
+							formDefine[i][5]
+						);
+						if (formDefine[i][5] == L"") {
+							dk->isEmpty = true;
+						}
+
+						record.push_back(dk);
+
+					}
 				}
 			}
 
