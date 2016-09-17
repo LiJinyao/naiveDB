@@ -346,6 +346,28 @@ namespace naiveDB {
 								}
 
 							}
+							else if (tmpp[j]->getTypeName() == L"bool")
+							{
+								StringKey* now = (StringKey*)tmpp[j];
+								if (!now->isEmpty) {
+									std::wcout << std::setw(24) << now->getData();
+								}
+								else {
+									std::wcout << std::setw(24) << " ";
+								}
+
+							}
+							else if (tmpp[j]->getTypeName() == L"date")
+							{
+								StringKey* now = (StringKey*)tmpp[j];
+								if (!now->isEmpty) {
+									std::wcout << std::setw(24) << now->getData();
+								}
+								else {
+									std::wcout << std::setw(24) << " ";
+								}
+
+							}
 							else
 							{
 								IntKey* now = (IntKey*)tmpp[j];
@@ -472,10 +494,31 @@ namespace naiveDB {
 						{
 							if (tmpp[k]->getKeyName() == keyNames[j])
 							{
-								if (tmpp[k]->getTypeName() == sa)
+								if (tmpp[j]->getTypeName() == sa)
 								{
-									StringKey* now = (StringKey*)tmpp[k];
-									//std::wcout << std::setw(8) << now->getData();
+									StringKey* now = (StringKey*)tmpp[j];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(24) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(24) << " ";
+									}
+
+								}
+								else if (tmpp[j]->getTypeName() == L"bool")
+								{
+									StringKey* now = (StringKey*)tmpp[j];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(24) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(24) << " ";
+									}
+
+								}
+								else if (tmpp[j]->getTypeName() == L"date")
+								{
+									StringKey* now = (StringKey*)tmpp[j];
 									if (!now->isEmpty) {
 										std::wcout << std::setw(24) << now->getData();
 									}
@@ -658,16 +701,37 @@ namespace naiveDB {
 						{
 							if (tmpp[k]->getKeyName() == keyNames[j])
 							{
-								if (tmpp[k]->getTypeName() == sa)
+								if (tmpp[j]->getTypeName() == sa)
 								{
-									StringKey* now = (StringKey*)tmpp[k];
+									StringKey* now = (StringKey*)tmpp[j];
 									if (!now->isEmpty) {
 										std::wcout << std::setw(24) << now->getData();
 									}
 									else {
 										std::wcout << std::setw(24) << " ";
 									}
-									//std::wcout << std::setw(8) << now->getData();
+
+								}
+								else if (tmpp[j]->getTypeName() == L"bool")
+								{
+									StringKey* now = (StringKey*)tmpp[j];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(24) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(24) << " ";
+									}
+
+								}
+								else if (tmpp[j]->getTypeName() == L"date")
+								{
+									StringKey* now = (StringKey*)tmpp[j];
+									if (!now->isEmpty) {
+										std::wcout << std::setw(24) << now->getData();
+									}
+									else {
+										std::wcout << std::setw(24) << " ";
+									}
 								}
 								else
 								{
