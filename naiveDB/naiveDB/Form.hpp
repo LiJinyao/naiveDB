@@ -503,7 +503,7 @@ namespace naiveDB {
 			}
 
 			//打印符合条件的记录
-			int Select(std::vector<std::wstring> keyNames, std::vector<std::vector<std::wstring> >condition, int orderx, std::wstring name) {
+			int Select(std::vector<std::wstring> keyNames, std::vector<std::vector<std::wstring> >condition, int orderx, std::wstring name, std::wstring relation) {
 				std::map<int, Record>::iterator it;
 				std::cout.setf(std::ios::left, std::ios::adjustfield);
 				std::vector<int>tmp;

@@ -22,16 +22,7 @@ namespace naiveDB {
 
 		DataBase(std::wstring _dbName, int useless) {
 			DBName = _dbName;
-			//std::wstring command = L"md .\\naiveDB\\";
-			//command = command + _dbName;
-			//std::wstring destination = L".\\naiveDB\\";
-			//destination = destination + _dbName;
-			//if (_waccess(destination.data(), 0) == -1) {
-			//	_wsystem(command.data());
-			//}
-			//else {
-			//	//std::wcout << L"该数据库已存在" << std::endl;
-			//}
+			
 		}
 
 
@@ -67,8 +58,8 @@ namespace naiveDB {
 
 
 
-		//注意这里只实现了 INSERT INTO 表名称 VALUES (值1, 值2,....) 一种句式
-		//该句式要求键值对数不多不少，且各方面符合表定义
+		/*注意这里只实现了 INSERT INTO 表名称 VALUES (值1, 值2,....) 一种句式
+		  该句式要求键值对数不多不少，且各方面符合表定义*/
 		void Insert(
 			std::wstring _formName, 
 			std::vector<std::wstring> _data, 
@@ -94,31 +85,61 @@ namespace naiveDB {
 
 			std::vector<std::vector<std::wstring>> fh = formSet[foundform].getFormHeader();
 			std::vector<std::wstring> dataset;
-			//必须插入完整记录
+			/*必须插入完整记录*/
 			if (definition.size() == 0) {
 				if (data.size() != fh.size()) {
 					std::wcout << L"错误！参数数量不匹配。" << std::endl;
 					return;
 				}
+
 				//进行数据类型检查
 				bool if_TypeError = false;
+				
+				//检查每一个数据
 				for (unsigned int i = 0; i < data.size(); i++) {
 					bool if_int = true;
+					bool if_date = true;
+					bool if_bool = false;
+					bool if_char = true;
 					std::wstring tmp = data[i];
+
+					if ((tmp == L"是") || (tmp == L"否") || (tmp == L"true") || (tmp == L"false")) {
+						if_bool = true;
+					}
+					if ((tmp[4] != '-') || (tmp[7] != '-') || (tmp.length() != 10)) {
+						if_date = false;
+					}
+
+					//遍历一条数据，检查是否为int
 					for (unsigned int j = 0; j < tmp.length(); j++) {
 						if (tmp[j] > L'9' || tmp[j] < L'0') {
 							if_int = false;
 							break;
 						}
 					}
-					if (if_int == true && fh[i][1] == L"char") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
-						if_TypeError = true;
+
+					if ((if_bool == true) || (if_date == true) || (if_int == true)) {
+						if_char = false;
 					}
-					else if (if_int == false && fh[i][1] == L"int") {
+
+					//开始报错
+					if (if_int == false && fh[i][1] == L"int") {
 						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
 						if_TypeError = true;
 					}
+					else if (if_char == false && fh[i][1] == L"char") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_bool == false && fh[i][1] == L"bool") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是bool型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_date == false && fh[i][1] == L"date") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是date型。" << std::endl;
+						if_TypeError = true;
+					}
+					
 				}
 				if (if_TypeError) {
 					return;
@@ -143,14 +164,15 @@ namespace naiveDB {
 				}
 
 				//进行属性限制检查
-				/*bool if_PropertyError = false;
-				for (unsigned int i = 0; i < data.size(); i++) {
-				if(fh[i][2] == L"true")
-				}*/
-
+				/*此处并无必要进行属性限制检查，因为主键的重复是在下一层检查的，
+				插入完整记录时主键和非空键也不会为空。*/
+			
 				dataset = data;
 			}
-			//可插入部分字段
+			
+			
+			
+			/*可插入部分字段*/
 			else {
 				//参数数量检查
 				if (data.size() != definition.size()) {
@@ -177,25 +199,46 @@ namespace naiveDB {
 				bool if_TypeError = false;
 				for (unsigned int i = 0; i < data.size(); i++) {
 					bool if_int = true;
+					bool if_date = true;
+					bool if_bool = false;
+					bool if_char = true;
 					std::wstring tmp = data[i];
+
+					if ((tmp == L"是") || (tmp == L"否") || (tmp == L"true") || (tmp == L"false")) {
+						if_bool = true;
+					}
+					if ((tmp[4] != '-') || (tmp[7] != '-') || (tmp.length() != 10)) {
+						if_date = false;
+					}
+
 					for (unsigned int j = 0; j < tmp.length(); j++) {
 						if (tmp[j] > L'9' || tmp[j] < L'0') {
 							if_int = false;
 							break;
 						}
 					}
-					for (unsigned int j = 0; j < fh.size(); j++) {
-						if (fh[j][0] == definition[i]) {
-							if (fh[j][1] == L"int" && if_int == false) {
-								std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
-								if_TypeError = true;
-							}
-							else if (fh[j][1] == L"char" && if_int == true) {
-								std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
-								if_TypeError = true;
-							}
-						}
+
+					if ((if_bool == true) || (if_date == true) || (if_int == true)) {
+						if_char = false;
 					}
+
+					if (if_int == false && fh[i][1] == L"int") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_char == false && fh[i][1] == L"char") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_bool == false && fh[i][1] == L"bool") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是bool型。" << std::endl;
+						if_TypeError = true;
+					}
+					else if (if_date == false && fh[i][1] == L"date") {
+						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是date型。" << std::endl;
+						if_TypeError = true;
+					}
+
 				}
 				if (if_TypeError) {
 					return;
