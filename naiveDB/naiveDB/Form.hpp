@@ -261,8 +261,22 @@ namespace naiveDB {
 						{
 							if (tmp[i]->getKeyName() == name)
 							{
-								if (tmp[i]->getTypeName() == L"wstring")
+								if (tmp[i]->getTypeName() == L"char")
 								{
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[i];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
+								}
+								else if (tmp[i]->getTypeName() == L"bool") {
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[i];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
+								}
+								else if (tmp[i]->getTypeName() == L"date") {
 									flag = 1;
 									StringKey * p = (StringKey*)tmp[i];
 									int x = it->first;
@@ -417,7 +431,23 @@ namespace naiveDB {
 						{
 							if (tmp[ii]->getKeyName() == name)
 							{
-								if (tmp[ii]->getTypeName() == L"wstring")
+								if (tmp[ii]->getTypeName() == L"char")
+								{
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[ii];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
+								}
+								else if (tmp[ii]->getTypeName() == L"bool")
+								{
+									flag = 1;
+									StringKey * p = (StringKey*)tmp[ii];
+									int x = it->first;
+									std::wstring y = p->getData();
+									mp1.insert(std::multimap<std::wstring, int>::value_type(y, x));
+								}
+								else if (tmp[ii]->getTypeName() == L"date")
 								{
 									flag = 1;
 									StringKey * p = (StringKey*)tmp[ii];
