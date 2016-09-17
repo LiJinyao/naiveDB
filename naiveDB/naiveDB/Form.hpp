@@ -52,7 +52,7 @@ namespace naiveDB {
 			{
 				return (m_one.second > m_two.second);//定义了大于，就是按从小到大排序 //可以定义任何你想要的比较操作  
 			}*/
-			void Insert(std::vector<std::wstring> dataSet) {
+			int Insert(std::vector<std::wstring> dataSet) {
 
 				idTotal++;
 				//建立可以传给Record的参数formDefine
@@ -81,7 +81,7 @@ namespace naiveDB {
 							bool _judge = intHeader[j]->judge(num);
 							if (!_judge) {
 								std::wcout << L"错误！主键重复。" << std::endl;
-								return;
+								return 0;
 							}
 						}
 					}
@@ -90,7 +90,7 @@ namespace naiveDB {
 							bool _judge = wstringHeader[j]->judge(dataSet[i]);
 							if (!_judge) {
 								std::wcout << L"错误！主键重复。" << std::endl;
-								return;
+								return 0;
 							}
 						}
 
@@ -119,6 +119,7 @@ namespace naiveDB {
 				//把新纪录插入map
 				Record r = Record(idTotal, formDefine);
 				records.insert(std::pair<int, Record>(idTotal, r));
+				return 1;
 				
 			}
 

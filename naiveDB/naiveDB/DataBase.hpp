@@ -305,10 +305,12 @@ namespace naiveDB {
 				}
 
 			}
-			formSet[foundform].Insert(dataset);
-			saveFormName();
-			saveForm(formSet[foundform]);
-			std::wcout << L"成功插入一条记录。" << std::endl;
+			if (formSet[foundform].Insert(dataset) == 1) {
+				saveFormName();
+				saveForm(formSet[foundform]);
+				std::wcout << L"成功插入一条记录。" << std::endl;
+			}
+
 		}
 
 
