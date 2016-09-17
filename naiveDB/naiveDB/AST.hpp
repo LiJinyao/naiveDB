@@ -288,8 +288,18 @@ namespace naiveDB {
 								ss >> str;
 								dataset.push_back(str);
 							}
+							else if (r[l]->getTypeName() == L"bool") {
+								naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
+								dataset.push_back(p->getData());
+							}
+							else if (r[l]->getTypeName() == L"date") {
+								naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
+								dataset.push_back(p->getData());
+							}
 						}
-						f2.Insert(dataset);
+						if (dataset.size() > 0) {
+							f2.Insert(dataset);
+						}
 					}
 					db->addForm(f2);
 				}

@@ -119,6 +119,7 @@ namespace naiveDB {
 				//把新纪录插入map
 				Record r = Record(idTotal, formDefine);
 				records.insert(std::pair<int, Record>(idTotal, r));
+				
 			}
 
 			//删除全部记录
