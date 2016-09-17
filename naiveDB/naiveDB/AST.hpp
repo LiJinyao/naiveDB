@@ -77,7 +77,7 @@ namespace naiveDB {
 			std::wstring name;
 			std::wstring dataType;
 			int limit = 0; // length limit.
-			std::wstring attribute; // NUT NULL, PRIMARY KEY
+			std::wstring attribute; // NOT NULL, PRIMARY KEY
 			friend std::wostream& operator<<(std::wostream& os, ColumnStatement const& ss) {
 				os << ss.name << " " << ss.dataType;
 				if (0 != ss.limit) {
@@ -222,8 +222,11 @@ namespace naiveDB {
 			void operator()(DropStatement & i) const;
 			void operator()(ShowStatement & i) const;
 		};
+		
+		
 		std::vector<DataBase*> dataBaseSet;
 		DataBase *pointer;
+
 		void buildFolder() {
 			std::wstring folderName = L".\\naiveDB";
 			std::wstring command = L"md ";
@@ -260,40 +263,39 @@ namespace naiveDB {
 			for (unsigned int i = 0; i < dbNames.size(); i++) {
 				DataBase *db = new DataBase(dbNames[i], i);
 				std::vector<std::wstring> formNameList = db->loadFormName();
-				if (formNameList.size() > 0) {
-					//对每一个表进行还原
-					for (unsigned int j = 0; j < formNameList.size(); j++) {
-						naiveDB::dataprocessor::Form f1 = db->loadForm(formNameList[j]);
-						std::vector<std::vector<std::wstring>> hd = f1.getFormHeader();
-						naiveDB::dataprocessor::Form f2 = naiveDB::dataprocessor::Form(hd, formNameList[j]);
-						std::map<int, naiveDB::dataprocessor::Record> recordsCopy = f1.getForm();
+				//对每一个表进行还原
+				for (unsigned int j = 0; j < formNameList.size(); j++) {
+					naiveDB::dataprocessor::Form f1 = db->loadForm(formNameList[j]);
+					std::vector<std::vector<std::wstring>> hd = f1.getFormHeader();
+					naiveDB::dataprocessor::Form f2 = naiveDB::dataprocessor::Form(hd, formNameList[j]);
+					std::map<int, naiveDB::dataprocessor::Record> recordsCopy = f1.getForm();
+					
 
-
-						for (unsigned int k = 0; k < recordsCopy.size(); k++) {
-							std::vector<std::wstring> dataset;
-							std::vector<naiveDB::dataprocessor::Key*> r = recordsCopy[k].getRecord();
-							for (unsigned int l = 0; l < r.size(); l++) {
-								if (r[l]->getTypeName() == L"char") {
-									naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
-									dataset.push_back(p->getData());
-								}
-								else if (r[l]->getTypeName() == L"int") {
-									naiveDB::dataprocessor::IntKey *p = (naiveDB::dataprocessor::IntKey*)r[l];
-									std::wstringstream ss;
-									int num = p->getData();
-									std::wstring str;
-									ss << num;
-									ss >> str;
-									dataset.push_back(str);
-								}
+					for (unsigned int k = 0; k < recordsCopy.size(); k++) {
+						std::vector<std::wstring> dataset;
+						std::vector<naiveDB::dataprocessor::Key*> r = recordsCopy[k].getRecord();
+						for (unsigned int l = 0; l < r.size(); l++) {
+							if (r[l]->getTypeName() == L"char") {
+								naiveDB::dataprocessor::StringKey *p = (naiveDB::dataprocessor::StringKey*)r[l];
+								dataset.push_back(p->getData());
 							}
-							f2.Insert(dataset);
+							else if (r[l]->getTypeName() == L"int") {
+								naiveDB::dataprocessor::IntKey *p = (naiveDB::dataprocessor::IntKey*)r[l];
+								std::wstringstream ss;
+								int num = p->getData();
+								std::wstring str;
+								ss << num;
+								ss >> str;
+								dataset.push_back(str);
+							}
 						}
-						db->addForm(f2);
+						f2.Insert(dataset);
 					}
+					db->addForm(f2);
 				}
 				dataBaseSet.push_back(db);
 			}
+			return;
 		}
 		
 		
@@ -307,87 +309,114 @@ namespace naiveDB {
 ****************************************/
 
 void naiveDB::parser::SQLparser::operator()(SelectStatement & i) const {
-	std::vector<std::wstring> columns = i.columns;
-	std::vector<std::wstring> fromtables = i.fromtables;
-	std::wstring order = i.order; //排序顺序，可能为: ""（未指定）, "DESC"（降序）, "ASC"（升序）；
-	boost::algorithm::to_upper(order);
- 	std::vector<std::vector<std::wstring>> whereClause;
-	for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
-		std::vector<std::wstring> s;
-		s.push_back(i.whereClause.statements[j].lh);
-		s.push_back(i.whereClause.statements[j].rh);
-		s.push_back(i.whereClause.statements[j].op);
-		whereClause.push_back(s);
-		s.clear();
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
 	}
+	else {
+		std::vector<std::wstring> columns = i.columns;
+		std::vector<std::wstring> fromtables = i.fromtables;
+		std::wstring order = i.order; //排序顺序，可能为: ""（未指定）, "DESC"（降序）, "ASC"（升序）；
+		boost::algorithm::to_upper(order);
+		std::vector<std::vector<std::wstring>> whereClause;
+		for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
+			std::vector<std::wstring> s;
+			s.push_back(i.whereClause.statements[j].lh);
+			s.push_back(i.whereClause.statements[j].rh);
+			s.push_back(i.whereClause.statements[j].op);
+			whereClause.push_back(s);
+			s.clear();
+		}
 
-	std::wstring orderBy = i.orderBy;
-	
+		std::wstring orderBy = i.orderBy;
 
-	pointer->Select(columns, fromtables, whereClause, orderBy, order);
-
+		pointer->Select(columns, fromtables, whereClause, orderBy, order);
+	}
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateTableStatement & i) const {
-	CreateTableStatement cs = i;
-	std::wstring formName = cs.tableName; //参数2
-	std::vector<std::vector<std::wstring>> formDefine;
-	std::vector<ColumnStatement> columnDefine = cs.columns;
-	
-	for (unsigned int i = 0; i < columnDefine.size(); i++) {
-		std::vector<std::wstring> s;
-		s.push_back(columnDefine[i].name);
-		s.push_back(columnDefine[i].dataType);
-		if (columnDefine[i].attribute == L"NOT NULL") {
-			s.push_back(L"false");
-			s.push_back(L"true");
-		}
-		else if (columnDefine[i].attribute == L"PRIMARY KEY") {
-			s.push_back(L"true");
-			s.push_back(L"false");
-		}
-		else {
-			s.push_back(L"NULL");
-			s.push_back(L"NULL");
-		}
-		std::wstringstream ss;
-		ss << columnDefine[i].limit;
-		std::wstring wstr;
-		ss >> wstr;
-		s.push_back(wstr);
-
-		formDefine.push_back(s);
-		s.clear();
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
 	}
+	else {
+		CreateTableStatement cs = i;
+		std::wstring formName = cs.tableName; //参数2
+		std::vector<std::vector<std::wstring>> formDefine;
+		std::vector<ColumnStatement> columnDefine = cs.columns;
 
-	pointer->Create(formDefine, formName);
+		for (unsigned int i = 0; i < columnDefine.size(); i++) {
+			std::vector<std::wstring> s;
+			s.push_back(columnDefine[i].name);
+			s.push_back(columnDefine[i].dataType);
+			if (columnDefine[i].attribute == L"NOT NULL") {
+				s.push_back(L"false");
+				s.push_back(L"true");
+			}
+			else if (columnDefine[i].attribute == L"PRIMARY KEY") {
+				s.push_back(L"true");
+				s.push_back(L"false");
+			}
+			else {
+				s.push_back(L"NULL");
+				s.push_back(L"NULL");
+			}
+			std::wstringstream ss;
+			ss << columnDefine[i].limit;
+			std::wstring wstr;
+			ss >> wstr;
+			s.push_back(wstr);
+
+			formDefine.push_back(s);
+			s.clear();
+		}
+
+		pointer->Create(formDefine, formName);
+
+	}
 }
 
 void naiveDB::parser::SQLparser::operator()(DeleteStatement & i) const {
-	std::wstring tableName = i.tableName;
-	std::vector<std::vector<std::wstring>> whereClause;
-	for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
-		std::vector<std::wstring> s;
-		s.push_back(i.whereClause.statements[j].lh);
-		s.push_back(i.whereClause.statements[j].rh);
-		s.push_back(i.whereClause.statements[j].op);
-		whereClause.push_back(s);
-		s.clear();
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
 	}
-	pointer->Delete(tableName, whereClause);
+	else {
+		std::wstring tableName = i.tableName;
+		std::vector<std::vector<std::wstring>> whereClause;
+		for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
+			std::vector<std::wstring> s;
+			s.push_back(i.whereClause.statements[j].lh);
+			s.push_back(i.whereClause.statements[j].rh);
+			s.push_back(i.whereClause.statements[j].op);
+			whereClause.push_back(s);
+			s.clear();
+		}
+		pointer->Delete(tableName, whereClause);
+	}
+	
 }
 
 void naiveDB::parser::SQLparser::operator()(InsertStatement & i) const {
-	std::wstring formName = i.tableName;
-	std::vector<std::wstring> data = i.values;
-	std::vector<std::wstring> definition = i.columns;
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
+	}
+	else {
+		std::wstring formName = i.tableName;
+		std::vector<std::wstring> data = i.values;
+		std::vector<std::wstring> definition = i.columns;
 
-	pointer->Insert(formName, data, definition);
+		pointer->Insert(formName, data, definition);
+	}
+	
 
 }
 
 void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
     std::wstring dbname = i.dbName;
+	for (unsigned int i = 0; i < dataBaseSet.size(); i++) {
+		if (dataBaseSet[i]->getDBName() == dbname) {
+			std::wcout << L"该数据库已存在。" << std::endl;
+			return;
+		}
+	}
 	DataBase *db = new DataBase(dbname);
 	pointer = db;
 	dataBaseSet.push_back(db);
@@ -401,50 +430,100 @@ void naiveDB::parser::SQLparser::operator()(CreateDatabaseStatement & i) const {
 		oa << (*it)->getDBName();
 	}
 	fout.close();
+	std::wcout << L"成功创建名为" << dbname << L"的数据库。" << std::endl;
 }
 
 void naiveDB::parser::SQLparser::operator()(UseDatabaseStatement & i) const {
 	std::wstring  dbName = i.dbName;
+	bool ifFound = false;
 	for (unsigned i = 0; i < dataBaseSet.size(); i++) {
 		if (dataBaseSet[i]->getDBName() == dbName) {
 			pointer = dataBaseSet[i];
+			ifFound = true;
+			std::wcout << L"已切换到数据库" << dataBaseSet[i]->getDBName() << std::endl;
+			break;
 		}
+	}
+	if (!ifFound) {
+		std::wcout << L"该数据库不存在。" << std::endl;
 	}
 
 }
 
 void naiveDB::parser::SQLparser::operator()(UpdateStatement & i) const {
-	
-	std::wstring tableName = i.tableName;
-	std::vector<std::vector<std::wstring>> sets;
-	std::vector<std::vector<std::wstring>> whereClause;
-
-	for (unsigned int j = 0; j < i.sets.size(); j++) {
-		std::vector<std::wstring> s;
-		s.push_back(i.sets[j].col);
-		s.push_back(i.sets[j].val);
-		sets.push_back(s);
-		s.clear();
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
 	}
+	else {
+		std::wstring tableName = i.tableName;
+		std::vector<std::vector<std::wstring>> sets;
+		std::vector<std::vector<std::wstring>> whereClause;
 
-	for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
-		std::vector<std::wstring> s;
-		s.push_back(i.whereClause.statements[j].lh);
-		s.push_back(i.whereClause.statements[j].rh);
-		s.push_back(i.whereClause.statements[j].op);
-		whereClause.push_back(s);
-		s.clear();
+		for (unsigned int j = 0; j < i.sets.size(); j++) {
+			std::vector<std::wstring> s;
+			s.push_back(i.sets[j].col);
+			s.push_back(i.sets[j].val);
+			sets.push_back(s);
+			s.clear();
+		}
+
+		for (unsigned int j = 0; j < i.whereClause.statements.size(); j++) {
+			std::vector<std::wstring> s;
+			s.push_back(i.whereClause.statements[j].lh);
+			s.push_back(i.whereClause.statements[j].rh);
+			s.push_back(i.whereClause.statements[j].op);
+			whereClause.push_back(s);
+			s.clear();
+		}
+		pointer->Update(tableName, sets, whereClause);
 	}
-	pointer->Update(tableName, sets, whereClause);
 }
 
 void naiveDB::parser::SQLparser::operator()(DropStatement & i) const {
-	std::wcout << i.table;
+	//std::wcout << i.table;
+	if (pointer == NULL) {
+		std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
+	}
+	else {
+		pointer->Drop(i.table);
+	}
 }
 
 void naiveDB::parser::SQLparser::operator()(ShowStatement & i) const {
-	std::wcout << i.showWaht; // TABLES DATABASES
-	// boost::algorithm::to_upper 
+	std::wstring showWhat = i.showWaht;
+	boost::algorithm::to_upper(showWhat);
+	if (showWhat == L"DATABASES") {
+		std::wstring fileName = L".\\naiveDB\\dataBaseNameList.dat";
+		if (_waccess(fileName.data(), 0) == -1) {
+			std::wcout << L"无预先保存的数据库" << std::endl;
+		}
+		else {
+			std::ifstream fin(fileName, std::ios::binary);
+			boost::archive::binary_iarchive ia(fin);
+			int size;
+			ia >> size;
+			if (size == 0) {
+				std::wcout << L"无预先保存的数据库" << std::endl;
+			}
+			else {
+				std::wstring wstr;
+				std::wcout << L"共存在" << size << L"个数据库" << std::endl;
+				for (int i = 0; i < size; i++) {
+					ia >> wstr;
+					std::wcout << wstr << std::endl;
+				}
+			}
+		}
+
+	}
+	else if (showWhat == L"TABLES") {
+		if (pointer == NULL) {
+			std::wcout << L"错误！请先声明所要操作的数据库。" << std::endl;
+		}
+		else {
+			pointer->showTables();
+		}
+	}
 }
 
 /****************************************

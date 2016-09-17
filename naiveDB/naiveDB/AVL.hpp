@@ -277,40 +277,20 @@ namespace naiveDB {
 				erase(root, dat);
 			}
 			void erasenew(T dat, int id) {
-				if (ifKey == 0)
+				node * now = finddata(root, dat);
+				std::vector<int>::iterator it;
+				for (it = now->idset.begin(); it != now->idset.end(); it++)
 				{
-
-
-					node * now = finddata(root, dat);
-					std::vector<int>::iterator it;
-					for (it = now->idset.begin(); it != now->idset.end(); it++)
+					if (*it == id)
 					{
-						if (*it == id)
-						{
-							now->idset.erase(it);
-							break;
-						}
+						now->idset.erase(it);
+						break;
 					}
-					if (now->idset.size() == 0) erase(root, now->dat);
 				}
-				else
-				{
-					node * now = finddata(root, dat);
-					ss.erase(ss.find(now->dat));
-					erase(root, now->dat);
-				}
+				if (now->idset.size() == 0) erase(root, now->dat);
 			}
 			void update(T datx, T daty, int id)
 			{
-				if (!ifKey)
-				{
-		
-				}
-				else
-				{
-					ss.erase(ss.find(daty));
-					ss.insert(datx);
-				}
 				node * now = finddata(root, daty);
 				if (now == NULL) {
 
@@ -326,7 +306,6 @@ namespace naiveDB {
 				if (root != NULL)
 					clear(root);
 				root = NULL;
-				ss.clear();
 			}
 			bool empty() {
 				return (root->getsize() == 0);
