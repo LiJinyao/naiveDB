@@ -384,18 +384,7 @@ namespace naiveDB {
 
 		}
 
-		void Drop(std::wstring _name) {
-			std::wstring name = _name;
-			std::vector<dataprocessor::Form>::iterator it;
-			for (it = formSet.begin(); it != formSet.end();) {
-				if (it->getFormName() == name) {
-					it = formSet.erase(it);
-				}
-				else {
-					it++;
-				}
-			}
-		}
+
 
 		void Delete(
 			std::wstring _tableName, 
@@ -724,19 +713,6 @@ namespace naiveDB {
 
 		void addForm(dataprocessor::Form f) {
 			formSet.push_back(f);
-		}
-
-		void showTables() {
-			if (formSet.size() == 0) {
-				std::wcout << L"数据库中没有任何表。" << std::endl;
-				return;
-			}
-			else {
-				for (unsigned int i = 0; i < formSet.size(); i++) {
-					std::wcout << formSet[i].getFormName() << std::endl;
-				}
-			}
-			return;
 		}
 
 	protected:
