@@ -265,9 +265,12 @@ namespace naiveDB {
 
 			}
 
-			formSet[foundform].Insert(dataset);
+			if (formSet[foundform].Insert(dataset)) {
+				std::wcout << L"成功插入1条记录。\n";
+			}
 			saveFormName();
 			saveForm(formSet[foundform]);
+			
 		}
 
 
@@ -347,11 +350,15 @@ namespace naiveDB {
 			for (it = formSet.begin(); it != formSet.end();) {
 				if (it->getFormName() == name) {
 					it = formSet.erase(it);
+					std::wcout << L"成功删除了表" << name << std::endl;
+					return;
 				}
 				else {
 					it++;
 				}
 			}
+			std::wcout << L"所要删除的表不存在。" << std::endl;
+			return;
 		}
 
 		void Delete(
@@ -658,8 +665,13 @@ namespace naiveDB {
 		}
 
 		std::vector<std::wstring> loadFormName() {
+			std::vector<std::wstring> v;
 			std::wstring formNameList = L".\\naiveDB\\";
 			formNameList = formNameList + DBName + L"\\formNameList.dat";
+
+			if (_waccess(formNameList.data(), 0) == -1) {
+				return v;
+			}
 
 			std::ifstream fin;
 			fin.open(formNameList, std::ios::binary);
@@ -667,7 +679,6 @@ namespace naiveDB {
 			int formSetSize;
 			ia >> formSetSize;
 			std::wstring wstr;
-			std::vector<std::wstring> v;
 			for (int i = 0; i < formSetSize; i++) {
 				ia >> wstr;
 				v.push_back(wstr);

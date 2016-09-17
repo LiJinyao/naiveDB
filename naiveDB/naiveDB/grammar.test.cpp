@@ -21,6 +21,11 @@ Welcome to naiveDB!";
 	std::locale loc("chs");
 	std::wstring help = L"\
 ------------------naiveDB帮助信息------------------\n\
+- 你需要先创建数据库才能使用-\n\
+- 创建数据库：\n\
+CREATE DATABASE 数据库名\n\
+- 切换数据库\n\
+USE 数据库名\n\
 - 格式规定：\n\
 数字不需要加引号， 字符串用双引号 \"\"\n\
 - 创建表语法：\n\

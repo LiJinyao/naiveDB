@@ -52,7 +52,7 @@ namespace naiveDB {
 			{
 				return (m_one.second > m_two.second);//定义了大于，就是按从小到大排序 //可以定义任何你想要的比较操作  
 			}*/
-			void Insert(std::vector<std::wstring> dataSet) {
+			int Insert(std::vector<std::wstring> dataSet) {
 
 				idTotal++;
 				//建立可以传给Record的参数formDefine
@@ -81,7 +81,7 @@ namespace naiveDB {
 							bool _judge = intHeader[j]->judge(num);
 							if (!_judge) {
 								std::wcout << L"错误！主键重复。" << std::endl;
-								return;
+								return 0;
 							}
 						}
 					}
@@ -90,7 +90,7 @@ namespace naiveDB {
 							bool _judge = wstringHeader[j]->judge(dataSet[i]);
 							if (!_judge) {
 								std::wcout << L"错误！主键重复。" << std::endl;
-								return;
+								return 0;
 							}
 						}
 
@@ -119,6 +119,7 @@ namespace naiveDB {
 				//把新纪录插入map
 				Record r = Record(idTotal, formDefine);
 				records.insert(std::pair<int, Record>(idTotal, r));
+				return 1;
 			}
 
 			//删除全部记录
@@ -528,6 +529,7 @@ namespace naiveDB {
 						return 0;
 					}
 				}
+				std::set<int>sstmp;
 				for (int i = 0; i < condition.size(); i++)
 				{
 					tmp.clear();
@@ -549,7 +551,25 @@ namespace naiveDB {
 							tmp = intHeader[j]->finddata(x, condition[i][2]);
 						}
 					}
-					for (int j = 0; j < tmp.size(); j++) stmp.insert(tmp[j]);
+					sstmp.clear();
+					if (i == 0)
+					{
+						for (int j = 0; j < tmp.size(); j++) stmp.insert(tmp[j]);
+					}
+					else
+					{
+						for (int j = 0; j < tmp.size(); j++)
+						{
+							if (stmp.find(tmp[j])!=stmp.end())
+								sstmp.insert(tmp[j]);
+						}
+						stmp.clear();
+						for (std::set<int>::iterator it1 = sstmp.begin(); it1 != sstmp.end(); it1++)
+						{
+							stmp.insert(*it1);
+						}
+					}
+				
 				}
 				tmp.clear();
 				if (orderx > 0)
@@ -747,29 +767,37 @@ namespace naiveDB {
 					}
 				}
 				int flag = 0;
+				std::vector<int>finaltmp;
 				for (int i = 0; i < wstringHeader.size(); i++)
-				{
-					for (int j = 0; j < condition.size(); j++)
-					{
-						if (wstringHeader[i]->GetName() == condition[j][0]&& wstringHeader[i]->ifk() == 1)
-						{
-							flag = 1;
-						}
-					}
-				}
-				for (int i = 0; i < intHeader.size(); i++)
 				{
 					for (int j = 0; j < set.size(); j++)
 					{
-						if (intHeader[i]->GetName() == set[j][0]&& intHeader[i] ->ifk()==1)
+						if (wstringHeader[i]->GetName() == set[j][0]&& wstringHeader[i]->ifk() == 1)
 						{
 							flag = 1;
+							finaltmp = wstringHeader[i]->finddata(set[j][1],L"=");
 						}
 					}
 				}
-				if (flag == 1 && ans.size() > 1)
+
+				for (int i1 = 0; i1 < intHeader.size(); i1++)
 				{
-					std::wcout << L"不合法修改" << std::endl;
+					for (int j1 = 0; j1 < set.size(); j1++)
+					{
+						if (intHeader[i1]->GetName() == set[j1][0]&& intHeader[i1] ->ifk()==1)
+						{
+							flag = 1;
+							std::wstringstream ss;
+							ss << set[j1][1];
+							int x;
+							ss >> x;
+							finaltmp = intHeader[i1]->finddata(x, L"=");
+						}
+					}
+				}
+				if ((flag == 1 && ans.size() > 1)||(flag == 1&&finaltmp.size()> 0))
+				{
+					std::wcout << L"主键不能重复。" << std::endl;
 					return 0;
 				}
 				for (int i = 0; i < set.size(); i++)
