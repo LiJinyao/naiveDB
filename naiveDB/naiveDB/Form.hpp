@@ -28,6 +28,14 @@ namespace naiveDB {
 						AVL<std::wstring> *tmp = new AVL<std::wstring>(formHeader[i][0], i, if_primary);
 						wstringHeader.push_back(tmp);
 					}
+					if (formHeader[i][1] == L"bool") {
+						AVL<std::wstring> *tmp = new AVL<std::wstring>(formHeader[i][0], i, if_primary);
+						wstringHeader.push_back(tmp);
+					}
+					if (formHeader[i][1] == L"date") {
+						AVL<std::wstring> *tmp = new AVL<std::wstring>(formHeader[i][0], i, if_primary);
+						wstringHeader.push_back(tmp);
+					}
 				}
 			}
 
@@ -142,6 +150,7 @@ namespace naiveDB {
 			//删除符合多种条件的记录(A&&B,A||B)
 			int Delete(std::vector<std::vector<std::wstring>> condition, std::wstring relation) {
 				std::vector<std::vector<int> > ans;
+
 				for (int i = 0; i < condition.size(); i++)
 				{
 					if (!check(condition[i][0]))
@@ -194,7 +203,7 @@ namespace naiveDB {
 						}
 					}
 				}
-				std::wstring sb = L"OR";
+			/*	std::wstring sb = L"OR";
 				if (relation == sb)
 				{
 					for (int i = 0; i <ans.size(); i++)
@@ -207,7 +216,7 @@ namespace naiveDB {
 							ans[0].push_back(temp[j]);
 						}
 					}
-				}
+				}*/
 				std::map<int, Record>::iterator it;
 				for (int i = 0; i < ans[0].size(); i++)
 				{
@@ -525,9 +534,9 @@ namespace naiveDB {
 						{
 							if (tmpp[k]->getKeyName() == keyNames[j])
 							{
-								if (tmpp[j]->getTypeName() == sa)
+								if (tmpp[k]->getTypeName() == sa)
 								{
-									StringKey* now = (StringKey*)tmpp[j];
+									StringKey* now = (StringKey*)tmpp[k];
 									if (!now->isEmpty) {
 										std::wcout << std::setw(24) << now->getData();
 									}
@@ -536,9 +545,9 @@ namespace naiveDB {
 									}
 
 								}
-								else if (tmpp[j]->getTypeName() == L"bool")
+								else if (tmpp[k]->getTypeName() == L"bool")
 								{
-									StringKey* now = (StringKey*)tmpp[j];
+									StringKey* now = (StringKey*)tmpp[k];
 									if (!now->isEmpty) {
 										std::wcout << std::setw(24) << now->getData();
 									}
@@ -547,9 +556,9 @@ namespace naiveDB {
 									}
 
 								}
-								else if (tmpp[j]->getTypeName() == L"date")
+								else if (tmpp[k]->getTypeName() == L"date")
 								{
-									StringKey* now = (StringKey*)tmpp[j];
+									StringKey* now = (StringKey*)tmpp[k];
 									if (!now->isEmpty) {
 										std::wcout << std::setw(24) << now->getData();
 									}
@@ -585,6 +594,7 @@ namespace naiveDB {
 				std::wstring sa = L"char";
 				std::wstring sb = L"int";
 				std::set<int>stmp;
+				std::set<int>tmpp;
 				std::multimap<std::wstring,int> mp1;
 				std::multimap<int, int> mp2;
 				for (int i = 0; i < keyNames.size(); i++)
@@ -603,7 +613,7 @@ namespace naiveDB {
 						return 0;
 					}
 				}
-				for (int i = 0; i < condition.size(); i++)
+				/*for (int i = 0; i < condition.size(); i++)
 				{
 					tmp.clear();
 					for (int j = 0; j < wstringHeader.size(); j++)
@@ -625,6 +635,46 @@ namespace naiveDB {
 						}
 					}
 					for (int j = 0; j < tmp.size(); j++) stmp.insert(tmp[j]);
+				}*/
+				for (int i = 0; i < condition.size(); i++)
+				{
+					tmp.clear();
+					for (int j = 0; j < wstringHeader.size(); j++)
+					{
+						if (wstringHeader[j]->GetName() == condition[i][0])
+						{
+							tmp = wstringHeader[j]->finddata(condition[i][1], condition[i][2]);
+						}
+					}
+					for (int j = 0; j < intHeader.size(); j++)
+					{
+						if (intHeader[j]->GetName() == condition[i][0])
+						{
+							std::wstringstream ss;
+							ss << condition[i][1];
+							int x;
+							ss >> x;
+							tmp = intHeader[j]->finddata(x, condition[i][2]);
+						}
+					}
+					if (i == 0)
+					{
+						for (int j = 0; j < tmp.size(); j++) stmp.insert(tmp[j]);
+					}
+					else
+					{
+						std::set<int>::iterator setit;
+						for (int j = 0; j < tmp.size(); j++)
+						{
+							if (stmp.find(tmp[j]) != stmp.end()) tmpp.insert(tmp[j]);
+						}
+						stmp.clear();
+						for (setit = tmpp.begin(); setit != tmpp.end(); setit++)
+						{
+							stmp.insert(*setit);
+						}
+					}
+					
 				}
 				tmp.clear();
 				if (orderx > 0)

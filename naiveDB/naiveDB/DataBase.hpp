@@ -193,7 +193,15 @@ namespace naiveDB {
 
 				//数据类型检查
 				bool if_TypeError = false;
+				
 				for (unsigned int i = 0; i < data.size(); i++) {
+					int chosen = -1;
+					for (unsigned int k = 0; k < fh.size(); k++) {
+						if (fh[k][0] == definition[i]) {
+							chosen = k;
+							break;
+						}
+					}
 					bool if_int = true;
 					bool if_bool = false;
 					bool if_date = true;
@@ -221,20 +229,20 @@ namespace naiveDB {
 					}
 
 
-					if (if_int == false && fh[i][1] == L"int") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是int型。" << std::endl;
+					if (if_int == false && fh[chosen][1] == L"int") {
+						std::wcout << L"插入了错误的数据类型，" << fh[chosen][0] << L"是int型。" << std::endl;
 						if_TypeError = true;
 					}
-					else if (if_char == false && fh[i][1] == L"char") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是char型。" << std::endl;
+					else if (if_char == false && fh[chosen][1] == L"char") {
+						std::wcout << L"插入了错误的数据类型，" << fh[chosen][0] << L"是char型。" << std::endl;
 						if_TypeError = true;
 					}
-					else if (if_bool == false && fh[i][1] == L"bool") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是bool型。" << std::endl;
+					else if (if_bool == false && fh[chosen][1] == L"bool") {
+						std::wcout << L"插入了错误的数据类型，" << fh[chosen][0] << L"是bool型。" << std::endl;
 						if_TypeError = true;
 					}
-					else if (if_date == false && fh[i][1] == L"date") {
-						std::wcout << L"插入了错误的数据类型，" << fh[i][0] << L"是date型。" << std::endl;
+					else if (if_date == false && fh[chosen][1] == L"date") {
+						std::wcout << L"插入了错误的数据类型，" << fh[chosen][0] << L"是date型。" << std::endl;
 						if_TypeError = true;
 					}
 				}
@@ -247,13 +255,13 @@ namespace naiveDB {
 				for (unsigned int i = 0; i < data.size(); i++) {
 					for (unsigned int j = 0; j < fh.size(); j++) {
 						if (fh[j][0] == definition[i]) {
-							if (fh[i][1] == L"char") {
+							if (fh[j][1] == L"char") {
 								std::wstringstream ss;
 								int limit;
-								ss << fh[i][4];
+								ss << fh[j][4];
 								ss >> limit;
-								if (data[i].length() > limit) {
-									std::wcout << L"错误！字段" << fh[i][0] << L"超出长度限制。" << std::endl;
+								if (data[i].length() > limit && limit != 0) {
+									std::wcout << L"错误！字段" << fh[j][0] << L"超出长度限制。" << std::endl;
 									if_LengthError = true;
 								}
 							}
